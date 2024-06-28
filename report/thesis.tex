@@ -18,6 +18,7 @@
 \usepackage{amsthm}
 \usepackage{latexsym,amsmath}
 \usepackage{graphicx}
+\graphicspath{{/Users/odenpetersen/Documents/Honours/order-book-hawkes/images}}
 \usepackage{afterpage}
 \usepackage{xcolor}
 
@@ -305,6 +306,11 @@ A Poisson process is a point process for which the following two properties hold
 
 \textcolor{red}{There is a link here to the sante fe order book model, described in the Bouchaud source, which is an example of the application of poisson arrivals.}
 
+\includegraphics[width=0.75\textwidth]{poisson_sim.png}
+
+\textcolor{red}{I think I should change this to be separate plots. Can show the intensity function for each; e.g. for inhomogenous it's the same for every realisation, but for hawkes process the intensity function is itself random.}
+
+
 \subsection{Inhomogeneous Poisson Process}
 An inhomogeneous Poisson process is a generalisation of the Poisson process for which the second condition is replaced by the weaker requirement that every Borel set $b$ with finite Lebesgue measure $\mu(b)$ has a finite expectation measure. \textcolor{red}{Is this weaker version even needed, or is it sufficient to just drop the condition entirely?}
 
@@ -314,12 +320,15 @@ An inhomogeneous Poisson process is a generalisation of the Poisson process for 
 immigration/birth interpretation
 
 \subsection{State-dependent Hawkes Processes}
-- State-dependence
+Moriaru-Patrichi and Pakkanen find that conditioning on the state of the order book improves the fit of the model.
 
-Markov chains
+They consider conditioning on only the state of the triggering event (their 2.3), as well as conditioning on both the state of the triggering event and the current state (their 4.2).
 
-\section{Prior applied work}
-\textcolor{red}{Moriaru-patrichi}
+The first of these:
+	$$\tilde\lambda_{ex}(t)=\phi_e(X(t),x)\left(\nu_e+\sum_{e'\in\mathcal E,x'\in \mathcal X}\int_{[0,t)}k_{e',e}(t-s,x')d\tilde N_{e'x'}(s)\right), & t\geq 0, & e\in\mathcal E, & x\in\mathcal X.$$
+
+The second:
+	$$\tilde\lambda_{ex}(t)=\nu_{ex}+\sum_{e'\in\mathcal E,x'\in\mathcal X}\int_{[0,t)}k_{e'x'ex}(t-s)d\tilde N_{e'x'}(s), t\geq 0, e\in\mathcal E, x\in\mathcal X.$$
 
 \chapter{Estimation}
 
@@ -1316,7 +1325,7 @@ nickel, le
 improvements on scalable stochastic bayesian inference methods for multivaariate hawkes processes
 jiang and rodriguez
 
-Bouchaud
+Bouchaud et al, Trades quotes and prices
 
 \end{thebibliography}
 

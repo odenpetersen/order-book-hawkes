@@ -1,0 +1,20 @@
+\contentsline {chapter}{\numberline {Chapter 1}Introduction}{1}{}%
+\contentsline {section}{\numberline {1.1}Limit Order Books}{1}{}%
+\contentsline {section}{\numberline {1.2}Point Process Models of Book Updates}{2}{}%
+\contentsline {subsection}{\numberline {1.2.1}Point Processes}{2}{}%
+\contentsline {subsection}{\numberline {1.2.2}The Expectation Measure}{3}{}%
+\contentsline {subsection}{\numberline {1.2.3}Intensity Functions}{3}{}%
+\contentsline {subsection}{\numberline {1.2.4}Poisson Processes}{3}{}%
+\contentsline {subsection}{\numberline {1.2.5}Inhomogeneous Poisson Process}{3}{}%
+\contentsline {subsection}{\numberline {1.2.6}Autoregressive Intensity \& Hawkes Processes}{3}{}%
+\contentsline {subsection}{\numberline {1.2.7}State-dependent Hawkes Processes}{4}{}%
+\contentsline {section}{\numberline {1.3}Prior applied work}{4}{}%
+\contentsline {chapter}{\numberline {Chapter 2}Estimation}{5}{}%
+\contentsline {section}{\numberline {2.1}Introduction to estimation algorithms}{5}{}%
+\contentsline {subsection}{\numberline {2.1.1}MLE}{5}{}%
+\contentsline {subsection}{\numberline {2.1.2}EM}{5}{}%
+\contentsline {subsection}{\numberline {2.1.3}Bayesian Approach}{5}{}%
+\contentsline {section}{\numberline {2.2}Prior work on estimation}{5}{}%
+\contentsline {chapter}{\numberline {Chapter 3}Application to NYSE Data}{6}{}%
+\contentsline {chapter}{\numberline {Chapter 4}Conclusion}{7}{}%
+\contentsline {chapter}{References}{8}{}%

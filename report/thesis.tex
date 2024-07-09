@@ -241,9 +241,27 @@ $$(\text{side},\text{price},\text{time},\text{size})\in \{-1,1\}\times P\times T
 where
 \begin{itemize}
 	\item The order expresses an intention to buy (side$=1$) or sell (side$=-1$) the asset
-	\item The price of the order is a real number. Typically prices are restricted to some discrete set of values, and the difference between successive prices is known as the \textit{tick size} (usually constant).
+	\item The price of the order is a real number. Typically prices are restricted to some discrete set of values, and the difference between successive prices is known as the \textit{tick size}.
+	\item The time at which the message is received is recorded
+	\item The quantity is some real number representing how many units of the asset the sender intends to buy or sell. This is also typically restricted to a discrete set of values, with the smallest possible value known as the \textit{lot size}.
 \end{itemize}
 
+\medskip
+
+When an order insertion message is received, 
+%Invariance of bid<ask
+
+%The matching process & price/time priority
+
+%Bid side and ask side of the book
+
+%The concept of a level
+
+%The bid and ask
+
+%Queue depletions are related to price changes
+
+%Evolution of the limit order book over time -> motivate the emphasis on modeling arrival times
 
 \textcolor{red}{I plan to also highlight in this section some key features of limit order book structures, such as the definition of bid/ask levels, the mechanics of the matching process and queue priority, and the evolution of the limit order book over time, motivating the emphasis on modeling arrival times. I also plan to highlight the fact that queue depletions are intimately related to price changes; this is discussed in the Bouchaud source and seems like important motivation.}
 
@@ -259,6 +277,8 @@ For each extension:
 
 %For each of these variations, maybe use a common example throughout (e.g. arrival times of trades) for clarity.
 
+\textcolor{red}{Need to define somewhere what non-explosiveness corresponds to formally}
+
 Given a sample space $\Omega$ with probability measure $\mathbb P$, a point process is any increasing random sequence of times $$\mathcal T:\Omega\to{\mathbb{R}_{\geq 0}}^\mathbb{N}.$$
 These times are often referred to as \textit{event times}, with the implication that the sequence represents the times at which some event of interest occurs (for instance, the arrival of messages sent to a matching engine).
 
@@ -272,6 +292,8 @@ $$N_{\mathcal T}(t,\omega) = \vert \{i\in\mathbb N \vert \mathcal{T}(\omega)_i \
 {\noindent}A point process $\mathcal T$ may also be \textit{marked}, in which case it is associated with one or more random sequences of marks $\mathcal E:\Omega\to E^{\mathbb N}$ drawn from a set $E$, typically representing additional information about each event. A common special case of this is when $E$ is finite, in which case we may refer to the elements of $E$ as \textit{event types}, and refer to $\mathcal T$ as a \textit{multivariate point process} with a \textit{multivariate counting process}
 $${\tilde N}_{\mathcal T, \mathcal E} : \mathbb{R}_{\geq 0}\times\omega \to \mathbb N ^ {\vert E \vert}$$
 $$N_{\mathcal T, \mathcal E}(t,\omega)_e = \vert \{i\in\mathbb N \vert \mathcal{T}(\omega)_i \leq t, \mathcal{E}(\omega)_i=e\} \vert.$$
+
+%Marked point processes have marks that are not independent of the point process itself. This is probably important to note. Continuous marks can also have this property; usually they won't affect the future behaviour of the point process though.
 
 \subsection{The Expectation Measure}
 Let $B(\mathbb{R})$ be the Borel $\sigma$-algebra on $\mathbb R$.
@@ -1326,6 +1348,24 @@ improvements on scalable stochastic bayesian inference methods for multivaariate
 jiang and rodriguez
 
 Bouchaud et al, Trades quotes and prices
+
+
+https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/1467-9868.00230
+Standard Errors for EM Estimation
+
+https://www.jstor.org/stable/2346010?seq=1
+Acceleration of the EM algorithm
+
+https://link.springer.com/article/10.1007/s11222-024-10392-x
+Improvements on scalable stochastic Bayesian inference methods for multivariate Hawkes process
+
+
+https://opus.lib.uts.edu.au/bitstream/10453/145676/2/19-930.pdf
+Efficient Inference for Nonparametric Hawkes Processes Using Auxiliary Latent Variables
+
+https://arxiv.org/pdf/2002.12501
+Learning Multivariate Hawkes Processes at Scale
+
 
 \end{thebibliography}
 

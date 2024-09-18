@@ -454,13 +454,16 @@ Then, since $A_n$ are measurable sets, the indicator functions are each measurab
 
 \subsection{Marked and Multivariate Point Processes}
 
-{\noindent}A point process $\mathcal T$ may also be \textit{marked}, in which case it is associated with one or more random sequences of marks $\mathcal E:\Omega\to E^{\mathbb N}$ drawn from a set $E$, typically representing additional information about each event. A common special case of this is when $E$ is finite, in which case we may refer to the elements of $E$ as \textit{event types}, and refer to $\mathcal T$ as a \textit{multivariate point process} with a \textit{multivariate counting process}
-$${\tilde N}_{\mathcal T, \mathcal E} : T\times\Omega \to \mathbb N ^ {\vert E \vert}$$
-$$N_{\mathcal T, \mathcal E}(t,\omega)_e = \vert \{i\in\mathbb N \vert \mathcal{T}(\omega)_i \leq t, \mathcal{E}(\omega)_i=e\} \vert.$$
+A point process \mathcal{T} may be \textit{marked}, in which case it is associated with one or more random sequences of marks $$\mathcal{X}:\Omega\to X^\mathbb{N},$$
+drawn from a set $X$, that represent additional information about each event.
+
+A common special case of this is when $X$ is partitioned into a finite number of \textit{event types}, in which case we may refer to $\mathcal{T}$ as a \textit{multivariate point process}.
+
+Each part $E$ of the partition then has an associated point process $$\mathcal{T}_{\{n\in\mathbb{N} : \mathcal{X}_n\in E\}},$$ formed by the subsequence of times where the corresponding element of $\mathcal{X}$ is in $E$. These point processes will then have their own counting functions and intensities. It is common to arrange these in vector form, with one entry for each event type.
+
+\textcolor{red}{Barcode plot and counting process for buys and sells}
 
 %Marked point processes have marks that are not independent of the point process itself. This is probably important to note. Continuous marks can also have this property; usually they won't affect the future behaviour of the point process though.
-
-%Sub-point processes, subsets of the point process
 
 
 \section{Types of Point Process Models}

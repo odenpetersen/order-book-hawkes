@@ -17,11 +17,14 @@
 \usepackage{amssymb}
 \usepackage{amsthm}
 \usepackage{latexsym,amsmath}
+\usepackage{mathtools}
 \usepackage{graphicx}
 \graphicspath{{/Users/odenpetersen/Documents/Honours/order-book-hawkes/images}}
 \usepackage{afterpage}
 \usepackage{xcolor}
 \usepackage{tikz}
+\usepackage[parfill]{parskip}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
@@ -146,6 +149,11 @@
 % the title etc that will appear on the front page
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\setlength{\parindent}{0}
+\setlength{\parskip}{2}
+
+
 
 \title{Point Process Modelling of a Limit Order Book}
 
@@ -337,18 +345,42 @@ Importance of arrival time modeling
 
 \texttt{https://www.amazon.com/Point-Processes-Queues-Martingale-Statistics/dp/0387905367}
 
-\section{Point Process Models of Book Updates}
-With the goal of modelling the arrival time process, we now turn to an introductory overview of point processes, and highlight some key variants described in existing literature that are relevant to this application.
+\section{Mathematical Foundations of Probability Models}
+In order to describe precisely the various models explored in this thesis, it is necessary to introduce some key mathematical concepts that form the basis for model specifications and related derivations. In this section, I cover the basics of measure, probability, and stochastic processes.
 
-\textcolor{red}{
-For each extension:
-- show some example realisations for various parameter choices: barcode and intensity plot
-}
+\subsection{Measure Theory Fundamentals}
+In order to formalise the concept of a stochastic process, it is necessary to introduce the concept of a measure space.
+
+For any set $X$, we can construct the power set
+$$\mathcal{P}(X) = \{S : S\subseteq X\}$$
+which is a new set that contains as its elements every subset $S$ of $X$.
+
+We say that a subset $\Sigma$ of $\mathcal{P}(X)$ is a  \textit{$\sigma$-algebra} on $X$ if and only if it satisfies the following three properties:
+\begin{enumerate}
+	\item Containment of the full space, i.e. $$X\in\Sigma.$$
+	\item Closure under complements, i.e. $$\forall S \in \Sigma, X\backslash S\in\Sigma.$$
+	\item Closure under countable union, i.e. $$\forall \{A_n\}_{n=0}^\infty\in\Sigma^{\mathbb{N}},\quad\bigcup_{n=0}^\infty A_n \in \Sigma.$$
+\end{enumerate}
+Elements of $\Sigma$ are known as \textit{measurable sets}.
+
+We then say that a \textit{measure} on $(X,\Sigma)$ is any function $\mu:\Sigma\to\mathbb{R}_{\geq 0}\cup\{\infty\}$ that is \textit{countably additive}, meaning that for any finite or countable sequence of disjoint sets $A_n\in\Sigma$, we have
+$$\mu\left(\bigcup_n A_n\right) = \sum_n \mu(A_n).$$
+Assuming that at least one set $S\in\Sigma$ has finite measure, we then have $$\mu(S)=\mu(S\cap\emptyset)=\mu(S)+\mu(\emptyset) \implies \mu(\emptyset)=0.$$
+We refer to the combined triple $(X,\Sigma,\mu)$ as a \textit{measure space}.
+
+Informally, a measure formalises intuitions about the size, mass, or significance of a set of points. For instance, a set $S\subseteq X$ with measure zero is known as a \textit{null set}, and a property that holds only for points in a null set is said to be true \textit{almost nowhere} in $X$. Conversely, a property that holds for every point except those in a null set is said to be true \textit{almost everywhere} (a.e.) in $X$. In this way, a measure quantifies how significant or negligible the exceptions to a heuristic principle may be.
+
+The concept of a measure is foundational to the definition of the Lebesgue integral. Integration of a function $f$ over a measurable set $S$ with respect to a measure $\mu$ is written as
+$$\int_S f d\mu,$$
+and will be used throughout this thesis. I will not cover the definition of the Lebesgue integral here, but it can be found in many textbooks on measure theory.
+
+\subsection{Probability Fundamentals}
+
+In the special case where $\mu(X)=1$, we refer to $\mu$ as a \textit{probability measure}, and to $X$ as a \textit{sample space}. Correspondingly, the term \textit{almost everywhere} is replaced with \textit{almost surely} (a.s.), indicating a property that holds on a set of points with probability measure one.
+
+A function from one $\sigma$-algebra to another is called \textit{measurable} if and only if the preimage of any measurable set in the codomain is a measurable set in the domain. A measurable function whose domain is a sample space $\Omega$ equipped with a probability measure $\mathbb{P}$ is known as a \textit{random variable}.
 
 \subsection{Stochastic Process Fundamentals}
-Measure theory basics
-
-What is almost surely (a.s.)
 
 What is a filtration
 
@@ -360,25 +392,65 @@ What is a cadlag \textcolor{red}{The order book is a cadlag over time. Also the 
 
 \textcolor{red}{What is a martingale - do I need this?}
 
+\section{Point Process Models of Book Updates}
+With the goal of modelling the arrival time process, we now turn to an introductory overview of point processes, and highlight some key variants described in existing literature that are relevant to this application.
+
+\textcolor{red}{
+For each extension:
+- show some example realisations for various parameter choices: barcode and intensity plot
+}
+
+
 \subsection{Point Processes}
+Given a probability space $(\Omega,\Sigma,\mathbb P)$, and a measurable space $(T,\Sigma_T)$ representing times, a point process is any increasing sequence of random times $$\mathcal T : \Omega\to T^\mathbb{N},$$
+meaning that $\mathcal{T}(\omega)_n$ is increasing in $n$ for any $\omega\in\Omega$.
 
-Given a sample space $\Omega$ with probability measure $\mathbb P$, a point process is any increasing random sequence of times $$\mathcal T:\Omega\to T^\mathbb{N}.$$
-\textcolor{red}{Include a barcode plot for a poisson process}
-These times are often referred to as \textit{event times}, with the implication that the sequence represents the times at which some event of interest occurs (for instance, the arrival of messages sent to a matching engine).
-{\noindent}All \textcolor{red}{(or perhaps many)} of the point processes considered in this thesis will additionally be adapted with respect to some filtration $\mathcal F$.
+Concretely, $T$ may be chosen to be $\mathbb{R}_{\geq 0}$, and equipped with the Borel $\sigma$-algebra $B\left(\mathbb{R}_{\geq 0}\right)$.
 
-In this thesis, we will only consider \textit{nonexplosive point processes}, defined as those point processes $\mathcal{T}$ for which
+The times in the point process are often referred to as \textit{event times}, with the implication that the sequence represents the times at which some event of interest occurs (for instance, the arrival of messages sent to a matching engine).
+
+{\noindent}For any point process, there exists a corresponding càdlàg stochastic process $N_{\mathcal T}:T\times\Omega\to\mathbb{N}$ known as the \textit{counting process}, that gives the number of events having occurred before or at a given time. This is defined as
+$$N_{\mathcal T}(t,\omega) = \vert \{i\in\mathbb N \vert \mathcal{T}(\omega)_i \leq t\} \vert.$$
+
+\textcolor{red}{Overlay barcode plot for trade times with corresponding counting process}
+
+All \textcolor{red}{(or perhaps many)} of the point processes considered in this thesis will additionally be adapted with respect to some filtration $\mathcal F$ indexed by $T$. \textcolor{red}{In what sense?}
+
+Furthermore, I will only consider \textit{nonexplosive point processes}, defined as those point processes $\mathcal{T}$ for which
 $$\lim_{n\to\infty}\mathcal{T}(\omega)_n=\infty, \mathbb{P}\text{-a.s.}$$
 
 For any bounded interval of time $(t_{\min},t_{\max})$, a nonexplosive point process will almost surely contain only a finite set of times in that interval, i.e.
-$$(t_{\min},t_{\max}) \cap \mathcal{T}(\omega) \text{ finite}, \mathbb{P}\text{-a.s.}$$
+$$(t_{\min},t_{\max}) \cap \mathcal{T}(\omega) \text{ finite},\quad\mathbb{P}\text{-a.s.}$$
 
-\subsection{The Counting Process}
+\subsection{The Counting Measure}
+For any $\omega\in\Omega$, we can define the \textit{counting measure} $\Lambda_\omega$ of the point process as
+$$\Lambda_\omega : \Sigma_T \to \mathbb{N}$$
+$$\Lambda_\omega(S) \coloneq \left\vert S\cap \mathcal{T}(\omega)\right\vert.$$
 
-{\noindent}For any point process, there exists a corresponding stochastic process $N_{\mathcal T}:T\times\Omega\to\mathbb{N}$ known as the \textit{counting process}, that gives the number of events having occurred before or at a given time. This is defined as
-$$N_{\mathcal T}(t,\omega) = \vert \{i\in\mathbb N \vert \mathcal{T}(\omega)_i \leq t\} \vert.$$
-\textcolor{red}{this is a cadlag}
-\textcolor{red}{Overlay barcode plot with corresponding counting process}
+For any finite or countable collection of disjoint sets $A_n\in\Sigma$, we have
+$$\Lambda_\omega\left(\bigcup_n A_n\right) = \left\vert \bigcup_n \left(A_n\cap\mathcal{T}(\omega)\right)\right\vert.$$
+Is this a measure on $(T,\Sigma_T)$? Since subsets of disjoint sets are also disjoint, the terms in the union on the right-hand side will be disjoint, and so
+$$\Lambda_\omega\left(\bigcup_n A_n\right) = \sum_n\left\vert A_n\cap \mathcal{T}(\omega)\right\vert = \sum_n \Lambda_\omega(A_n).$$
+So this is indeed a measure.
+
+\subsection{The Expectation Measure}
+Taking the expectation of the counting measure with respect to some measure $\mathbb{P}$ on a measurable space $(\Omega,\Sigma)$ gives the \textit{expectation measure},
+$$\Lambda_\mathbb{P}(S)\coloneq \mathbb{E}_\mathbb{P}\left[\Lambda_\omega(S)\right] = \int_\Omega \Lambda_\omega(S)d\mathbb{P}(\omega).$$
+
+Is this a measure on $(T,\Sigma_T)$? Since $\Lambda_\omega(S)$ is a non-negative function of $\omega$, it follows that $$\Lambda_{\mathbb{P}} : \Sigma_T \to \mathbb{R}_{\geq 0}\cap\{\infty\}.$$ Furthermore, for any finite or countable sequence of $A_n\in B(\mathbb{R})$, we have $$\Lambda_\mathbb{P}\left(\bigcup_n A_n\right) = \int_\Omega \Lambda_\omega\left(\bigcup_n A_n\right)d\mathbb{P}(\omega) = \int_\Omega \sum_n \Lambda_\omega(A_n) d\mathbb{P}(\omega),$$
+by the countable additivity of $\Lambda_\omega$.
+
+To handle the sum inside the integral, we can write each term as a sum of indicator functions:
+$$\Lambda_\omega(A_n) = \left\vert A_n\cap \mathcal{T}(\omega)\right\vert = \sum_i \mathbb{I}_{A_n}\left(\mathcal{T}(\omega)_i\right).$$
+Then, since $A_n$ are measurable sets, the indicator functions are each measurable functions of $\omega$. Because finite sums and pointwise limits of measurable functions are measurable, we have that $\Lambda_\omega(A_n)$ is measurable.  Finally, since each term in the sum over $n$ is a nonnegative measurable function, the integral commutes with the sum, and hence $\Lambda_\mathbb{P}$ is countably additive. Therefore the expectation measure is also a valid measure.
+
+\subsection{Intensity Functions}
+\textcolor{red}{These can be formulated using the Radon-Nikodym derivative of $\Lambda$ with respect to the lebesgue measure on time, i.e. $d\Lambda=\lambda dt$.}
+\textcolor{red}{Show that $\frac{d\mathbb{E}[N(t)]}{dt}=\lambda(t)$}
+\textcolor{red}{For intuition, this is the arrival rate.}
+
+\textcolor{red}{Existence and uniqueness shown in https://projecteuclid.org/journals/annals-of-probability/volume-24/issue-3/Stability-of-nonlinear-Hawkes-processes/10.1214/aop/1065725193.full under restrictions on the kernel}
+
 
 \subsection{Marked and Multivariate Point Processes}
 
@@ -388,28 +460,8 @@ $$N_{\mathcal T, \mathcal E}(t,\omega)_e = \vert \{i\in\mathbb N \vert \mathcal{
 
 %Marked point processes have marks that are not independent of the point process itself. This is probably important to note. Continuous marks can also have this property; usually they won't affect the future behaviour of the point process though.
 
-\subsection{The Expectation Measure}
-Let $B(\mathbb{R})$ be the Borel $\sigma$-algebra on $\mathbb R$.
+%Sub-point processes, subsets of the point process
 
-{\noindent}For any point process $\mathcal T$ and for any $\omega\in\Omega$, we can define the \textit{counting measure} $\Lambda_\omega$ as
-$$\Lambda_\omega : B(\mathbb R) \to \mathbb{N}$$
-$$\Lambda_\omega(S) = \left\vert S\cap \mathcal{T}(\omega)\right\vert.$$
-\textcolor{red}{Prove this is a measure}
-
-Taking the expectation of the counting measure with respect to $\mathbb{P}$ \textcolor{red}{(optionally conditional on some sub-$\sigma$-algebra of $\Omega$)} gives the \textit{expectation measure} $\Lambda(S)$.
-\textcolor{red}{Prove this is a measure}
-
-\begin{verbatim} https://en.wikipedia.org/wiki/Campbell%27s_theorem_(probability)\end{verbatim}
-
-\textcolor{red}{For the sake of intuition, it should probably be shown here that $d\Lambda=d(\mathbb{E}N)$}
-
-\textcolor{red}{It is also important to define the expectation measure with respect to a sigma-algebra, and in particular one from the filtration.}
-
-\subsection{Intensity Functions}
-\textcolor{red}{These can be formulated using the Radon-Nikodym derivative of $\Lambda$ with respect to the lebesgue measure on time, i.e. $d\Lambda=\lambda dt$.}
-\textcolor{red}{For intuition, this is the arrival rate.}
-
-\textcolor{red}{Existence and uniqueness shown in https://projecteuclid.org/journals/annals-of-probability/volume-24/issue-3/Stability-of-nonlinear-Hawkes-processes/10.1214/aop/1065725193.full under restrictions on the kernel}
 
 \section{Types of Point Process Models}
 

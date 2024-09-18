@@ -370,9 +370,13 @@ We refer to the combined triple $(X,\Sigma,\mu)$ as a \textit{measure space}.
 
 Informally, a measure formalises intuitions about the size, mass, or significance of a set of points. For instance, a set $S\subseteq X$ with measure zero is known as a \textit{null set}, and a property that holds only for points in a null set is said to be true \textit{almost nowhere} in $X$. Conversely, a property that holds for every point except those in a null set is said to be true \textit{almost everywhere} (a.e.) in $X$. In this way, a measure quantifies how significant or negligible the exceptions to a heuristic principle may be.
 
+Similarly, familiar concepts of \textit{length}, \textit{area} and \textit{volume} are all formalised by a family of translation-invariant measures on $\mathbb{R}^n$, known as the $n$-dimensional \textit{Lebesgue measures}.
+
 The concept of a measure is foundational to the definition of the Lebesgue integral. Integration of a function $f$ over a measurable set $S$ with respect to a measure $\mu$ is written as
 $$\int_S f d\mu,$$
-and will be used throughout this thesis. I will not cover the definition of the Lebesgue integral here, but it can be found in many textbooks on measure theory.
+while integration with respect to the Lebesgue measure will often be written simply as
+$$\int_S f(t)dt.$$
+I will not cover the definition of the Lebesgue measure or Lebesgue integral here, but they can be found in many textbooks on measure theory.
 
 \subsection{Probability Fundamentals}
 
@@ -455,11 +459,11 @@ Then, since $A_n$ are measurable sets, the indicator functions are each measurab
 \subsection{Marked and Multivariate Point Processes}
 
 A point process \mathcal{T} may be \textit{marked}, in which case it is associated with one or more random sequences of marks $$\mathcal{X}:\Omega\to X^\mathbb{N},$$
-drawn from a set $X$, that represent additional information about each event.
+drawn from a set $X$, that represent additional information about each event. These may be adapted to the filtration $\mathcal{F}$ \textcolor{red}{In what sense?}
 
 A common special case of this is when $X$ is partitioned into a finite number of \textit{event types}, in which case we may refer to $\mathcal{T}$ as a \textit{multivariate point process}.
 
-Each part $E$ of the partition then has an associated point process $$\mathcal{T}_{\{n\in\mathbb{N} : \mathcal{X}_n\in E\}},$$ formed by the subsequence of times where the corresponding element of $\mathcal{X}$ is in $E$. These point processes will then have their own counting functions and intensities. It is common to arrange these in vector form, with one entry for each event type.
+Each part $E$ of the partition then has an associated point process $$\mathcal{T}_E = \mathcal{T}_{\{n\in\mathbb{N} : \mathcal{X}_n\in E\}},$$ formed by the subsequence of times where the corresponding element of $\mathcal{X}$ is in $E$. These point processes will then have their own counting functions, intensities, and other characteristics. It is common to arrange these in vector form, with one entry for each event type.
 
 \textcolor{red}{Barcode plot and counting process for buys and sells}
 
@@ -469,7 +473,7 @@ Each part $E$ of the partition then has an associated point process $$\mathcal{T
 \section{Types of Point Process Models}
 
 \subsection{Poisson Processes}
-Probably the simplest modeling assumption we can make is to assume that the arrival rate of the process is a constant \textcolor{red}{conditional on any sigma-algebra in the filtration to which the process is adapted}.
+Probably the simplest modeling assumption we can make is to assume that the arrival rate of the process is a constant $\nu\in\mathbb{R}$.
 
 A Poisson process is a point process for which the following two properties hold.
 \begin{enumerate}

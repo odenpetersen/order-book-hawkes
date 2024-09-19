@@ -228,7 +228,7 @@ This is the abstract
 
 \chapter{Introduction}\label{s-intro}
 
-{\noindent}On a single day in 2023, the US stock market saw an average of around \$500 billion dollars worth of shares traded on various exchanges and other venues, exceeding the annual GDP of a typical European country \cite{FINRA2024}. Modern securities markets facilitate the exchange of shares and other financial assets at extremely high frequency, as a result of aggressive investment in specialised networking hardware, custom-made computer architectures, and high-throughput machine learning systems. In facilitating capital flows for the global economy, financial markets have at the same time managed to claim an increasing fraction of resources and attention, with economic consequences that are not yet fully understood \cite{Palley2007}.
+On a single day in 2023, the US stock market saw an average of around \$500 billion dollars worth of shares traded on various exchanges and other venues, exceeding the annual GDP of a typical European country \cite{FINRA2024}. Modern securities markets facilitate the exchange of shares and other financial assets at extremely high frequency, as a result of aggressive investment in specialised networking hardware, custom-made computer architectures, and high-throughput machine learning systems. In facilitating capital flows for the global economy, financial markets have at the same time managed to claim an increasing fraction of resources and attention, with economic consequences that are not yet fully understood \cite{Palley2007}.
 
 Despite many mysteries and open questions about the origins and dynamics of market phenomena, the financial sector itself has readily adapted to the increasing scale and complexity of the markets in which it operates. The practical design of exchange rules and trading systems has in large part been an empirical endeavour on the part of market participants, operators, and regulators. Many phenomena have been observed to emerge in an apparently decentralised fashion from the application of exploitative heuristics and predictive algorithms that interact with exchanges and aggregate to produce desirable outcomes. While users of trading strategies aim to maintain acceptable risk levels while generating profits over the long term, market operators and regulators are tasked with the design of incentive mechanisms that exploit this self-interested behaviour to improve market outcomes, including reduced transaction costs, fast and accurate incorporation of external information (such as economic news or earnings reports), and adherence to various concepts of fairness, propriety, and legality.
 
@@ -345,59 +345,10 @@ Importance of arrival time modeling
 
 \texttt{https://www.amazon.com/Point-Processes-Queues-Martingale-Statistics/dp/0387905367}
 
-\section{Mathematical Foundations of Probability Models}
-In order to describe precisely the various models explored in this thesis, it is necessary to introduce some key mathematical concepts that form the basis for model specifications and related derivations. In this section, I cover the basics of measure, probability, and stochastic processes.
+\section{Overview of Point Processes}
+With the goal of modelling the arrival time process, I will now provide an introductory overview of point processes. Later in this chapter, I will highlight some key variants described in existing literature that are relevant to order book modeling.
 
-\subsection{Measure Theory Fundamentals}
-In order to formalise the concept of a stochastic process, it is necessary to introduce the concept of a measure space.
-
-For any set $X$, we can construct the power set
-$$\mathcal{P}(X) = \{S : S\subseteq X\}$$
-which is a new set that contains as its elements every subset $S$ of $X$.
-
-We say that a subset $\Sigma$ of $\mathcal{P}(X)$ is a  \textit{$\sigma$-algebra} on $X$ if and only if it satisfies the following three properties:
-\begin{enumerate}
-	\item Containment of the full space, i.e. $$X\in\Sigma.$$
-	\item Closure under complements, i.e. $$\forall S \in \Sigma, X\backslash S\in\Sigma.$$
-	\item Closure under countable union, i.e. $$\forall \{A_n\}_{n=0}^\infty\in\Sigma^{\mathbb{N}},\quad\bigcup_{n=0}^\infty A_n \in \Sigma.$$
-\end{enumerate}
-Elements of $\Sigma$ are known as \textit{measurable sets}.
-
-We then say that a \textit{measure} on $(X,\Sigma)$ is any function $\mu:\Sigma\to\mathbb{R}_{\geq 0}\cup\{\infty\}$ that is \textit{countably additive}, meaning that for any finite or countable sequence of disjoint sets $A_n\in\Sigma$, we have
-$$\mu\left(\bigcup_n A_n\right) = \sum_n \mu(A_n).$$
-Assuming that at least one set $S\in\Sigma$ has finite measure, we then have $$\mu(S)=\mu(S\cap\emptyset)=\mu(S)+\mu(\emptyset) \implies \mu(\emptyset)=0.$$
-We refer to the combined triple $(X,\Sigma,\mu)$ as a \textit{measure space}.
-
-Informally, a measure formalises intuitions about the size, mass, or significance of a set of points. For instance, a set $S\subseteq X$ with measure zero is known as a \textit{null set}, and a property that holds only for points in a null set is said to be true \textit{almost nowhere} in $X$. Conversely, a property that holds for every point except those in a null set is said to be true \textit{almost everywhere} (a.e.) in $X$. In this way, a measure quantifies how significant or negligible the exceptions to a heuristic principle may be.
-
-Similarly, familiar concepts of \textit{length}, \textit{area} and \textit{volume} are all formalised by a family of translation-invariant measures on $\mathbb{R}^n$, known as the $n$-dimensional \textit{Lebesgue measures}.
-
-The concept of a measure is foundational to the definition of the Lebesgue integral. Integration of a function $f$ over a measurable set $S$ with respect to a measure $\mu$ is written as
-$$\int_S f d\mu,$$
-while integration with respect to the Lebesgue measure will often be written simply as
-$$\int_S f(t)dt.$$
-I will not cover the definition of the Lebesgue measure or Lebesgue integral here, but they can be found in many textbooks on measure theory.
-
-\subsection{Probability Fundamentals}
-
-In the special case where $\mu(X)=1$, we refer to $\mu$ as a \textit{probability measure}, and to $X$ as a \textit{sample space}. Correspondingly, the term \textit{almost everywhere} is replaced with \textit{almost surely} (a.s.), indicating a property that holds on a set of points with probability measure one.
-
-A function from one $\sigma$-algebra to another is called \textit{measurable} if and only if the preimage of any measurable set in the codomain is a measurable set in the domain. A measurable function whose domain is a sample space $\Omega$ equipped with a probability measure $\mathbb{P}$ is known as a \textit{random variable}.
-
-\subsection{Stochastic Process Fundamentals}
-
-What is a filtration
-
-What is a stochastic process
-
-What is a realisation of a stochastic process
-
-What is a cadlag \textcolor{red}{The order book is a cadlag over time. Also the counting process is a cadlag.}
-
-\textcolor{red}{What is a martingale - do I need this?}
-
-\section{Point Process Models of Book Updates}
-With the goal of modelling the arrival time process, we now turn to an introductory overview of point processes, and highlight some key variants described in existing literature that are relevant to this application.
+This section will make extensive use of theoretical concepts described in the appendix \textcolor{red}{Make sure to update this if there ends up being more than one appendix}. For an overview of measure theory, probability spaces, and stochastic processes, please refer to the relevant sections.
 
 \textcolor{red}{
 For each extension:
@@ -455,6 +406,8 @@ Then, since $A_n$ are measurable sets, the indicator functions are each measurab
 
 \textcolor{red}{Existence and uniqueness shown in https://projecteuclid.org/journals/annals-of-probability/volume-24/issue-3/Stability-of-nonlinear-Hawkes-processes/10.1214/aop/1065725193.full under restrictions on the kernel}
 
+\subsection{Residuals}
+\textcolor{red}{Define residuals, explain why they're exponentially distributed}
 
 \subsection{Marked and Multivariate Point Processes}
 
@@ -465,25 +418,29 @@ A common special case of this is when $X$ is partitioned into a finite number of
 
 Each part $E$ of the partition then has an associated point process $$\mathcal{T}_E = \mathcal{T}_{\{n\in\mathbb{N} : \mathcal{X}_n\in E\}},$$ formed by the subsequence of times where the corresponding element of $\mathcal{X}$ is in $E$. These point processes will then have their own counting functions, intensities, and other characteristics. It is common to arrange these in vector form, with one entry for each event type.
 
+On the other hand, given a collection of point processes adapted with respect to a common filtration, we can form a single marked point process by interleaving the sequences of event times. The counting process, counting measure, expectation measure, and intensity function of the combined process will be the sum of the intensities for the individual point processes.
+
 \textcolor{red}{Barcode plot and counting process for buys and sells}
 
 %Marked point processes have marks that are not independent of the point process itself. This is probably important to note. Continuous marks can also have this property; usually they won't affect the future behaviour of the point process though.
 
 
-\section{Types of Point Process Models}
+\section{Point Process Models of Book Updates}
 
 \subsection{Poisson Processes}
 Probably the simplest modeling assumption we can make is to assume that the arrival rate of the process is a constant $\nu\in\mathbb{R}$.
 
 A Poisson process is a point process for which the following two properties hold.
 \begin{enumerate}
-	\item For any collection of disjoint Borel sets $B\subset B(\mathbb R)$, their couting measures $\{\Lambda_w(b) : b\in B\}$ are independent random variables.
-	\item For any Borel set $b$ with finite Lebesgue measure $\mu(b)$, we have $\Lambda(b)=\lambda \mu(b)\propto \mu(b)$ for some fixed $\lambda\in\mathbb{R}$. \textcolor{red}{Put differently, we have $d\Lambda=\lambda dt$.}
+	\item For any finite collection of disjoint measurable sets $A_n\in\Sigma_T$, their counting measures $\Lambda_\omega(A_n)$ are independent random variables.
+	\item For any measurable set $A$, we have $$\Lambda_{\mathbb P}(A) = \nu \mu_{\mathrm{Lebesgue}}(A)\propto\mu_{\mathrm{Lebesgue}}(A).$$
 \end{enumerate}
+
+In the multivariate case with $n$ event types, we can have a vector $\nu\in\mathbb{R}^n$ containing the constant intensities of each individual point process.
 
 \textcolor{red}{This definition might require a reference.}
 
-\textcolor{red}{Multivariate case}
+\textcolor{red}{Explain why the times between events are exponentially distributed. Can use the linearity of residuals to prove this succinctly, since residuals are exponentially distributed.}
 
 \textcolor{red}{There is a link here to the sante fe order book model, described in the Bouchaud source, which is an example of the application of poisson arrivals.}
 
@@ -491,13 +448,11 @@ A Poisson process is a point process for which the following two properties hold
 
 \textcolor{red}{I think I should change this to be separate plots. Can show the intensity function for each; e.g. for inhomogenous it's the same for every realisation, but for hawkes process the intensity function is itself random.}
 
-
 \subsection{Inhomogeneous Poisson Process}
 An inhomogeneous Poisson process is a generalisation of the Poisson process for which the second condition is replaced by the weaker requirement that every Borel set $b$ with finite Lebesgue measure $\mu(b)$ has a finite expectation measure. \textcolor{red}{Is this weaker version even needed, or is it sufficient to just drop the condition entirely?}
 
-\subsection{Residuals}
-
-\subsection{Autoregressive Intensity \& Hawkes Processes}
+\subsection{Autoregressive Point Processes}
+i.e. Hawkes Processes
 \textcolor{red}{Intuitively, self-excitation or self-inhibition; mutually exciting/inhibiting}
 
 \textcolor{red}{Original hawkes process paper https://academic.oup.com/biomet/article-abstract/58/1/83/224809?redirectedFrom=fulltext}
@@ -505,7 +460,6 @@ An inhomogeneous Poisson process is a generalisation of the Poisson process for 
 immigration/birth interpretation
 branching matrix \& complete data likelihood
 
-\subsection{Hawkes Processes}
 Long-run mean $$\bar\lambda = \lim_{t\to\infty} \mathbb E\left[\lambda(t)\right]$$
 
 $$\bar\lambda = \nu + \bar\lambda \int_0^\infty k(t)dt$$
@@ -563,6 +517,7 @@ Meta-orders. Kernel is product of an ordinary kernel and an EMA on the meta-orde
 Could also be used to correct for the quasi-EM approximation.
 
 \section{the most general model}
+\textcolor{red}{Here for ideas/reference but I dont think this section will be in the final report}
 State-dependent multi-kernel multivariate hawkes process with increasing kernel components and possible inhibition.
 
 Nonparametric estimate of nu, sim study for u-shaped true nu. Probably splines, maybe kde if its fast enough. Compare to quadratic regression
@@ -585,7 +540,7 @@ Define $\lambda_{e,(T,E)}(t)$ and $\Lambda_{e,(T,E)}(t)$ for fully observed poin
 
 \section{Maximum Likelihood Estimation}
 Given a parametric family of marked point processes,
-$$\{(\mathcal{T}_\theta,\mathcal{E}) : \theta\in\Theta\}$$
+$$\{(\mathcal{T}_\theta,\mathcal{X}) : \theta\in\Theta\}$$
 
 
 \textcolor{red}{Derive the likelihood function}
@@ -749,6 +704,82 @@ https://databento.medium.com/getting-futures-tick-sizes-and-notional-tick-values
 This is the conclusion
 
 
+\chapter{Appendix: Foundations of Probabilistic Models}
+In order to describe precisely the various models explored in this thesis, it is necessary to introduce some key mathematical concepts that form the basis for model specifications and related derivations. In this appendix, I cover the basics of measure, probability, and stochastic processes.
+
+\section{Measure Theory Fundamentals}
+In order to formalise the concept of a stochastic process, it is necessary to introduce the concept of a measure space.
+
+For any set $X$, we can construct the power set
+$$\mathcal{P}(X) = \{S : S\subseteq X\}$$
+which is a new set that contains as its elements every subset $S$ of $X$.
+
+We say that a subset $\Sigma$ of $\mathcal{P}(X)$ is a  \textit{$\sigma$-algebra} on $X$ if and only if it satisfies the following three properties:
+\begin{enumerate}
+	\item Containment of the full space, i.e. $$X\in\Sigma.$$
+	\item Closure under complements, i.e. $$\forall S \in \Sigma, X\backslash S\in\Sigma.$$
+	\item Closure under countable union, i.e. $$\forall \{A_n\}_{n=0}^\infty\in\Sigma^{\mathbb{N}},\quad\bigcup_{n=0}^\infty A_n \in \Sigma.$$
+\end{enumerate}
+Elements of $\Sigma$ are known as \textit{measurable sets}. A common example of a $\sigma$-algebra is the Borel $\sigma$-algebra $B(X)$ of a topological space $X$ (e.g. $\mathbb{R}$), defined as the smallest $\sigma$-algebra such that every open set is measurable.
+
+We then say that a \textit{measure} on $(X,\Sigma)$ is any function $\mu:\Sigma\to\mathbb{R}_{\geq 0}\cup\{\infty\}$ that is \textit{countably additive}, meaning that for any finite or countable sequence of disjoint sets $A_n\in\Sigma$, we have
+$$\mu\left(\bigcup_n A_n\right) = \sum_n \mu(A_n).$$
+Assuming that at least one set $S\in\Sigma$ has finite measure, we then have $$\mu(S)=\mu(S\cap\emptyset)=\mu(S)+\mu(\emptyset) \implies \mu(\emptyset)=0.$$
+We refer to the combined triple $(X,\Sigma,\mu)$ as a \textit{measure space}.
+
+Informally, a measure formalises intuitions about the size, mass, or significance of a set of points. For instance, a set $S\subseteq X$ with measure zero is known as a \textit{null set}, and a property that holds only for points in a null set is said to be true \textit{almost nowhere} in $X$. Conversely, a property that holds for every point except those in a null set is said to be true \textit{almost everywhere} (a.e.) in $X$. In this way, a measure quantifies how significant or negligible the exceptions to a heuristic principle may be.
+
+Similarly, familiar concepts of \textit{length}, \textit{area} and \textit{volume} are all formalised by a family of translation-invariant measures on $\mathbb{R}^n$, known as the $n$-dimensional \textit{Lebesgue measures}.
+
+The concept of a measure is foundational to the definition of the Lebesgue integral. Integration of a function $f$ over a measurable set $S$ with respect to a measure $\mu$ is written as
+$$\int_{t\in S} f(t) d\mu(t),$$
+while integration with respect to the Lebesgue measure will often be written simply as
+$$\int_S f(t)dt.$$
+I will not cover the definition of the Lebesgue measure or Lebesgue integral here, but they can be found in most textbooks on measure theory.
+
+\section{Probability Spaces}
+In the special case where $\mu(X)=1$, we refer to $\mu$ as a \textit{probability measure}, and to $X$ as a \textit{sample space}. Correspondingly, the term \textit{almost everywhere} is replaced with \textit{almost surely} (a.s.), indicating a property that holds on a set of points with probability measure one.
+
+A function from one $\sigma$-algebra to another is called \textit{measurable} if and only if the preimage of any measurable set in the codomain is a measurable set in the domain. A measurable function whose domain is a sample space $\Omega$ equipped with a probability measure $\mathbb{P}$ is known as a \textit{random variable}.
+
+Measurable sets in a sample space are often referred to as \textit{events}, and the measure of such a set is called the probability of the event. For instance, the set $S$ of points $\omega\in\Omega$ for which a random variable $X:\Omega\to\mathbb{R}$ satisfies a particular property $P:\mathbb{R}\to\{\mathrm{True},\mathrm{False}\}$ will have measure equal to the probability of that property being true.\footnote{The predicate $P$ must be measurable.}
+
+A more general concept is \textit{expectation}. For a real-valued random variable $X:\Omega\to \mathbb{R}$, we define the expectation of $X$ with respect to $\mathbb{P}$ to be the linear functional
+$$\mathbb{E}_{\mathbb{P}}[X(\omega)] \coloneq \int_{\omega\in\Omega} X(\omega)d\mathbb{P}(\omega).$$
+
+For binary-valued random variables $X:\Omega\to\{0,1\}$, we have the identity
+$$\mathbb{E}_\mathbb{P}[X(\omega)] = \mathbb{P}\left(\{\omega\in\Omega : X(\omega)=1\}\right).$$
+
+\subsection{Conditionalisation}
+By defining ``events" as $\Sigma$-measurable subsets of $\Omega$, we allow knowledge of an event to inform us about which possible values of the hidden $\omega$ could have produced the result we actually observe. In this way, the knowledge that $\omega$ has produced one observed event allows us to draw probabilistic conclusions about the occurrence of a different, related event. For instance, learning that a die has rolled an even number tells us that it cannot possibly have rolled a $3$, and makes the proposition that a $2$ has been rolled a more reasonable guess than otherwise.
+
+In order to capture the relationships between events, and to make systematic inferences about hidden events from observed ones, it is necessary to describe mathematical rules for \textit{conditionalisation}.
+
+Given two $\sigma$-algebras $\Sigma_1,\Sigma_2$ on $\omega$, we say that $\Sigma_1$ is a \textit{sub-$\sigma$-algebra} of $\Sigma_2$ if and only if $\Sigma_1\subseteq\Sigma_2$. In the case where $\Sigma_1\not=\Sigma_2$, $\Sigma_1$ is said to be \textit{coarser} than $\Sigma_2$, in the sense that $\Sigma_2$ contains events that cannot be expressed as $\Sigma_1$-measurable sets. Knowing which $\Sigma_2$-events the hidden $\omega$ falls under can therefore give us more information about the exact value of $\omega$.
+
+One common example of a sub-$\sigma$-algebra arises by considering the set
+$$\{X^{-1}(A) : A\in\mathbb{R}\}\subseteq\mathcal{P}(\Omega),$$
+consisting of all the preimages of Borel-measurable sets under a random variable $X:\Omega\to\mathbb{R}$. This is known as the $\sigma$-algebra generated by $X$.
+
+expectation conditional on sigma algebra
+expectation conditional on an event
+
+probability is expectation of indicator function
+
+What is independence
+
+Conditional probability
+
+\section{Stochastic Process Fundamentals}
+What is a filtration
+
+What is a stochastic process
+
+What is a realisation of a stochastic process
+
+What is a cadlag \textcolor{red}{The order book is a cadlag over time. Also the counting process is a cadlag.}
+
+\textcolor{red}{What is a martingale - do I need this?}
 
 
 

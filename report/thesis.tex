@@ -339,24 +339,21 @@ Queue depletions are related to price changes \cite{BouchaudEtAl}
 
 Evolution of the limit order book over time $\to$ motivate the emphasis on modeling arrival times
 
-Price evolution
+Price evolution as a jump process (what is a jump process)
+``Swishchuk and Huffman (2020) construct a compound Hawkes process'' modeling price changes with a jump process where jump sizes are a markov chain. Jump process is controlled by one-dimensional point process.
+``Coinciding with the first preprint version of the present paper, Wu et al. (2019) develop a queue-reactive Hawkes process based on (2.4). In their model, X is endogenous and carries information about queue lengths in the LOB, while the multi-dimensional counting process driven by the intensity (2.4) models events pertaining to these queues. Wu et al. (2019) estimate their model on German bond (Bund) and index (DAX) futures LOB data.''
+``Subsequently, Mounjid et al. (2019) generalise the queue-reactive Hawkes process to a more general point process framework that allows for non-linearity and quadratic Hawkes structure.  Mounjid et al. (2019) additionally establish ergodicity for the model and also derive functional limit theorems for its long-term behaviour. They apply the model to evaluate and rank equities market makers on Euronext Paris.''
 
 Importance of arrival time modeling
 
 \texttt{https://www.amazon.com/Point-Processes-Queues-Martingale-Statistics/dp/0387905367}
 
 \section{Overview of Point Processes}
-With the goal of modelling the arrival time process, I will now provide an introductory overview of point processes. Later in this chapter, I will highlight some key variants described in existing literature that are relevant to order book modeling.
+With the goal of modelling the arrival time process, I will now provide an introductory overview of point processes. In the next section, I will highlight some key variants described in existing literature that are relevant to order book modeling.
 
 This section will make extensive use of theoretical concepts described in the appendix \textcolor{red}{Make sure to update this if there ends up being more than one appendix}. For an overview of measure theory, probability spaces, and stochastic processes, please refer to the relevant sections.
 
-\textcolor{red}{
-For each extension:
-- show some example realisations for various parameter choices: barcode and intensity plot
-}
-
-
-\subsection{Point Processes}
+\subsection{Definition}
 Given a probability space $(\Omega,\Sigma,\mathbb P)$, and a measurable space $(T,\Sigma_T)$ representing times, a point process is any increasing sequence of random times $$\mathcal T : \Omega\to T^\mathbb{N},$$
 meaning that $\mathcal{T}(\omega)_n$ is increasing in $n$ for any $\omega\in\Omega$.
 
@@ -396,13 +393,35 @@ Is this a measure on $(T,\Sigma_T)$? Since $\Lambda_\omega(S)$ is a non-negative
 by the countable additivity of $\Lambda_\omega$.
 
 To handle the sum inside the integral, we can write each term as a sum of indicator functions:
-$$\Lambda_\omega(A_n) = \left\vert A_n\cap \mathcal{T}(\omega)\right\vert = \sum_i \mathbb{I}_{A_n}\left(\mathcal{T}(\omega)_i\right).$$
+$$\Lambda_\omega(A_n) = \left\vert A_n\cap \mathcal{T}(\omega)\right\vert = \sum_i 1_{A_n}\left(\mathcal{T}(\omega)_i\right).$$
 Then, since $A_n$ are measurable sets, the indicator functions are each measurable functions of $\omega$. Because finite sums and pointwise limits of measurable functions are measurable, we have that $\Lambda_\omega(A_n)$ is measurable.  Finally, since each term in the sum over $n$ is a nonnegative measurable function, the integral commutes with the sum, and hence $\Lambda_\mathbb{P}$ is countably additive. Therefore the expectation measure is also a valid measure.
 
-\subsection{Intensity Functions}
-\textcolor{red}{These can be formulated using the Radon-Nikodym derivative of $\Lambda$ with respect to the lebesgue measure on time, i.e. $d\Lambda=\lambda dt$.}
-\textcolor{red}{Show that $\frac{d\mathbb{E}[N(t)]}{dt}=\lambda(t)$}
-\textcolor{red}{For intuition, this is the arrival rate.}
+\subsection{Intensity of a Point Process}
+For a point process $\mathcal{T}$, the counting measure of a half-open interval $(t,t+\epsilon]$ can be written in terms of the counting process $N_\mathcal{T}$ in the form
+$$\Lambda_\omega\left((t,t+\epsilon]\right) = N_\mathcal{T}(t+\epsilon,\omega) - N_\mathcal{T}(t,\omega).$$
+Integrating out $\omega$ with respect to $\mathbb{P}$ then gives us the identity
+$$\Lambda_\mathbb{P}\left((t,t+\epsilon]\right) = \mathbb{E}_\mathbb{P}\left[N_\mathcal{T}(t+\epsilon)\right] - \mathbb{E}_\mathbb{P}\left[N_\mathcal{T}(t)\right],$$
+allowing us to write the expectation measure in terms of a finite difference of the first moment of $N_\mathcal{T}$.
+
+If $\mathbb{E}_\mathbb{P}\left[N_\mathcal{T}(t)\right]$ is right-differentiable at $t$, we can further say that
+$$\lim_{\epsilon\to0}\frac{\Lambda_\mathbb{P}\left((t,t+\epsilon]\right)}{\epsilon} = \lim_{\epsilon\to0}\frac{\mathbb{E}_\mathbb{P}\left[N_\mathcal{T}(t+\epsilon)\right] - \mathbb{E}_\mathbb{P}\left[N_\mathcal{T}(t)\right]}{\epsilon} = \frac{d\mathbb{E}_\mathbb{P}\left[N_\mathcal{T}(t)\right]}{dt}$$
+for sufficiently small $\epsilon$, where the last term is the right-derivative. For brevity, I will write
+$$\lambda_{\mathbb{P}}(t) \coloneq \frac{d\mathbb{E}_\mathbb{P}\left[N_\mathcal{T}(t)\right]}{dt}.$$
+
+Assuming further that $\mathbb{E}_\mathbb{P}\left[N_\mathcal{T}(t)\right]$ is differentiable on some open interval $(t,t+\epsilon')$, \textcolor{red}{Prove this is Radon-Nikodym derivative of $\Lambda_\mathbb{P}$ in the open interval}
+
+It then follows from the fundamental theorem of calculus that
+$$\int_t^{t+\epsilon} \lambda_{\mathbb{P}}(s)ds = \lambda_{\mathbb{P}}(t)\cdot\epsilon + o(\epsilon),\quad \epsilon\to 0.$$
+
+So \textcolor{red}{since $\lambda_\mathbb{P}$ is a radon-nikodym derivative} we can write \textcolor{red}{Why?}
+$$\Lambda_{\mathbb{P}}\left((t,t+\epsilon]\right)=\lambda_{\mathbb{P}}(t)\cdot\epsilon+o(\epsilon),\quad \epsilon\to 0$$
+Therefore the expected number of events occurring in a small interval $(t,t+\epsilon]$ is approximately proportional to its length.
+
+It is common to refer to $\lambda_{\mathbb{P}}(t)$ as the \textit{arrival rate} of the point process at $t$, since it represents the expected number of events occurring per unit time.
+
+If we instead take the expectations above conditioned on $\mathcal{F}_t$, we can define a stochastic process
+$$\lambda(t,\omega) \coloneq \lambda_{\mathbb{P}\vert\mathcal{F}_t}(t,\omega),$$
+known as the \textit{intensity} of the point process. This represents our best estimate of the number of events that will arrive in the next $\epsilon$ units of time, for very small $\epsilon$, based on all the information contained in the filtration up to $t$.
 
 \textcolor{red}{Existence and uniqueness shown in https://projecteuclid.org/journals/annals-of-probability/volume-24/issue-3/Stability-of-nonlinear-Hawkes-processes/10.1214/aop/1065725193.full under restrictions on the kernel}
 
@@ -418,27 +437,36 @@ A common special case of this is when $X$ is partitioned into a finite number of
 
 Each part $E$ of the partition then has an associated point process $$\mathcal{T}_E = \mathcal{T}_{\{n\in\mathbb{N} : \mathcal{X}_n\in E\}},$$ formed by the subsequence of times where the corresponding element of $\mathcal{X}$ is in $E$. These point processes will then have their own counting functions, intensities, and other characteristics. It is common to arrange these in vector form, with one entry for each event type.
 
-On the other hand, given a collection of point processes adapted with respect to a common filtration, we can form a single marked point process by interleaving the sequences of event times. The counting process, counting measure, expectation measure, and intensity function of the combined process will be the sum of the intensities for the individual point processes.
+On the other hand, given a collection of point processes adapted with respect to a common filtration, we can form a single marked point process by interleaving the sequences of event times. The counting process, counting measure, expectation measure, and intensity of the combined process will be the sum of those for the individual point processes.
 
-\textcolor{red}{Barcode plot and counting process for buys and sells}
+\textcolor{red}{Barcode plot and counting process for buys and sells, and the combined process}
 
 %Marked point processes have marks that are not independent of the point process itself. This is probably important to note. Continuous marks can also have this property; usually they won't affect the future behaviour of the point process though.
 
 
 \section{Point Process Models of Book Updates}
 
+\textcolor{red}{
+For each extension:
+- show some example realisations for various parameter choices: barcode and intensity plot
+}
+
+
 \subsection{Poisson Processes}
-Probably the simplest modeling assumption we can make is to assume that the arrival rate of the process is a constant $\nu\in\mathbb{R}$.
+Probably the simplest modeling assumption we can make is to assume that the intensity of the process is a constant $\nu\in\mathbb{R}$.
 
 A Poisson process is a point process for which the following two properties hold.
 \begin{enumerate}
 	\item For any finite collection of disjoint measurable sets $A_n\in\Sigma_T$, their counting measures $\Lambda_\omega(A_n)$ are independent random variables.
-	\item For any measurable set $A$, we have $$\Lambda_{\mathbb P}(A) = \nu \mu_{\mathrm{Lebesgue}}(A)\propto\mu_{\mathrm{Lebesgue}}(A).$$
+	\item For any measurable set $A\in\Sigma_T$, we have $$\Lambda_{\mathbb P}(A) = \nu \mu_{\mathrm{Lebesgue}}(A)\propto\mu_{\mathrm{Lebesgue}}(A).$$
 \end{enumerate}
+\textcolor{red}{Why is this the same as saying that the intensity is constant?}
 
-In the multivariate case with $n$ event types, we can have a vector $\nu\in\mathbb{R}^n$ containing the constant intensities of each individual point process.
+In the multivariate case with $n$ event types, we have a vector $\nu\in\mathbb{R}_{>0}^n$ containing the constant intensities of each individual point process.
 
 \textcolor{red}{This definition might require a reference.}
+
+\textcolor{red}{Is there a proof of existence and nonexplosiveness?}
 
 \textcolor{red}{Explain why the times between events are exponentially distributed. Can use the linearity of residuals to prove this succinctly, since residuals are exponentially distributed.}
 
@@ -449,9 +477,17 @@ In the multivariate case with $n$ event types, we can have a vector $\nu\in\math
 \textcolor{red}{I think I should change this to be separate plots. Can show the intensity function for each; e.g. for inhomogenous it's the same for every realisation, but for hawkes process the intensity function is itself random.}
 
 \subsection{Inhomogeneous Poisson Process}
-An inhomogeneous Poisson process is a generalisation of the Poisson process for which the second condition is replaced by the weaker requirement that every Borel set $b$ with finite Lebesgue measure $\mu(b)$ has a finite expectation measure. \textcolor{red}{Is this weaker version even needed, or is it sufficient to just drop the condition entirely?}
+An inhomogeneous Poisson process is a generalisation of the Poisson process for which the second condition is replaced by the weaker requirement that every measurable set $A\in\Sigma_T$ with finite Lebesgue measure $\mu_{\mathrm{Lebesgue}}(A)$ has a finite expectation measure. \textcolor{red}{Is this weaker version even needed, or is it sufficient to just drop the condition entirely?}
+
+As a result, although the intensity $\lambda(t,\omega)$ is constant in $\omega$ (i.e. deterministic) \textcolor{red}{how do we know it is?}, it can vary as a function of $t$. This is useful for modeling deterministic seasonality in the point process, such as having more events near the start/end of each trading session or near known events such as news releases.
+
+\textcolor{red}{Show U-shape from empirical data}
+\textcolor{red}{Show U-shape from quadratic IPP}
 
 \subsection{Autoregressive Point Processes}
+
+
+
 i.e. Hawkes Processes
 \textcolor{red}{Intuitively, self-excitation or self-inhibition; mutually exciting/inhibiting}
 
@@ -477,10 +513,14 @@ According to \texttt{https://ieeexplore.ieee.org/document/7416001 https://arxiv.
 
 Special case of $\beta=0$ may be worth including in the final kernel. (Integrated point process?)
 
+
 \subsection{State Dependence}
+Vinovskaya proposes regime-switching independent of the point process
+Moriaru-Patrichi and Pakkanen generalise this by coupling state transitions with the event sequence. They consider conditioning on only the state of the triggering event (their 2.3), as well as conditioning on both the state of the triggering event and the current state (their 4.2).
 Moriaru-Patrichi and Pakkanen find that conditioning on the state of the order book improves the fit of the model. (How?)
 
-They consider conditioning on only the state of the triggering event (their 2.3), as well as conditioning on both the state of the triggering event and the current state (their 4.2).
+``Cohen and Elliott (2013) introduce a one-dimensional Markov-modulated Hawkes process following (2.4), where X is an exogenous Markov process in a finite state space (exogenous in the sense that the counting process does not influence X).  The key feature of their work is that they assume X to be unobservable, leading them to derive a filtering procedure for the estimation of the current state of X.'' (hidden states)
+
 
 The first of these:
 	$$\tilde\lambda_{ex}(t)=\phi_e(X(t),x)\left(\nu_e+\sum_{e'\in\mathcal E,x'\in \mathcal X}\int_{[0,t)}k_{e',e}(t-s,x')d\tilde N_{e'x'}(s)\right), & t\geq 0, & e\in\mathcal E, & x\in\mathcal X.$$
@@ -762,13 +802,22 @@ $$\{X^{-1}(A) : A\in\mathbb{R}\}\subseteq\mathcal{P}(\Omega),$$
 consisting of all the preimages of Borel-measurable sets under a random variable $X:\Omega\to\mathbb{R}$. This is known as the $\sigma$-algebra generated by $X$.
 
 expectation conditional on sigma algebra
+https://math.stackexchange.com/questions/2373097/condition-on-sigma-algebra
 expectation conditional on an event
 
-probability is expectation of indicator function
+
+probability is expectation of indicator function (notation for indicator function is $1_A$)
+
+random measure
 
 What is independence
+independence of RVs if and only if independence of generated sigma algebras
 
 Conditional probability
+
+\section{Density of a Measure}
+\textcolor{red}{Absolute continuity: $\mu_1\ll\mu_2$ ($mu_1$ is dominated by $\mu_2$) if and only if $\mu_2(A)=0\implies\mu_1(A)=0$ for every measurable set $A$. Can also say that one measure is absolutely continuous wrt another on a subset of the measure space}
+\textcolor{red}{Radon-Nikodym Theorem}
 
 \section{Stochastic Process Fundamentals}
 What is a filtration

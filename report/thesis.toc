@@ -5,46 +5,56 @@
 \contentsline {subsection}{\numberline {1.2.2}Liquidity}{3}{}%
 \contentsline {subsection}{\numberline {1.2.3}Price-Time Priority}{4}{}%
 \contentsline {section}{\numberline {1.3}Queueing Models of the Order Book}{4}{}%
-\contentsline {section}{\numberline {1.4}Overview of Point Processes}{4}{}%
+\contentsline {section}{\numberline {1.4}Overview of Point Processes}{5}{}%
 \contentsline {subsection}{\numberline {1.4.1}Definition}{5}{}%
-\contentsline {subsection}{\numberline {1.4.2}The Counting Measure}{5}{}%
+\contentsline {subsection}{\numberline {1.4.2}The Counting Measure}{6}{}%
 \contentsline {subsection}{\numberline {1.4.3}The Expectation Measure}{6}{}%
-\contentsline {subsection}{\numberline {1.4.4}Intensity of a Point Process}{6}{}%
-\contentsline {subsection}{\numberline {1.4.5}Residuals}{7}{}%
-\contentsline {subsection}{\numberline {1.4.6}Marked and Multivariate Point Processes}{7}{}%
+\contentsline {subsection}{\numberline {1.4.4}Intensity of a Point Process}{7}{}%
+\contentsline {subsection}{\numberline {1.4.5}Residuals}{8}{}%
+\contentsline {subsection}{\numberline {1.4.6}Marked and Multivariate Point Processes}{8}{}%
 \contentsline {section}{\numberline {1.5}Point Process Models of Book Updates}{8}{}%
 \contentsline {subsection}{\numberline {1.5.1}Poisson Processes}{8}{}%
 \contentsline {subsection}{\numberline {1.5.2}Inhomogeneous Poisson Process}{9}{}%
 \contentsline {subsection}{\numberline {1.5.3}Autoregressive Point Processes}{9}{}%
-\contentsline {subsection}{\numberline {1.5.4}State Dependence}{10}{}%
-\contentsline {subsection}{\numberline {1.5.5}Regression on marks}{10}{}%
-\contentsline {subsection}{\numberline {1.5.6}Adding structure to the event space}{10}{}%
-\contentsline {subsection}{\numberline {1.5.7}Hidden Events}{11}{}%
-\contentsline {section}{\numberline {1.6}the most general model}{11}{}%
-\contentsline {chapter}{\numberline {Chapter 2}Estimation}{12}{}%
-\contentsline {section}{\numberline {2.1}Empirical Counting Measure}{12}{}%
-\contentsline {section}{\numberline {2.2}Maximum Likelihood Estimation}{12}{}%
-\contentsline {section}{\numberline {2.3}EM}{12}{}%
-\contentsline {subsection}{\numberline {2.3.1}Information Theory and EM}{12}{}%
-\contentsline {subsection}{\numberline {2.3.2}EM for Hawkes Processes}{13}{}%
-\contentsline {subsection}{\numberline {2.3.3}Generalised Fixed Point Methods}{13}{}%
-\contentsline {subsection}{\numberline {2.3.4}Method of Scoring (Newton's Method)}{13}{}%
-\contentsline {section}{\numberline {2.4}Uncertainty quantification for MLE}{13}{}%
-\contentsline {section}{\numberline {2.5}Inference for the Mark Process}{13}{}%
-\contentsline {section}{\numberline {2.6}Computational Concerns}{13}{}%
-\contentsline {section}{\numberline {2.7}Bayesian Approach}{13}{}%
-\contentsline {section}{\numberline {2.8}Model Selection}{13}{}%
-\contentsline {chapter}{\numberline {Chapter 3}Generative Sampling}{14}{}%
-\contentsline {section}{\numberline {3.1}Simulation Methods}{14}{}%
-\contentsline {section}{\numberline {3.2}Simulation Study of Estimation Methods}{14}{}%
-\contentsline {section}{\numberline {3.3}Impulse Response Function}{14}{}%
-\contentsline {chapter}{\numberline {Chapter 4}Application to KOSPI/SPY Data}{15}{}%
-\contentsline {subsection}{\numberline {4.0.1}Clustering Ratio}{16}{}%
-\contentsline {chapter}{\numberline {Chapter 5}Conclusion}{17}{}%
-\contentsline {chapter}{\numberline {Chapter 6}Appendix: Foundations of Probabilistic Models}{18}{}%
-\contentsline {section}{\numberline {6.1}Measure Theory Fundamentals}{18}{}%
-\contentsline {section}{\numberline {6.2}Probability Spaces}{19}{}%
-\contentsline {subsection}{\numberline {6.2.1}Conditionalisation}{20}{}%
-\contentsline {section}{\numberline {6.3}Density of a Measure}{21}{}%
-\contentsline {section}{\numberline {6.4}Stochastic Process Fundamentals}{21}{}%
-\contentsline {chapter}{References}{22}{}%
+\contentsline {subsection}{\numberline {1.5.4}Quadratic Hawkes Processes}{11}{}%
+\contentsline {subsection}{\numberline {1.5.5}State Dependence}{11}{}%
+\contentsline {subsection}{\numberline {1.5.6}Regression on marks}{12}{}%
+\contentsline {subsection}{\numberline {1.5.7}Adding structure to the event space}{12}{}%
+\contentsline {subsection}{\numberline {1.5.8}Hidden Events}{12}{}%
+\contentsline {section}{\numberline {1.6}the most general model}{12}{}%
+\contentsline {chapter}{\numberline {Chapter 2}Estimation}{13}{}%
+\contentsline {section}{\numberline {2.1}Maximum Likelihood Estimation}{14}{}%
+\contentsline {subsection}{\numberline {2.1.1}Maximum Likelihood Estimator}{14}{}%
+\contentsline {subsection}{\numberline {2.1.2}Log-Likelihood Maximisation}{14}{}%
+\contentsline {subsection}{\numberline {2.1.3}Poisson Processes}{15}{}%
+\contentsline {subsection}{\numberline {2.1.4}Exponential Hawkes Processes}{16}{}%
+\contentsline {section}{\numberline {2.2}EM}{16}{}%
+\contentsline {subsection}{\numberline {2.2.1}Information Theory and EM}{16}{}%
+\contentsline {subsection}{\numberline {2.2.2}EM for Hawkes Processes}{16}{}%
+\contentsline {subsection}{\numberline {2.2.3}Generalised Fixed Point Methods}{16}{}%
+\contentsline {section}{\numberline {2.3}Uncertainty quantification for MLE}{17}{}%
+\contentsline {section}{\numberline {2.4}Inference for the Mark Process}{17}{}%
+\contentsline {section}{\numberline {2.5}Monte Carlo EM}{17}{}%
+\contentsline {section}{\numberline {2.6}Computational Concerns}{17}{}%
+\contentsline {section}{\numberline {2.7}Bayesian Approach}{17}{}%
+\contentsline {section}{\numberline {2.8}Model Selection}{17}{}%
+\contentsline {chapter}{\numberline {Chapter 3}Generative Sampling}{18}{}%
+\contentsline {section}{\numberline {3.1}Simulation Methods}{18}{}%
+\contentsline {section}{\numberline {3.2}Simulation Study of Estimation Methods}{18}{}%
+\contentsline {section}{\numberline {3.3}Impulse Response Function}{18}{}%
+\contentsline {chapter}{\numberline {Chapter 4}Application to KOSPI/SPY Data}{19}{}%
+\contentsline {subsection}{\numberline {4.0.1}Clustering Ratio}{19}{}%
+\contentsline {section}{\numberline {4.1}Summary of datasets}{20}{}%
+\contentsline {section}{\numberline {4.2}Inhomogeneity}{20}{}%
+\contentsline {section}{\numberline {4.3}Multidimensionality}{20}{}%
+\contentsline {section}{\numberline {4.4}Self-Excitation and Mutual Excitation}{20}{}%
+\contentsline {section}{\numberline {4.5}Queue Size Dependence}{20}{}%
+\contentsline {section}{\numberline {4.6}Regression on marks}{20}{}%
+\contentsline {chapter}{\numberline {Chapter 5}Conclusion}{21}{}%
+\contentsline {chapter}{\numberline {Chapter 6}Appendix: Foundations of Probabilistic Models}{22}{}%
+\contentsline {section}{\numberline {6.1}Measure Theory Fundamentals}{22}{}%
+\contentsline {section}{\numberline {6.2}Probability Spaces}{23}{}%
+\contentsline {subsection}{\numberline {6.2.1}Conditionalisation}{24}{}%
+\contentsline {section}{\numberline {6.3}Density of a Measure}{25}{}%
+\contentsline {section}{\numberline {6.4}Stochastic Process Fundamentals}{25}{}%
+\contentsline {chapter}{References}{26}{}%

@@ -77,6 +77,7 @@
 \newcommand{\bin}[2]{\left( \begin{array}{@{}c@{}}
 				#1 \\ #2
 			\end{array}\right)	}
+\DeclareMathOperator*{\argmax}{argmax}
 %
 %  Macros - some of these are in plain TeX (gasp!)
 %
@@ -406,7 +407,8 @@ allowing us to write the expectation measure in terms of a finite difference of 
 If $\mathbb{E}_\mathbb{P}\left[N_\mathcal{T}(t)\right]$ is right-differentiable at $t$, we can further say that
 $$\lim_{\epsilon\to0}\frac{\Lambda_\mathbb{P}\left((t,t+\epsilon]\right)}{\epsilon} = \lim_{\epsilon\to0}\frac{\mathbb{E}_\mathbb{P}\left[N_\mathcal{T}(t+\epsilon)\right] - \mathbb{E}_\mathbb{P}\left[N_\mathcal{T}(t)\right]}{\epsilon} = \frac{d\mathbb{E}_\mathbb{P}\left[N_\mathcal{T}(t)\right]}{dt}$$
 for sufficiently small $\epsilon$, where the last term is the right-derivative. For brevity, I will write
-$$\lambda_{\mathbb{P}}(t) \coloneq \frac{d\mathbb{E}_\mathbb{P}\left[N_\mathcal{T}(t)\right]}{dt}.$$
+$$\lambda_{\mathbb{P}}(t) \coloneq \frac{d\mathbb{E}_\mathbb{P}\left[N_\mathcal{T}(t)\right]}{dt},$$
+again using the right-derivative.
 
 Assuming further that $\mathbb{E}_\mathbb{P}\left[N_\mathcal{T}(t)\right]$ is differentiable on some open interval $(t,t+\epsilon')$, \textcolor{red}{Prove this is Radon-Nikodym derivative of $\Lambda_\mathbb{P}$ in the open interval}
 
@@ -426,14 +428,15 @@ known as the \textit{intensity} of the point process. This represents our best e
 \textcolor{red}{Existence and uniqueness shown in https://projecteuclid.org/journals/annals-of-probability/volume-24/issue-3/Stability-of-nonlinear-Hawkes-processes/10.1214/aop/1065725193.full under restrictions on the kernel}
 
 \subsection{Residuals}
-\textcolor{red}{Define residuals, explain why they're exponentially distributed}
+\textcolor{red}{Define residuals, explain why they're $Exp(1)$ distributed}
+\textcolor{red}{They're independent according to theorem 3.3 from MORARIU-PATRICHI, M. AND PAKKANEN, M. S.}
 
 \subsection{Marked and Multivariate Point Processes}
 
 A point process \mathcal{T} may be \textit{marked}, in which case it is associated with one or more random sequences of marks $$\mathcal{X}:\Omega\to X^\mathbb{N},$$
 drawn from a set $X$, that represent additional information about each event. These may be adapted to the filtration $\mathcal{F}$ \textcolor{red}{In what sense?}
 
-A common special case of this is when $X$ is partitioned into a finite number of \textit{event types}, in which case we may refer to $\mathcal{T}$ as a \textit{multivariate point process}.
+A common special case of this is when $\mathcal{X}$ is partitioned into a finite number of \textit{event types}, in which case we may refer to $\mathcal{T}$ as a \textit{multivariate point process}.
 
 Each part $E$ of the partition then has an associated point process $$\mathcal{T}_E = \mathcal{T}_{\{n\in\mathbb{N} : \mathcal{X}_n\in E\}},$$ formed by the subsequence of times where the corresponding element of $\mathcal{X}$ is in $E$. These point processes will then have their own counting functions, intensities, and other characteristics. It is common to arrange these in vector form, with one entry for each event type.
 
@@ -485,16 +488,25 @@ As a result, although the intensity $\lambda(t,\omega)$ is constant in $\omega$ 
 \textcolor{red}{Show U-shape from quadratic IPP}
 
 \subsection{Autoregressive Point Processes}
+In the case of the homogenous and inhomogenous poisson processes, the intensity function is deterministic. While such an assumption for modeling the arrival of independent events, it is common in financial markets for events to ``cluster'' together in a non-deterministic fashion, with the intensity dependent on the recency of previous event occurrences. One explicit test for this is to examine the autocorrelation of residuals, \textcolor{red}{which will be covered in some section of the applications chapter}.
 
+The increase in intensity seen after a series of related events in quick succession is known as \textit{self-excitation}\footnote{In the case of multivariate point processes, interactions between event types are often called \textit{cross-exciting}. The opposite behaviour, where recent occurrences temporarily decrease the intensity, is known as \textit{self-inhibition} or \textit{cross-inhibition}.}, and requires us to introduce a stochastic component to the intensity of our model that will depend on the realised history of the point process up until $t$. By analogy with time series literature, the dependence of forecasts on recent history is referred to as \textit{autoregressive}.
 
-
-i.e. Hawkes Processes
-\textcolor{red}{Intuitively, self-excitation or self-inhibition; mutually exciting/inhibiting}
-
+A popular class of autoregressive models are known as \textit{Hawkes Processes}, first introduced by 
 \textcolor{red}{Original hawkes process paper https://academic.oup.com/biomet/article-abstract/58/1/83/224809?redirectedFrom=fulltext}
+\textcolor{red}{Discuss history of their application to financial datasets}
 
-immigration/birth interpretation
-branching matrix \& complete data likelihood
+Hawkes process models require that the intensity process have the functional form
+$$\lambda(t,\omega) = \nu + \int_{t_\mathrm{\min}}^t k(t-s)d\Lambda_\omega(s),$$
+where $\nu\in\mathbb{R}_{>0}$ represents a constant arrival rate, $k$ is a kernel function encoding the self-excitation behaviour of each event, and $t_\mathrm{\min}$ is the earliest time events can occur, such as the opening time of a trading session.
+\textcolor{red}{Existence of such processes is established... where?}
+
+It is common to regard events in the point process as having either been generated by a ``background'' poisson process with arrival rate $\nu$, or else ``triggered'' by some previous event. From the form of the intensity, it follows \textcolor{red}{why?} that the probability of an event at time $t$ being from the background process, conditioning on the natural filtration $\mathcal{F}_t$, will be
+$$\frac{\nu}{\lambda(t,\omega)},$$
+while the probability of it having been triggered by an event at time $s$ will be
+$$\frac{k(t-s)}{\lambda(t,\omega)}.$$
+Notice the dependence on $\omega$, implying that these probabilities (often known as \textit{branching probabilities}) are specific to a particular realisation of the process.
+
 
 Long-run mean $$\bar\lambda = \lim_{t\to\infty} \mathbb E\left[\lambda(t)\right]$$
 
@@ -508,11 +520,13 @@ $$\bar\lambda = (I-K)^{-1}\nu$$
 Requires $\vert\det K\vert < 1$ (why? and what about if there are directions orthogonal to $\nu$?)
 \textcolor{red}{Define K}
 
-According to \texttt{https://ieeexplore.ieee.org/document/7416001 https://arxiv.org/pdf/1401.0903}, hawkes processes are fully determined by the first two moments of the intensity function. Proof in the paper.
-
-
+Why use exponential kernel? Possible reasons why others might be more correct eg polynomial kernel captures long memory better
 Special case of $\beta=0$ may be worth including in the final kernel. (Integrated point process?)
 
+According to \texttt{https://ieeexplore.ieee.org/document/7416001 https://arxiv.org/pdf/1401.0903}, hawkes processes are fully determined by the first two moments of the intensity function. Proof in the paper.
+
+\subsection{Quadratic Hawkes Processes}
+\textcolor{red}{We'll see}
 
 \subsection{State Dependence}
 Vinovskaya proposes regime-switching independent of the point process
@@ -520,6 +534,9 @@ Moriaru-Patrichi and Pakkanen generalise this by coupling state transitions with
 Moriaru-Patrichi and Pakkanen find that conditioning on the state of the order book improves the fit of the model. (How?)
 
 ``Cohen and Elliott (2013) introduce a one-dimensional Markov-modulated Hawkes process following (2.4), where X is an exogenous Markov process in a finite state space (exogenous in the sense that the counting process does not influence X).  The key feature of their work is that they assume X to be unobservable, leading them to derive a filtering procedure for the estimation of the current state of X.'' (hidden states)
+
+
+`` This two-way interaction between N and X makes them fully coupled, just like the order flow and the state of the LOB in an order-driven market. It also distinguishes the model from the existing regime switching Hawkes processes (Wang et al., 2012; Cohen and Elliott, 2013; Vinkovskaya, 2014; Swishchuk and Huffman, 2020), where the state process evolves exogenously, receiving no feedback from the point process''
 
 
 The first of these:
@@ -573,32 +590,99 @@ $$\lambda_e(t,\omega) = \sum_{e'} \sum_k \lambda_{e,e',k}(t,\omega) + \text{spli
 
 \chapter{Estimation}%\label{something}
 
-To enable analysis of empirical order book data, I will now explain the principles involved in parameter estimation for point process models.
+To enable analysis of empirical order book data, I will now explain the principles involved in parametric estimation of point process models.
 
-\section{Empirical Counting Measure}
-Define $\lambda_{e,(T,E)}(t)$ and $\Lambda_{e,(T,E)}(t)$ for fully observed point processes for $(T,E)$
+We will work with a dataset of the form $\mathcal{D} = \left(\mathcal{T}_\mathrm{obs},\mathcal{X}_\mathrm{obs}\right)$, consisting of a sequence of event times and event marks observed in the time interval $$[t_\mathrm{min},t_\mathrm{max}].$$
+We can define a counting measure $\Lambda_\mathcal{D}$ on the space of events times $(T,\Sigma_T)$ by
+$$\Lambda_{\mathcal{D}} : \Sigma_T \to \mathbb{R}_{\geq 0}$$
+$$\Lambda_{\mathcal{D}}(A) \coloneq \left\vert A\cap\mathcal{T}_\mathrm{obs}\right\vert.$$
+
+Similarly, we can define a càdlàg counting function
+$$N_\mathcal{D} : T \to \mathbb{N}$$
+$$N_\mathcal{D}(t) \coloneq \left\vert \mathcal{T}_\mathrm{obs}\cap [t_\mathrm{min},t]\right\vert = \int_{[t_\mathrm{min},t]} d\Lambda_\mathcal{D}.$$
+
+In the multivariate case we will further have $\Lambda_\mathcal{D}^E$ and $N_\mathcal{D}^E$ for each event type $E$.
+
+Given a subset of the data $\mathcal{D}_t$ containing only the event times and marks up until some time $t$, it is reasonable to ask whether we can predict the remainder of the dataset using some model of the point process that generated the data.
+
+If we consider a point process $\mathcal{T}$ defined with respect to $\mathbb{P}$ and having natural filtration $\mathcal{F}$, we can construct an \textit{empirical intensity function}
+$$\lambda_\mathcal{D}(t) \coloneq \lambda_{\mathbb{P}\vert\mathcal{F}_t,\mathcal{D}_t}(t)$$
+as the intensity conditional on the $\sigma$-algebra $\mathcal{F}_t$ and the contents of $\mathcal{D}_t$. \textcolor{red}{How is this well-defined? The point process realising $\mathcal{D}_t$ exactly has probability zero, and probability-zeor events cant be conditioned on. I suspect the solution here is to construct it using the janossy density. In particular, instead of conditioning on $\mathcal{D}_t$, it is proper to condition on $\mathcal{D}_t$ being in a certain event set and having a certain number of events, then use this to define a measure which $\lambda_\mathcal{D}$ is constructed as a density of}
+
+\textcolor{red}{For the purposes of defining the likelihood function, the janossy density also needs to be derived or cited}
+
+$$p(\mathcal{D}) = \exp\left(\int_{t_\mathrm{min}}^{t_\mathrm{max}}\log(\lambda_\mathcal{D}(t))d\Lambda_\mathcal{D}-\int_{t_\mathrm{min}}^{t_\mathrm{max}}\lambda_\mathcal{D}(t) dt\right).$$
 
 \section{Maximum Likelihood Estimation}
-Given a parametric family of marked point processes,
-$$\{(\mathcal{T}_\theta,\mathcal{X}) : \theta\in\Theta\}$$
+Given a parametric family of multivariate point processes,
+$$\{(\mathcal{T}_\theta,\mathcal{X}) : \theta\in\Theta\},$$
+we may wish to select one model from the family that best describes the empirical data.
 
+Letting $p_\theta(\mathcal{D})$ be the probability density of an observed dataset $\mathcal{D}$ under $\mathcal{T}_\theta$, we can write the \textit{likelihood function} for the dataset
+$$L(\theta ; \mathcal{D}) \coloneq p_\theta(\mathcal{D}) = \exp\left(\int_{t_\mathrm{min}}^{t_\mathrm{max}}\log(\lambda_\mathcal{D}^\theta(t))d\Lambda_\mathcal{D}-\int_{t_\mathrm{min}}^{t_\mathrm{max}}\lambda_\mathcal{D}^\theta(t) dt\right),$$
+where $\lambda_\mathcal{D}^\theta$ represents the empirical intensity function of $\mathcal{T}_\theta$.
 
-\textcolor{red}{Derive the likelihood function}
+\subsection{Maximum Likelihood Estimator}
+Because the likelihood function tells us the probability density of the observed data under the corresponding model, a higher likelihood function corresponds to a better fit of model to data. Assuming that the likelihood has a unique global maxima
+$$\hat\theta_\mathrm{MLE} \coloneq \argmax_\theta L(\theta;\mathcal{D}),$$
+this is known as the \textit{maximum likelihood estimate}, and is a popular method of selecting a single ``best'' model from a parametric family.
+\textcolor{red}{Discuss why and what properties it has. Ogata proves consistency and asymptotic normality for stationary processes}
+\textcolor{red}{estimate = on a particular dataset. estimator = considered as a random variable}
+Ogata paper https://www.ism.ac.jp/editsec/aism/pdf/030_2_0243.pdf 
 
-For a particular observation $(T,E)$, we have
+\textcolor{red}{Is it biased? preferably downward, this is nice for hidden events to stop the event count from increasing too much}
 
-$$\ell((T,E);\theta) = \sum_e \left(\int_0^T \log(\lambda_{e,\theta,(T,E)}(t))d\Lambda_{e,(T,E)}(t)-\int_0^T \lambda_{e,\theta,(T,E)}(t)dt\right)$$
+Because finding global maxima is in general a hard problem, it is common to first weaken our search to finding stationary points of $L$ using its first derivative with respect to $\theta$. We can then use second-order information to eliminate local minima and saddle points, and select the best local maxima among those found in hopes that it is either the global maxima, or at least has a similar enough likelihood to be a good model choice.
 
-\textcolor{red}{What is a likelihood function}
+\subsection{Log-Likelihood Maximisation}
 
+Observe that we can write $L$ in the form
+$$L(\theta;\mathcal{D}) = \exp(\ell(\theta;\mathcal{D}))$$
+where $\ell(\theta;\mathcal{D})$ is the \textit{log-likelihood function},
+$$\ell(\theta ; \mathcal{D}) \coloneq \log(p_\theta(\mathcal{D})) = \int_{t_\mathrm{min}}^{t_\mathrm{max}}\log(\lambda_\mathcal{D}^\theta(t))d\Lambda_\mathcal{D}-\int_{t_\mathrm{min}}^{t_\mathrm{max}}\lambda_\mathcal{D}^\theta(t) dt.$$
 
-Clearly $\lambda_e$ must be positive at the event times.
+Then, by the chain rule, it follows that
+$$\frac{\partial}{\partial\theta}L(\theta;\mathcal{D}) = \left(\frac{\partial}{d\theta}\ell(\theta;\mathcal{D})\right) \exp\left(\ell(\theta;\mathcal{D})\right).$$
+Because $\exp\left(\ell(\theta;\mathcal{D})\right)>0$ for all $\theta$, the left-hand side is zero exactly when
+$$\frac{\partial}{\partial\theta}\ell\left(\theta;\mathcal{D}\right)=0,$$
+meaning that the stationary points of $L$ and $\ell$ coincide. This is also clear if we consider that $\log$ is a monotonic function, meaning that if $L$ has a unique maximum in a region, it will also be the unique maximum of $\ell$ in that region. We can further write this condition as
+$$\int_{t_\mathrm{min}}^{t_\mathrm{max}}\frac{\partial}{\partial\theta}\log(\lambda_\mathcal{D}^\theta(t))d\Lambda_\mathcal{D}-\int_{t_\mathrm{min}}^{t_\mathrm{max}}\frac{\partial}{\partial\theta}\lambda_\mathcal{D}^\theta(t) dt=0,$$
+\textcolor{red}{why can we bring the derivative inside the integral?}
+which admits closed form solutions for simple parametric families, and other computational conveniences for more complex models, as we will see below.
 
-At stationary points, loglikelihood has zero derivatives.
+\subsection{Poisson Processes}
+Suppose we have a family of poisson process models parameterised by their constant intensity $\nu\in\mathbb{R}_{>0}$.
 
-$$\frac{\partial \ell((T,E);\theta)}{\partial \theta} = \sum_{e}\left(\int_0^T \frac{\partial \lambda_{e,\theta,(T,E)}(t)}{\partial \theta}\cdot\frac{1}{\lambda_{e,\theta,(T,E)}(t)}d\Lambda_{e,(T,E)}(t) - \int_0^T \frac{\partial\lambda_{e,\theta,(T,E)}(t)}{\partial \theta}dt\right)$$
+The log-likelihood of each model is then given by
 
-Explain why no explicit solution
+\begin{equation}
+	\begin{align}
+		\ell(\nu;\mathcal{D})
+		&= \int_{t_\mathrm{min}}^{t_\mathrm{max}}\log(\nu)d\Lambda_\mathcal{D}-\int_{t_\mathrm{min}}^{t_\mathrm{max}}\nu dt\\
+		&= \log(\nu)\int_{t_\mathrm{min}}^{t_\mathrm{max}}d\Lambda_\mathcal{D} - \nu\int_{t_\mathrm{min}}^{t_\mathrm{max}}dt\\
+		&= \log(\nu)N_\mathcal{D}\left(t_\mathrm{max}\right) - \nu\left(t_\mathrm{max}-t_\mathrm{min}\right).
+	\end{align}
+\end{equation}
+
+At stationary points, we will then have
+\begin{equation*}
+	\frac{\partial}{\partial\nu}\ell(\nu;\mathcal{D}) = \frac{1}{\nu}N_\mathcal{D}\left(t_\mathrm{max}\right)-\left(t_\mathrm{max}-t_\mathrm{min}\right)=0,
+\end{equation*}
+
+implying that
+\begin{equation}
+	\hat\nu_\mathrm{MLE} = \frac{N_\mathcal{D}}{t_\mathrm{max}-t_\mathrm{min}}.\footnote{Subject to the Hessian of $\ell$ being negative definite, which is true here.}
+\end{equation}
+
+Intuitively, the estimate for the arrival rate $\nu$ is the average number of events per unit time in the observed data.
+
+In the multivariate case, where we have a vector $\nu\in\mathbb{R}_{>0}^n$ containing the arrival rates for each event type $E$, we similarly obtain
+$$\left(\hat\nu_\mathrm{MLE}\right)_E = \frac{N_\mathcal{D}^E\left(t_\mathrm{max}\right)}{t_\mathrm{max}-t_\mathrm{min}}.$$
+
+\subsection{Exponential Hawkes Processes}
+first $\nu=0$
+
+explain why $\nu\not=0$ has no explicit solution
 
 Observe that if intensity is a sum of multiple kernels it separates into the EM form
 
@@ -629,14 +713,14 @@ Branching matrix:
 
 - Visualisation of branching matrix. How does it evolve throughout the fitting procedure?
 - Quasi EM approximation
-- Closed form constant time M step
+- Closed form constant time M step for multivariate state dependent hawkes processes
+- Method of scoring (Newton's method)
 - Negative probabilities. Conditions for kernel nonnegativity? (Probably not tractable)
-- Complex probabilities? For periodic/wavelet kernels
 
 \subsection{Generalised Fixed Point Methods}
 \textcolor{red}{Is it a contraction mapping?}
-
-\subsection{Method of Scoring (Newton's Method)}
+\textcolor{red}{Are there any iterative methods other than EM that are also guaranteed to give stationary points if they converge?}
+\textcolor{red}{Minorisation-Maximisation}
 
 \section{Uncertainty quantification for MLE}
 Asymptotic normality
@@ -645,6 +729,9 @@ Parametric Bootstrap
 
 \section{Inference for the Mark Process}
 Kalman filter? Ways to couple this with the point process? (Monte carlo EM?)
+
+\section{Monte Carlo EM}
+this actually makes it pretty easy to do hidden events
 
 \section{Computational Concerns}
 Sensor fusion for parallelisation
@@ -686,18 +773,13 @@ What does inserting a single exogenous event do to the order book, price, etc? A
 
 \cite{AbergelJedidi} \cite{Toke} sources that use hawkes process models to simulate an order book for analysis purposes
 
-
 \chapter{Application to KOSPI/SPY Data} %Maybe make this 2 different chapters
+
 \textcolor{red}{Hawkes processes and their applications to finance: a review https://www.tandfonline.com/doi/full/10.1080/14697688.2017.1403131}
 \textcolor{red}{https://www.tandfonline.com/journals/rejf20/collections/Hawkes-Processes-in-Finance}
 
 
 \begin{itemize}
-	\item Basic poisson model
-	\item Univariate hawkes
-	\item Multivariate hawkes - what are the event types?
-	\item State-dependent hawkes - which state variables are relevant?
-	\item Full model
 	\item Replicate findings from \cite{MorariuPatrichiPakkanen}
 	\item Hidden events (\& events on different exchanges) - either poisson distributed or more complex
 	\item Modeling changes in the entire order book
@@ -723,11 +805,6 @@ $\texttt{https://quant.stackexchange.com/questions/59593/what-are-some-currently
 
 Point process control \texttt{https://pages.stern.nyu.edu/~rcaldent/courses/B60.4308_files/Point-Process.pdf}
 
-Two choices for handling inhomogeneity:
-- Reparameterise to 'business time' in preprocessing, as recommended by \cite{BouchaudEtAl} in 9.3.1
-- Splines/polynomials etc
-- Could also combine both
-
 
 Databento info:
 CME:
@@ -737,6 +814,41 @@ OPRA:
 SPX - Index options
 SPY - Index ETF options
 https://databento.medium.com/getting-futures-tick-sizes-and-notional-tick-values-in-python-with-databento-ba03cfded553
+\section{Summary of datasets}
+- data structure and granularity
+- which assets are involved
+
+\section{Inhomogeneity}
+Two choices for handling inhomogeneity:
+- Reparameterise to 'business time' in preprocessing, as recommended by \cite{BouchaudEtAl} in 9.3.1
+- Splines/polynomials etc
+- Could also combine both
+- Can also focus on a small part of the data. counting process should look roughly linear
+
+\section{Multidimensionality}
+poisson model
+
+correlations in trade sign (buys vs sells arrival rate nonstationary)
+
+trades vs inserts vs cancels
+
+different price levels have different arrival rates -> sante fe model is wrong
+
+how to not need a separate event type for each price level
+
+\section{Self-Excitation and Mutual Excitation}
+i.e. poisson vs hawkes
+
+\section{Queue Size Dependence}
+queue size (esp. cancellations) and also book imbalance
+
+state-dependent process can be used here
+
+queue-reactive process is a little bit more fit for purpose
+
+\section{Regression on marks}
+not sure what this will look like yet. how to justify? which variables are reasonable to use?
+
 
 \chapter{Conclusion}\label{ccl}
 
@@ -823,6 +935,8 @@ Conditional probability
 What is a filtration
 
 What is a stochastic process
+
+What is the natural filtration
 
 What is a realisation of a stochastic process
 

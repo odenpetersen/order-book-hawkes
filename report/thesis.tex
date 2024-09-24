@@ -488,7 +488,7 @@ As a result, although the intensity $\lambda(t,\omega)$ is constant in $\omega$ 
 \textcolor{red}{Show U-shape from empirical data}
 \textcolor{red}{Show U-shape from quadratic IPP}
 
-\subsection{Compound Point Processes}
+\subsection{Composite Point Processes}
 \textcolor{red}{Define these in a way that leads into hawkes processes. They should be adapted to the natural filtration on the overall point process (NOT the individual point processes, this would preclude interaction between them)}
 
 \subsection{Autoregressive Point Processes}
@@ -623,7 +623,7 @@ is the probability of an event at $t$ having been triggered by an event at $s$.
 
 Notice the dependence on $\omega$, implying that these probabilities (often known as \textit{branching probabilities}) are specific to a particular realisation of the process.
 
-\textcolor{red}{Observe that these are truly probabilities for compound point processes, but if some components of intensity are negative this is no longer the correct interpretation; nonetheless we will still use the $B$ notation}
+\textcolor{red}{Observe that these are truly probabilities for composite point processes, but if some components of intensity are negative this is no longer the correct interpretation; nonetheless we will still use the $B$ notation}
 \section{Maximum Likelihood Estimation}
 Given a parametric family of multivariate point processes,
 $$\{(\mathcal{T}_\theta,\mathcal{X}) : \theta\in\Theta\},$$
@@ -707,17 +707,17 @@ $$\sum_{i=1}^{N_\mathcal{D}(t_\mathrm{max})} r_i = \bar\Lambda(t_\mathrm{max})=N
 In the multivariate case, where we have a vector $\nu\in\mathbb{R}_{>0}^n$ containing the arrival rates for each event type $E$, we similarly obtain
 $$\left(\hat\nu_\mathrm{MLE}\right)_E = \frac{N_\mathcal{D}^E\left(t_\mathrm{max}\right)}{t_\mathrm{max}-t_\mathrm{min}}.$$
 
-\subsection{Compound Processes}
+\subsection{Composite Processes}
 Suppose that the intensity has the form
 $$\lambda^{\theta_1,\theta_2,\ldots}(t,\omega) \coloneq \sum_i \lambda_i^{\theta_i}(t,\omega),$$
 where each component $\lambda_i(t,\omega)$ is parameterised by some vector $\theta_i$ and adapted with respect to the natural filtration $\mathcal{F}$ of the point process. Then the loglikelihood will be
 $$\ell(\theta_1,\theta_2,\ldots;\mathcal{D}) = \int_{t_\mathrm{min}}^{t_\mathrm{max}}\log\left(\sum_i \left(\lambda_i^{\theta_i}\right)_{\mathcal{D}}(t)\right)d\Lambda_\mathcal{D}(t)-\sum_i \bar\Lambda_i\left(t_\mathrm{max}\right),$$
 where $$(\lambda_i^{\theta_i})_\mathcal{D} \coloneq \lim_{s\to t^+}\mathbb{E}_{\mathbb{P}\vert\mathcal{F}_t,\mathcal{D}_t}\left[\lambda_i^{\theta_i}(s)\right]$$
-\textcolor{red}{Is this the right definition to use? it should coincide with component intensities in the case of a compound point process, as noted below. It seems to depend on continuity of the first moment, and so maybe more restrictions need to be placed on the component processes}
+\textcolor{red}{Is this the right definition to use? it should coincide with component intensities in the case of a composite point process, as noted below. It seems to depend on continuity of the first moment, and so maybe more restrictions need to be placed on the component processes}
 
 and
 $$\bar\Lambda_i(t) \coloneq \int_{t_\mathrm{min}}^t \left(\lambda_i^{\theta_i}\right)_\mathcal{D}(s)ds$$
-In the case where $\lambda^{\theta_1,\theta_2,\ldots}$ is the intensity of a compound point process whose components are adapted to the natural filtration of the overall point process, and have intensities $\lambda_i^{\theta_i}$, the functions $\left(\lambda_i^{\theta_i}\right)_\mathcal{D}$ will just be the empirical intensity of the components.\textcolor{red}{Is this true? is there a simple proof?}
+In the case where $\lambda^{\theta_1,\theta_2,\ldots}$ is the intensity of a composite point process whose components are adapted to the natural filtration of the overall point process, and have intensities $\lambda_i^{\theta_i}$, the functions $\left(\lambda_i^{\theta_i}\right)_\mathcal{D}$ will just be the empirical intensity of the components.\textcolor{red}{Is this true? is there a simple proof?}
 
 By the chain rule, we then have
 \textcolor{red}{Why can I exchange derivative and integral here}
@@ -736,14 +736,13 @@ By the chain rule, we then have
 \textcolor{red}{Can the last equation be written in terms of log?}
 where
 $$B_{i,t} \coloneq \frac{\left(\lambda_i^{\theta_i}\right)_\mathcal{D}(t)}{\lambda_\mathcal{D}^{\theta_1,\theta_2,\ldots}(t)}$$
-are the ratios of each component to the overall intensity. In the case where the point process is a compound of processes with intensities $\lambda_i^{\theta_i}$, these represent the probability that an event at $t$ is from the $i$th component point process.\textcolor{red}{Is this true? is there a simple proof?}
+are the ratios of each component to the overall intensity. In the case where the point process is a composite of processes with intensities $\lambda_i^{\theta_i}$, these represent the probability that an event at $t$ is from the $i$th component point process.\textcolor{red}{Is this true? is there a simple proof?}
 
 \section{Expectation Maximisation}
-We know that the loglikelihood for a compound process is given by
+We know that the loglikelihood for a composite process is given by
 $$\ell(\theta_1,\theta_2,\ldots;\mathcal{D}) = \int_{t_\mathrm{min}}^{t_\mathrm{max}}\log\left(\sum_i \left(\lambda_i^{\theta_i}\right)_{\mathcal{D}}(t)\right)d\Lambda_\mathcal{D}(t)-\sum_i \bar\Lambda_i\left(t_\mathrm{max}\right).$$
 
-From Jensen's inequality, since $\log$ is a concave function, we have
-$$\log\left(\sum_i \left(\lambda_i^{\theta_i}\right)_{\mathcal{D}}(t)\right) \geq \log\left(\sum_i \left(\lambda_i^{\theta_i}\right)_{\mathcal{D}}(t)\right)$$
+$$\log\left(\sum_i \left(\lambda_i^{\theta_i}\right)_{\mathcal{D}}(t)\right) = \sum_i \log\left(\left\vert\left(\lambda_i^{\theta_i}\right)_\mathcal{D}(t)\right\vert\right)B_{i,t} - \sum_i \log\left(\left\vert B_{i,t}\right\vert\right)B_{i,t} \geq \sum_i \log\left(\left(\lambda_i^{\theta_i}\right)_{\mathcal{D}}(t)\right)$$
 
 \textcolor{red}{In the case where probas are all positive, jensens inequality says that likelihood is minorised by likelihood-fixing-probas. Then iteration is guaranteed to converge to a stationary point. However, in the case of negative probas, I don't think there's a guarantee}
 

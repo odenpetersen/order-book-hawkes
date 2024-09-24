@@ -30,33 +30,33 @@
 \contentsline {subsection}{\numberline {2.2.2}Log-Likelihood Maximisation}{15}{}%
 \contentsline {subsection}{\numberline {2.2.3}Poisson Processes}{16}{}%
 \contentsline {subsection}{\numberline {2.2.4}Compound Processes}{17}{}%
-\contentsline {section}{\numberline {2.3}EM}{19}{}%
-\contentsline {subsection}{\numberline {2.3.1}Information Theory and EM}{19}{}%
-\contentsline {subsection}{\numberline {2.3.2}EM for Hawkes Processes}{19}{}%
+\contentsline {section}{\numberline {2.3}Expectation Maximisation}{18}{}%
+\contentsline {subsection}{\numberline {2.3.1}Information Theory and EM}{18}{}%
+\contentsline {subsection}{\numberline {2.3.2}EM for Hawkes Processes}{18}{}%
 \contentsline {subsection}{\numberline {2.3.3}Generalised Fixed Point Methods}{19}{}%
-\contentsline {section}{\numberline {2.4}Uncertainty quantification for MLE}{20}{}%
-\contentsline {section}{\numberline {2.5}Inference for the Mark Process}{20}{}%
-\contentsline {section}{\numberline {2.6}Monte Carlo EM}{20}{}%
-\contentsline {section}{\numberline {2.7}Computational Concerns}{20}{}%
-\contentsline {section}{\numberline {2.8}Bayesian Approach}{20}{}%
-\contentsline {section}{\numberline {2.9}Model Selection}{20}{}%
-\contentsline {chapter}{\numberline {Chapter 3}Generative Sampling}{21}{}%
-\contentsline {section}{\numberline {3.1}Simulation Methods}{21}{}%
-\contentsline {section}{\numberline {3.2}Simulation Study of Estimation Methods}{21}{}%
-\contentsline {section}{\numberline {3.3}Impulse Response Function}{21}{}%
-\contentsline {chapter}{\numberline {Chapter 4}Application to KOSPI/SPY Data}{22}{}%
-\contentsline {subsection}{\numberline {4.0.1}Clustering Ratio}{22}{}%
-\contentsline {section}{\numberline {4.1}Summary of datasets}{23}{}%
-\contentsline {section}{\numberline {4.2}Inhomogeneity}{23}{}%
-\contentsline {section}{\numberline {4.3}Multidimensionality}{23}{}%
-\contentsline {section}{\numberline {4.4}Self-Excitation and Mutual Excitation}{23}{}%
-\contentsline {section}{\numberline {4.5}Queue Size Dependence}{23}{}%
-\contentsline {section}{\numberline {4.6}Regression on marks}{23}{}%
-\contentsline {chapter}{\numberline {Chapter 5}Conclusion}{24}{}%
-\contentsline {chapter}{\numberline {Chapter 6}Appendix: Foundations of Probabilistic Models}{25}{}%
-\contentsline {section}{\numberline {6.1}Measure Theory Fundamentals}{25}{}%
-\contentsline {section}{\numberline {6.2}Probability Spaces}{26}{}%
-\contentsline {subsection}{\numberline {6.2.1}Conditionalisation}{27}{}%
-\contentsline {section}{\numberline {6.3}Density of a Measure}{28}{}%
-\contentsline {section}{\numberline {6.4}Stochastic Process Fundamentals}{28}{}%
-\contentsline {chapter}{References}{29}{}%
+\contentsline {section}{\numberline {2.4}Uncertainty quantification for MLE}{19}{}%
+\contentsline {section}{\numberline {2.5}Inference for the Mark Process}{19}{}%
+\contentsline {section}{\numberline {2.6}Monte Carlo EM}{19}{}%
+\contentsline {section}{\numberline {2.7}Computational Concerns}{19}{}%
+\contentsline {section}{\numberline {2.8}Bayesian Approach}{19}{}%
+\contentsline {section}{\numberline {2.9}Model Selection}{19}{}%
+\contentsline {chapter}{\numberline {Chapter 3}Generative Sampling}{20}{}%
+\contentsline {section}{\numberline {3.1}Simulation Methods}{20}{}%
+\contentsline {section}{\numberline {3.2}Simulation Study of Estimation Methods}{20}{}%
+\contentsline {section}{\numberline {3.3}Impulse Response Function}{20}{}%
+\contentsline {chapter}{\numberline {Chapter 4}Application to KOSPI/SPY Data}{21}{}%
+\contentsline {subsection}{\numberline {4.0.1}Clustering Ratio}{21}{}%
+\contentsline {section}{\numberline {4.1}Summary of datasets}{22}{}%
+\contentsline {section}{\numberline {4.2}Inhomogeneity}{22}{}%
+\contentsline {section}{\numberline {4.3}Multidimensionality}{22}{}%
+\contentsline {section}{\numberline {4.4}Self-Excitation and Mutual Excitation}{22}{}%
+\contentsline {section}{\numberline {4.5}Queue Size Dependence}{22}{}%
+\contentsline {section}{\numberline {4.6}Regression on marks}{22}{}%
+\contentsline {chapter}{\numberline {Chapter 5}Conclusion}{23}{}%
+\contentsline {chapter}{\numberline {Chapter 6}Appendix: Foundations of Probabilistic Models}{24}{}%
+\contentsline {section}{\numberline {6.1}Measure Theory Fundamentals}{24}{}%
+\contentsline {section}{\numberline {6.2}Probability Spaces}{25}{}%
+\contentsline {subsection}{\numberline {6.2.1}Conditionalisation}{26}{}%
+\contentsline {section}{\numberline {6.3}Density of a Measure}{27}{}%
+\contentsline {section}{\numberline {6.4}Stochastic Process Fundamentals}{27}{}%
+\contentsline {chapter}{References}{28}{}%

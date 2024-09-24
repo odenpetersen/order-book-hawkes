@@ -720,74 +720,36 @@ $$\bar\Lambda_i(t) \coloneq \int_{t_\mathrm{min}}^t \left(\lambda_i^{\theta_i}\r
 In the case where $\lambda^{\theta_1,\theta_2,\ldots}$ is the intensity of a compound point process whose components are adapted to the natural filtration of the overall point process, and have intensities $\lambda_i^{\theta_i}$, the functions $\left(\lambda_i^{\theta_i}\right)_\mathcal{D}$ will just be the empirical intensity of the components.\textcolor{red}{Is this true? is there a simple proof?}
 
 By the chain rule, we then have
+\textcolor{red}{Why can I exchange derivative and integral here}
 \begin{equation*}
 	\begin{align}
 		\frac{\partial}{\partial \theta_i}\ell(\theta_1,\theta_2,\ldots;\mathcal{D})
 		= & \int_{t_\mathrm{min}}^{t_\mathrm{max}}\frac{\partial}{\partial\theta_i}\log\left(\sum_i \left(\lambda_i^{\theta_i}\right)_\mathcal{D}(t)\right)d\Lambda_\mathcal{D} - \frac{\partial}{\partial\theta_i}\bar\Lambda_i(t_\mathrm{max})\\
-		= & \int_{t_\mathrm{min}}^{t_\mathrm{max}}\frac{\frac{\partial}{\partial\theta_i}\lambda_i^{\theta_i}(t)}{\lambda^{\theta_1,\theta_2,\ldots}_\mathcal{D}(t)}d\Lambda_\mathcal{D} - \int_{t_\mathrm{min}}^{t_\mathrm{max}}\frac{\partial}{\partial\theta_i}\lambda_i^{\theta_i}(t)dt\\
-		= & \int_{t_\mathrm{min}}^{t_\mathrm{max}}\frac{\frac{\partial}{\partial\theta_i}\lambda_i^{\theta_i}(t)}{\left(\lambda_i^{\theta_i}\right)_\mathcal{D}(t)}B_{i,t}d\Lambda_\mathcal{D} - \int_{t_\mathrm{min}}^{t_\mathrm{max}}\frac{\partial}{\partial\theta_i}\lambda_i^{\theta_i}(t)dt,\\
+		= & \int_{t_\mathrm{min}}^{t_\mathrm{max}}\frac{\frac{\partial}{\partial\theta_i}\left(\lambda_i^{\theta_i}\right)_\mathcal{D}(t)}{\lambda^{\theta_1,\theta_2,\ldots}_\mathcal{D}(t)}d\Lambda_\mathcal{D} - \int_{t_\mathrm{min}}^{t_\mathrm{max}}\frac{\partial}{\partial\theta_i}\left(\lambda_i^{\theta_i}\right)_\mathcal{D}(t)dt\\
+		= & \int_{t_\mathrm{min}}^{t_\mathrm{max}}\frac{\frac{\partial}{\partial\theta_i}\left(\lambda_i^{\theta_i}\right)_\mathcal{D}(t)}{\left(\lambda_i^{\theta_i}\right)_\mathcal{D}(t)}B_{i,t}d\Lambda_\mathcal{D} - \int_{t_\mathrm{min}}^{t_\mathrm{max}}\frac{\partial}{\partial\theta_i}\left(\lambda_i^{\theta_i}\right)_\mathcal{D}(t)dt\\
+		= & \int_{t_\mathrm{min}}^{t_\mathrm{max}} \left(\frac{\partial}{\partial\theta_i}\log\left(\left\vert\left(\lambda_i^{\theta_i}\right)_\mathcal{D}(t)\right\vert\right)\right) \left(\left\vert B_{i,t}\right\vert d\Lambda_\mathcal{D}\right) - \int_{t_\mathrm{min}}^{t_\mathrm{max}}\frac{\partial}{\partial\theta_i}\left(\lambda_i^{\theta_i}\right)_\mathcal{D}(t)dt,\\
 		\frac{\partial^2}{\partial \theta_i^2}\ell(\theta_1,\theta_2,\ldots;\mathcal{D})
 		= & \int_{t_\mathrm{min}}^{t_\mathrm{max}} \frac{\frac{\partial^2}{\partial\theta_i^2}\left(\lambda_i^{\theta_i}\right)_\mathcal{D}(t) - \left(\frac{\partial}{\partial\theta_i}\left(\lambda_i^{\theta_i}\right)_\mathcal{D}(t)\right) \left(\frac{\partial}{\partial\theta_i}\left(\lambda_i^{\theta_i}\right)_\mathcal{D}(t)\right)^T }{\left(\lambda_i^{\theta_i}\right)_\mathcal{D}(t)} B_{i,t} d\Lambda_\mathcal{D} \\
-		  & - \int_{t_\mathrm{min}}^{t_\mathrm{max}} \left(\frac{\partial^2}{\partial\theta^2}\left(\lambda_i^{\theta_i}\right)_\mathcal{D}(t)\right) dt,
+		  & - \int_{t_\mathrm{min}}^{t_\mathrm{max}} \left(\frac{\partial^2}{\partial\theta_i^2}\left(\lambda_i^{\theta_i}\right)_\mathcal{D}(t)\right) dt\\
 	\end{align}
 \end{equation*}
-		%& - \left(\frac{\partial}{\partial\theta}\left(\lambda_i^{\theta_i}\right)_\mathcal{D}(t)\right) \left(\frac{\partial}{\partial\theta}\left(\lambda_i^{\theta_i}\right)_\mathcal{D}(t)\right)^T}{\left(\lambda_i^{\theta_i}\right)_\mathcal{D}(t)}d\Lambda_\mathcal{D} - \int_{t_\mathrm{min}}^{t_\mathrm{max}}\frac{\partial^2}{\partial\theta^2}\left(\lambda_i^{\theta_i}\right)_\mathcal{D}(t) dt \\
-		%= & \int_{t_\mathrm{min}}^{t_\mathrm{max}}\frac{\frac{\partial^2}{\partial\theta^2}\left(\lambda_i^{\theta_i}\right)_\mathcal{D}(t) \\
-		%&- \left(\frac{\partial}{\partial\theta}\left(\lambda_i^{\theta_i}\right)_\mathcal{D}(t)\right)\left(\frac{\partial}{\partial\theta}\left(\lambda_i^{\theta_i}\right)_\mathcal{D}(t)\right)^T}{\left(\lambda_i^{\theta_i}\right)_\mathcal{D}(t)}d\Lambda_\mathcal{D} - \int_{t_\mathrm{min}}^{t_\mathrm{max}}\frac{\partial^2}{\partial\theta^2}\left(\lambda_i^{\theta_i}\right)_\mathcal{D}(t) dt \\
+\textcolor{red}{Can the last equation be written in terms of log?}
 where
 $$B_{i,t} \coloneq \frac{\left(\lambda_i^{\theta_i}\right)_\mathcal{D}(t)}{\lambda_\mathcal{D}^{\theta_1,\theta_2,\ldots}(t)}$$
-are the ratios of component intensities to overall intensity. In the case where the point process is a compound of processes with intensities $\lambda_i^{\theta_i}$, these represent the probability that an event at $t$ is from the $i$th point process.\textcolor{red}{Is this true? is there a simple proof?}
+are the ratios of each component to the overall intensity. In the case where the point process is a compound of processes with intensities $\lambda_i^{\theta_i}$, these represent the probability that an event at $t$ is from the $i$th component point process.\textcolor{red}{Is this true? is there a simple proof?}
 
-Suppose we have a Hawkes process with background intensity $\nu\in\mathbb{R}$ and kernel equal to
-$$k(x) = \alpha\exp(-\beta x).$$
+\section{Expectation Maximisation}
+We know that the loglikelihood for a compound process is given by
+$$\ell(\theta_1,\theta_2,\ldots;\mathcal{D}) = \int_{t_\mathrm{min}}^{t_\mathrm{max}}\log\left(\sum_i \left(\lambda_i^{\theta_i}\right)_{\mathcal{D}}(t)\right)d\Lambda_\mathcal{D}(t)-\sum_i \bar\Lambda_i\left(t_\mathrm{max}\right).$$
 
-The loglikelihood is then equal to
-\begin{equation*}
-	\begin{align}
-		\ell(\nu,\alpha,\beta;\mathcal{D})
-		= &\int_{t_\mathrm{min}}^{t_\mathrm{max}}\log\left(\lambda_\mathrm{exo}(t)+\lambda_\mathrm{endo}(t)\right)d\Lambda_{\mathcal{D}}(t) \\
-		- &\int_{t_\mathrm{min}}^{t_\mathrm{max}}\left(\lambda_\mathrm{exo}(t)+\lambda_\mathrm{endo}(t)\right) dt,
-	\end{align}
-\end{equation*}
-where
-\begin{equation*}
-	\begin{align}
-		\lambda_\mathrm{exo}(t) &\coloneq \nu,\\
-		\lambda_\mathrm{endo}(t) &\coloneq \int_{t_\mathrm{min}}^t k(t-s) d\Lambda_{\mathcal{D}}(s) = \alpha\int_{t_\mathrm{min}}^t \exp(-\beta (t-s))d\Lambda_\mathcal{D}(s)
-	\end{align}
-\end{equation*}
-are the exogenous and endogenous components of the intensity $\lambda_\mathcal{D}$.
+From Jensen's inequality, since $\log$ is a concave function, we have
+$$\log\left(\sum_i \left(\lambda_i^{\theta_i}\right)_{\mathcal{D}}(t)\right) \geq \log\left(\sum_i \left(\lambda_i^{\theta_i}\right)_{\mathcal{D}}(t)\right)$$
 
-We can then apply the chain rule to see that
-\begin{equation*}
-	\begin{align}
-		\frac{\partial}{\partial \nu} \ell(\nu,\alpha,\beta;\mathcal{D})
-		= &\int_{t_\mathrm{min}}^{t_\mathrm{max}}\frac{\frac{\partial \lambda_\mathrm{exo}(t)}{\partial\nu}+\frac{\partial\lambda_\mathrm{endo}}{\partial\nu}}{\lambda_\mathrm{exo}(t)+\lambda_\mathrm{endo}(t)}d\Lambda_{\mathcal{D}}(t) - \int_{t_\mathrm{min}}^{t_\mathrm{max}} \left(\frac{\partial \lambda_\mathrm{exo}(t)}{\partial\nu}+\frac{\partial\lambda_\mathrm{endo}}{\partial\nu}\right) dt \\
-		= & \int_{t_\mathrm{min}}^{t_\mathrm{max}} \frac{\frac{\partial\mathrm{exo}}{\partial\nu}}{\lambda_\mathrm{exo}+\lambda_\mathrm{endo}}d\Lambda_\mathcal{D}(t) - \int_{t_\mathrm{min}}^{t_\mathrm{max}} \frac{\partial \lambda_\mathrm{exo}(t)}{\partial\nu}dt\\
-		= & \int_{t_\mathrm{min}}^{t_\mathrm{max}} \frac{\frac{\partial \lambda_\mathrm{exo}(t)}{\partial\nu}}{\lambda_\mathrm{exo}}B_{\mathrm{exo},t}d\Lambda_\mathcal{D}(t) - \int_{t_\mathrm{min}}^{t_\mathrm{max}} \frac{\partial \lambda_\mathrm{exo}(t)}{\partial\nu}dt\\
-		= & \frac{1}{\nu}\int_{t_\mathrm{min}}^{t_\mathrm{max}} B_{\mathrm{exo},t}d\Lambda_\mathcal{D}(t)-(t_\mathrm{max}-t_\mathrm{min}),\\
-		\frac{\partial}{\partial \alpha} \ell(\nu,\alpha,\beta;\mathcal{D})
-		= & \int_{t_\mathrm{min}}^{t_\mathrm{max}} \frac{\frac{\partial \lambda_\mathrm{endo}(t)}{\partial\alpha}}{\lambda_\mathrm{endo}}B_{\mathrm{endo},t}d\Lambda_\mathcal{D}(t) - \int_{t_\mathrm{min}}^{t_\mathrm{max}} \frac{\partial \lambda_\mathrm{endo}(t)}{\partial\alpha}dt\\
-		= & \frac{1}{\alpha}\left(\int_{t_\mathrm{min}}^{t_\mathrm{max}} B_{\mathrm{endo},t}d\Lambda_\mathcal{D}(t) - \int_{t_\mathrm{min}}^{t_\mathrm{max}} \lambda_\mathrm{endo}(t)dt\right)\\
-		\frac{\partial}{\partial \beta} \ell(\nu,\alpha,\beta;\mathcal{D})
-		= & \int_{t_\mathrm{min}}^{t_\mathrm{max}} \frac{\frac{\partial \lambda_\mathrm{endo}(t)}{\partial\beta}}{\lambda_\mathrm{endo}}B_{\mathrm{endo},t}d\Lambda_\mathcal{D}(t) - \int_{t_\mathrm{min}}^{t_\mathrm{max}} \frac{\partial \lambda_\mathrm{endo}(t)}{\partial\beta}dt,\\
-	\end{align}
-\end{equation*}
-\textcolor{red}{Why can I exchange derivatives and integrals here}
-where the second and third identities follow by similar reasoning to the first.
+\textcolor{red}{In the case where probas are all positive, jensens inequality says that likelihood is minorised by likelihood-fixing-probas. Then iteration is guaranteed to converge to a stationary point. However, in the case of negative probas, I don't think there's a guarantee}
 
-In general, if the intensity $\lambda$ can be written as a sum of stochastic processes $\lambda_i$, each drawn from a family of processes parameterised by $\theta_i$, and adapted to $\mathcal{F}$, the loglikelihood function of the resulting point process conditioning on a dataset $\mathcal{D}$ will satisfy
-$$\frac{\partial}{\partial\theta_i}\ell(\theta_1,\theta_2,\ldots\theta_i,\ldots;\mathcal{D}) = \int_{t_\mathrm{min}}^{t_\mathrm{max}}\frac{\frac{\partial\lambda_i(t)}{\partial\theta_i}}{\lambda_i(t)}B_{i,t}d\Lambda_\mathcal{D}(t) - \int_{t_\mathrm{min}}^{t_\mathrm{max}} \frac{\partial\lambda_i(t)}{\partial\theta_i}dt$$
+\textcolor{red}{Motivate iterative methods: find an iteration whose fixed points are stationary points. Is there a way to show that this converges?}
 
-explain why $\nu\not=0$ has no explicit solution
-
-Observe that if intensity is a sum of multiple kernels it separates into the EM form
-
-Introduce the branching matrix
-
-Motivate iterative methods: find an iteration whose fixed points are stationary points. Is there a way to show that this converges?
-
-\section{EM}
+\textcolor{red}{MM algorithm paper:   Quantile Regression via an MM Algorithm David R. Hunter Kenneth Lange Pages 60-77 | Received 01 Jun 1998, Published online: 21 Feb 2012}
 
 \subsection{Information Theory and EM}
 \textcolor{red}{Can cite original dempster paper? As well as the one that corrects the errors in that paper}

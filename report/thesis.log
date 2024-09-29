@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.6.2)  24 SEP 2024 16:50
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.6.2)  29 SEP 2024 12:46
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -777,7 +777,7 @@ e.com/doi/full/10.1080/1351847X.2020.1820356?scroll=topneedAccess=true[]
 [12]
 Chapter 2.
 
-Overfull \hbox (30.0pt too wide) in paragraph at lines 589--589
+Overfull \hbox (30.0pt too wide) in paragraph at lines 593--593
 [] 
  []
 
@@ -787,17 +787,17 @@ Overfull \hbox (30.0pt too wide) in paragraph at lines 589--589
 ! Missing $ inserted.
 <inserted text> 
                 $
-l.642 ...tps://www.ism.ac.jp/editsec/aism/pdf/030_
+l.646 ...tps://www.ism.ac.jp/editsec/aism/pdf/030_
                                                   2_0243.pdf
 ? 
 ! Double subscript.
-l.642 ...s://www.ism.ac.jp/editsec/aism/pdf/030_2_
+l.646 ...s://www.ism.ac.jp/editsec/aism/pdf/030_2_
                                                   0243.pdf
 ? 
 ! Missing $ inserted.
 <inserted text> 
                 $
-l.643 
+l.647 
       
 ? 
 
@@ -808,7 +808,7 @@ See the amsmath package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.659 	\end{align}
+l.663 	\end{align}
                   
 ? 
 
@@ -819,7 +819,7 @@ See the amsmath package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.676 	\end{align}
+l.680 	\end{align}
                   
 ? 
 [15]
@@ -831,7 +831,7 @@ See the amsmath package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.691 	\end{align}
+l.695 	\end{align}
                   
 ? 
 [16]
@@ -843,34 +843,28 @@ See the amsmath package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.734 	\end{align}
+l.738 	\end{align}
                   
 ? 
 
-Overfull \hbox (27.09163pt too wide) detected at line 735
+Overfull \hbox (25.40913pt too wide) detected at line 739
 [][]
  []
 
 [17]
-Overfull \hbox (29.84688pt too wide) detected at line 745
-[] [] \OT1/cmr/m/n/12 = [] [] [] \OML/cmm/m/it/12 B[] \OMS/cmsy/m/n/12 ^^@ [] [
-] [] \OML/cmm/m/it/12 B[] \OMS/cmsy/m/n/12 ^^U [] [] []
- []
-
-[18]
-Overfull \hbox (17.37393pt too wide) in paragraph at lines 772--777
-\OT1/cmr/m/n/12 a-tive prob-a-bil-i-ties. Con-di-tions for ker-nel non-neg-a-ti
-v-ity? (Prob-a-bly not tractable) 
+Overfull \hbox (43.80699pt too wide) in paragraph at lines 766--767
+[]\OT1/cmr/m/n/12 - Neg-a-tive prob-a-bil-i-ties. Con-di-tions for ker-nel non-
+neg-a-tiv-ity? (Prob-a-bly not tractable) 
  []
 
 
-Overfull \hbox (0.84216pt too wide) in paragraph at lines 789--790
+Overfull \hbox (0.84216pt too wide) in paragraph at lines 769--770
 \OT1/cmr/m/n/12 Kalman fil-ter? Ways to cou-ple this with the point pro-cess? (
 Monte carlo EM?) 
  []
 
-
-Overfull \hbox (16.38597pt too wide) in paragraph at lines 808--809
+[18]
+Overfull \hbox (16.38597pt too wide) in paragraph at lines 794--795
 \OT1/cmr/m/n/12 cial data https://www.tandfonline.com/doi/full/10.1080/14697688
 .2017.1403140[] 
  []
@@ -878,7 +872,7 @@ Overfull \hbox (16.38597pt too wide) in paragraph at lines 808--809
 [19]
 Chapter 3.
 
-Overfull \hbox (30.0pt too wide) in paragraph at lines 810--810
+Overfull \hbox (30.0pt too wide) in paragraph at lines 796--796
 [] 
  []
 
@@ -889,24 +883,24 @@ See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.817 Ogata thinning \bibitem{Ogata}
+l.803 Ogata thinning \bibitem{Ogata}
                                     
 ? 
 
-Underfull \hbox (badness 10000) detected at line 817
+Underfull \hbox (badness 10000) detected at line 803
 [][]
  []
 
 ! Undefined control sequence.
 <argument> \@listctr 
                      
-l.817 Ogata thinning \bibitem{Ogata}
+l.803 Ogata thinning \bibitem{Ogata}
                                     
 ? 
 ! You can't use `\relax' after \the.
 <recently read> \c@ 
                     
-l.817 Ogata thinning \bibitem{Ogata}
+l.803 Ogata thinning \bibitem{Ogata}
                                     
 ? 
 [20
@@ -914,18 +908,18 @@ l.817 Ogata thinning \bibitem{Ogata}
 ]
 Chapter 4.
 
-Overfull \hbox (30.0pt too wide) in paragraph at lines 834--834
+Overfull \hbox (30.0pt too wide) in paragraph at lines 820--820
 [] 
  []
 
 
-Overfull \hbox (244.55273pt too wide) in paragraph at lines 836--838
+Overfull \hbox (244.55273pt too wide) in paragraph at lines 822--824
 []\OT1/cmr/m/n/12 Hawkes pro-cesses and their ap-pli-ca-tions to fi-nance: a re
 -view https://www.tandfonline.com/doi/full/10.1080/14697688.2017.1403131[]
  []
 
 
-Overfull \hbox (52.99811pt too wide) in paragraph at lines 836--838
+Overfull \hbox (52.99811pt too wide) in paragraph at lines 822--824
 []\OT1/cmr/m/n/12 https://www.tandfonline.com/journals/rejf20/collections/Hawke
 s-Processes-in-Finance[] 
  []
@@ -933,14 +927,14 @@ s-Processes-in-Finance[]
 ! Missing $ inserted.
 <inserted text> 
                 $
-l.849 ...m/files/working_papers/w29369/w29369.pdf}
+l.835 ...m/files/working_papers/w29369/w29369.pdf}
                                                   . Options price impact: \t...
 
 ? 
 ! Extra }, or forgotten $.
 <recently read> \egroup 
                         
-l.849 ...m/files/working_papers/w29369/w29369.pdf}
+l.835 ...m/files/working_papers/w29369/w29369.pdf}
                                                   . Options price impact: \t...
 
 ? 
@@ -951,7 +945,7 @@ See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.850 	\item
+l.836 	\item
              Closed form for optimal execution of signals (including cross-i...
 
 ? 
@@ -962,7 +956,7 @@ See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.850 	\item C
+l.836 	\item C
               losed form for optimal execution of signals (including cross-i...
 
 ? 
@@ -973,7 +967,7 @@ See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.850 	\item C
+l.836 	\item C
               losed form for optimal execution of signals (including cross-i...
 
 ? 
@@ -984,33 +978,33 @@ See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.851 	\item
+l.837 	\item
              This paper arxiv.org/pdf/2401.11495 shows a functional limit th...
 
 ? 
 ! Missing $ inserted.
 <inserted text> 
                 $
-l.851 	\item T
+l.837 	\item T
               his paper arxiv.org/pdf/2401.11495 shows a functional limit th...
 
 ? 
 ! Missing } inserted.
 <inserted text> 
                 }
-l.851 	\item T
+l.837 	\item T
               his paper arxiv.org/pdf/2401.11495 shows a functional limit th...
 
 ? 
 
-Overfull \hbox (112.91505pt too wide) in paragraph at lines 849--851
+Overfull \hbox (112.91505pt too wide) in paragraph at lines 835--837
 \OT1/cmtt/m/n/12 https://www.nber.org/system/files/working$[]\OML/cmm/m/it/12 a
 pers=w\OT1/cmr/m/n/12 29369\OML/cmm/m/it/12 =w\OT1/cmr/m/n/12 29369\OML/cmm/m/i
 t/12 :pdf:Optionspriceimpact \OT1/cmr/m/n/12 :
  []
 
 
-Overfull \hbox (115.84958pt too wide) in paragraph at lines 849--851
+Overfull \hbox (115.84958pt too wide) in paragraph at lines 835--837
 []\OML/cmm/m/it/12 Closedformforoptimalexecutionofsignals\OT1/cmr/m/n/12 (\OML/
 cmm/m/it/12 includingcross \OMS/cmsy/m/n/12 ^^@
  []
@@ -1018,59 +1012,59 @@ cmm/m/it/12 includingcross \OMS/cmsy/m/n/12 ^^@
 ! Missing $ inserted.
 <inserted text> 
                 $
-l.855 ...4711 Option Pricing Using Hawkes Process}
+l.841 ...4711 Option Pricing Using Hawkes Process}
                                                   
 ? 
 ! Extra }, or forgotten $.
 <recently read> \egroup 
                         
-l.855 ...4711 Option Pricing Using Hawkes Process}
+l.841 ...4711 Option Pricing Using Hawkes Process}
                                                   
 ? 
 ! Missing $ inserted.
 <inserted text> 
                 $
-l.857 
+l.843 
       
 ? 
 
-Overfull \hbox (255.30446pt too wide) in paragraph at lines 854--857
+Overfull \hbox (255.30446pt too wide) in paragraph at lines 840--843
 []$[]$
  []
 
 
-Overfull \hbox (570.46384pt too wide) in paragraph at lines 854--857
+Overfull \hbox (570.46384pt too wide) in paragraph at lines 840--843
 \OT1/cmtt/m/n/12 https://papers.ssrn.com/sol3/papers.cfm?abstract$[]\OML/cmm/m/
 it/12 d \OT1/cmr/m/n/12 = 4844711\OML/cmm/m/it/12 OptionPricingUsingHawkesProce
 ss[]$ 
  []
 
 
-Overfull \hbox (26.82935pt too wide) in paragraph at lines 858--860
+Overfull \hbox (26.82935pt too wide) in paragraph at lines 844--846
 [][]\OT1/cmtt/m/n/12 A slightly depressing jump model: intraday volatility patt
 ern simulation
  []
 
 
-Overfull \hbox (76.22937pt too wide) in paragraph at lines 858--860
+Overfull \hbox (76.22937pt too wide) in paragraph at lines 844--846
 \OT1/cmtt/m/n/12 https://www.tandfonline.com/doi/full/10.1080/14697688.2017.140
 3139[] []Implementation
  []
 
 
-Overfull \hbox (396.45451pt too wide) in paragraph at lines 858--860
+Overfull \hbox (396.45451pt too wide) in paragraph at lines 844--846
 \OT1/cmtt/m/n/12 and evaluation of the Heston-Queue-Hawkes option pricing model
  https://uu.diva-portal.org/smash/get/diva2:1763609/FULLTEXT01.pdf[] 
  []
 
 
-Overfull \hbox (45.35435pt too wide) in paragraph at lines 862--863
+Overfull \hbox (45.35435pt too wide) in paragraph at lines 848--849
 []\OT1/cmtt/m/n/12 Variance of interevent time divided by expectation. Bouchaud
  p 165. Should
  []
 
 
-Overfull \hbox (44.47934pt too wide) in paragraph at lines 862--863
+Overfull \hbox (44.47934pt too wide) in paragraph at lines 848--849
 \OT1/cmtt/m/n/12 this section be elsewhere? Does this mean something for residu
 als too?[] 
  []
@@ -1078,73 +1072,103 @@ als too?[]
 ! Missing $ inserted.
 <inserted text> 
                 $
-l.864 ...courses/B60.4308_files/Point-Process.pdf}
+l.850 ...courses/B60.4308_files/Point-Process.pdf}
                                                   
 ? 
 ! Extra }, or forgotten $.
 <recently read> \egroup 
                         
-l.864 ...courses/B60.4308_files/Point-Process.pdf}
+l.850 ...courses/B60.4308_files/Point-Process.pdf}
                                                   
 ? 
 ! Missing $ inserted.
 <inserted text> 
                 $
-l.865 
+l.851 
       
 ? 
 
-Overfull \hbox (114.89996pt too wide) in paragraph at lines 864--865
+Overfull \hbox (114.89996pt too wide) in paragraph at lines 850--851
 []\OT1/cmtt/m/n/12 Point process control https://pages.stern.nyu.edu/ rcaldent/
 courses/B60.4308$[]\OML/cmm/m/it/12 iles=Point \OMS/cmsy/m/n/12 ^^@
  []
 
+! Misplaced alignment tab character &.
+l.853 ...fft?md5=a6db8ba8fcd787042e962ad8b575732b&
+                                                  pid=1-s2.0-S15446123240118...
 
-Overfull \hbox (8.30434pt too wide) in paragraph at lines 867--875
-[]\OT1/cmtt/m/n/12 Databento info: CME: ES MES OPRA: SPX - Index options SPY - 
-Index ETF
+? 
+
+Overfull \hbox (14.47934pt too wide) in paragraph at lines 853--854
+[]\OT1/cmtt/m/n/12 Recent Paper - Limit Order Book Dynamics and Order Size Mode
+lling Using
  []
 
 
-Overfull \hbox (384.1045pt too wide) in paragraph at lines 867--875
-\OT1/cmtt/m/n/12 options https://databento.medium.com/getting-futures-tick-size
-s-and-notional-tick-values-in-python-with-databento-ba03cfded553 
+Overfull \hbox (865.75475pt too wide) in paragraph at lines 853--854
+\OT1/cmtt/m/n/12 Compound Hawkes Process https://arxiv.org/abs/2312.08927 https
+://www.sciencedirect.com/science/article/pii/S1544612324011863/pdfft?md5=a6db8b
+a8fcd787042e962ad8b575732bpid=1-s2.0-S1544612324011863-main.pdf 
  []
 
 [21
 
 ]
-Overfull \hbox (8.30434pt too wide) in paragraph at lines 880--885
+Overfull \hbox (8.30434pt too wide) in paragraph at lines 856--864
+[]\OT1/cmtt/m/n/12 Databento info: CME: ES MES OPRA: SPX - Index options SPY - 
+Index ETF
+ []
+
+
+Overfull \hbox (384.1045pt too wide) in paragraph at lines 856--864
+\OT1/cmtt/m/n/12 options https://databento.medium.com/getting-futures-tick-size
+s-and-notional-tick-values-in-python-with-databento-ba03cfded553 
+ []
+
+
+Overfull \hbox (286.17947pt too wide) in paragraph at lines 865--869
+[]\OT1/cmtt/m/n/12 https://databento.com/portal/datasets/XNAS.ITCH/ETF/SPY http
+s://databento.com/portal/datasets/GLBX.MDP3/Futures/MES
+ []
+
+
+Overfull \hbox (408.80452pt too wide) in paragraph at lines 865--869
+\OT1/cmtt/m/n/12 https://databento.com/portal/datasets/GLBX.MDP3/Futures/ES htt
+ps://databento.com/docs/examples/order-book/limit-order-book/example 
+ []
+
+
+Overfull \hbox (8.30434pt too wide) in paragraph at lines 874--879
 \OT1/cmtt/m/n/12 Two choices for handling inhomogeneity: - Reparameterise to 'b
 usiness
  []
 
 
-Overfull \hbox (45.35435pt too wide) in paragraph at lines 880--885
+Overfull \hbox (45.35435pt too wide) in paragraph at lines 874--879
 \OT1/cmtt/m/n/12 time' in preprocessing, as recommended by [[]] in 9.3.1 - Spli
 nes/polynomials
  []
 
 
-Overfull \hbox (2.12933pt too wide) in paragraph at lines 880--885
+Overfull \hbox (2.12933pt too wide) in paragraph at lines 874--879
 \OT1/cmtt/m/n/12 etc - Could also combine both - Can also focus on a small part
  of the
  []
 
 
-Overfull \hbox (32.12933pt too wide) in paragraph at lines 889--890
+Overfull \hbox (32.12933pt too wide) in paragraph at lines 883--884
 []\OT1/cmtt/m/n/12 correlations in trade sign (buys vs sells arrival rate nonst
 ationary) 
  []
 
 
-Overfull \hbox (2.12933pt too wide) in paragraph at lines 893--894
+Overfull \hbox (2.12933pt too wide) in paragraph at lines 887--888
 []\OT1/cmtt/m/n/12 different price levels have different arrival rates -> sante
  fe model
  []
 
 
-Overfull \hbox (20.65434pt too wide) in paragraph at lines 908--909
+Overfull \hbox (20.65434pt too wide) in paragraph at lines 902--903
 \OT1/cmtt/m/n/12 not sure what this will look like yet. how to justify? which v
 ariables
  []
@@ -1152,7 +1176,7 @@ ariables
 [22]
 Chapter 5.
 
-Overfull \hbox (30.0pt too wide) in paragraph at lines 911--911
+Overfull \hbox (30.0pt too wide) in paragraph at lines 905--905
 [] 
  []
 
@@ -1161,49 +1185,49 @@ Overfull \hbox (30.0pt too wide) in paragraph at lines 911--911
 ]
 Chapter 6.
 
-Overfull \hbox (30.0pt too wide) in paragraph at lines 917--917
+Overfull \hbox (30.0pt too wide) in paragraph at lines 911--911
 [] 
  []
 
 
-Overfull \hbox (33.00435pt too wide) in paragraph at lines 918--919
+Overfull \hbox (33.00435pt too wide) in paragraph at lines 912--913
 \OT1/cmtt/m/n/12 In order to describe precisely the various models explored in 
 this thesis,
  []
 
 
-Overfull \hbox (2.12933pt too wide) in paragraph at lines 918--919
+Overfull \hbox (2.12933pt too wide) in paragraph at lines 912--913
 \OT1/cmtt/m/n/12 it is necessary to introduce some key mathematical concepts th
 at form
  []
 
 
-Overfull \hbox (57.70436pt too wide) in paragraph at lines 918--919
+Overfull \hbox (57.70436pt too wide) in paragraph at lines 912--913
 \OT1/cmtt/m/n/12 the basis for model specifications and related derivations. In
  this appendix,
  []
 
 
-Overfull \hbox (32.12933pt too wide) in paragraph at lines 918--919
+Overfull \hbox (32.12933pt too wide) in paragraph at lines 912--913
 \OT1/cmtt/m/n/12 I cover the basics of measure, probability, and stochastic pro
 cesses. 
  []
 
 
-Overfull \hbox (33.00435pt too wide) in paragraph at lines 921--922
+Overfull \hbox (33.00435pt too wide) in paragraph at lines 915--916
 \OT1/cmtt/m/n/12 In order to formalise the concept of a stochastic process, it 
 is necessary
  []
 
 
-Overfull \hbox (38.3993pt too wide) in paragraph at lines 924--926
+Overfull \hbox (38.3993pt too wide) in paragraph at lines 918--920
 \OT1/cmtt/m/n/12 which is a new set that contains as its elements every subset 
 $\OML/cmm/m/it/12 S$ \OT1/cmtt/m/n/12 of $\OML/cmm/m/it/12 X$\OT1/cmtt/m/n/12 .
  
  []
 
 
-Overfull \hbox (11.26941pt too wide) in paragraph at lines 927--928
+Overfull \hbox (11.26941pt too wide) in paragraph at lines 921--922
 []\OT1/cmtt/m/n/12 We say that a subset $\OT1/cmr/m/n/12 ^^F$ \OT1/cmtt/m/n/12 
 of $\OMS/cmsy/m/n/12 P\OT1/cmr/m/n/12 (\OML/cmm/m/it/12 X\OT1/cmr/m/n/12 )$ \OT
 1/cmtt/m/n/12 is a $\OML/cmm/m/it/12 ^^[$\OT1/cmtt/m/it/12 -algebra \OT1/cmtt/m
@@ -1211,14 +1235,14 @@ of $\OMS/cmsy/m/n/12 P\OT1/cmr/m/n/12 (\OML/cmm/m/it/12 X\OT1/cmr/m/n/12 )$ \OT
  []
 
 
-Overfull \hbox (50.47342pt too wide) in paragraph at lines 933--934
+Overfull \hbox (50.47342pt too wide) in paragraph at lines 927--928
 \OT1/cmtt/m/n/12 Elements of $\OT1/cmr/m/n/12 ^^F$ \OT1/cmtt/m/n/12 are known a
 s \OT1/cmtt/m/it/12 measurable sets\OT1/cmtt/m/n/12 . A common example of a $\O
 ML/cmm/m/it/12 ^^[$\OT1/cmtt/m/n/12 -algebra
  []
 
 
-Overfull \hbox (27.09073pt too wide) in paragraph at lines 933--934
+Overfull \hbox (27.09073pt too wide) in paragraph at lines 927--928
 \OT1/cmtt/m/n/12 is the Borel $\OML/cmm/m/it/12 ^^[$\OT1/cmtt/m/n/12 -algebra $
 \OML/cmm/m/it/12 B\OT1/cmr/m/n/12 (\OML/cmm/m/it/12 X\OT1/cmr/m/n/12 )$ \OT1/cm
 tt/m/n/12 of a topological space $\OML/cmm/m/it/12 X$ \OT1/cmtt/m/n/12 (e.g. $\
@@ -1226,19 +1250,19 @@ U/msb/m/n/12 R$\OT1/cmtt/m/n/12 ), defined
  []
 
 
-Overfull \hbox (8.36328pt too wide) in paragraph at lines 933--934
+Overfull \hbox (8.36328pt too wide) in paragraph at lines 927--928
 \OT1/cmtt/m/n/12 as the smallest $\OML/cmm/m/it/12 ^^[$\OT1/cmtt/m/n/12 -algebr
 a such that every open set is measurable. 
  []
 
 
-Overfull \hbox (53.77826pt too wide) in paragraph at lines 935--936
+Overfull \hbox (53.77826pt too wide) in paragraph at lines 929--930
 \OT1/cmtt/m/n/12 that is \OT1/cmtt/m/it/12 countably additive\OT1/cmtt/m/n/12 ,
  meaning that for any finite or countable sequence
  []
 
 
-Overfull \hbox (32.33185pt too wide) in paragraph at lines 936--937
+Overfull \hbox (32.33185pt too wide) in paragraph at lines 930--931
 \OT1/cmtt/m/n/12 Assuming that at least one set $\OML/cmm/m/it/12 S \OMS/cmsy/m
 /n/12 2 \OT1/cmr/m/n/12 ^^F$ \OT1/cmtt/m/n/12 has finite measure, we then have 
 
@@ -1247,83 +1271,83 @@ Overfull \hbox (32.33185pt too wide) in paragraph at lines 936--937
 [24
 
 ]
-Overfull \hbox (76.22937pt too wide) in paragraph at lines 940--941
+Overfull \hbox (76.22937pt too wide) in paragraph at lines 934--935
 []\OT1/cmtt/m/n/12 Informally, a measure formalises intuitions about the size, 
 mass, or significance
  []
 
 
-Overfull \hbox (21.65385pt too wide) in paragraph at lines 940--941
+Overfull \hbox (21.65385pt too wide) in paragraph at lines 934--935
 \OT1/cmtt/m/n/12 known as a \OT1/cmtt/m/it/12 null set\OT1/cmtt/m/n/12 , and a 
 property that holds only for points in a null
  []
 
 
-Overfull \hbox (29.00687pt too wide) in paragraph at lines 940--941
+Overfull \hbox (29.00687pt too wide) in paragraph at lines 934--935
 \OT1/cmtt/m/n/12 set is said to be true \OT1/cmtt/m/it/12 almost nowhere \OT1/c
 mtt/m/n/12 in $\OML/cmm/m/it/12 X$\OT1/cmtt/m/n/12 . Conversely, a property tha
 t
  []
 
 
-Overfull \hbox (33.75398pt too wide) in paragraph at lines 940--941
+Overfull \hbox (33.75398pt too wide) in paragraph at lines 934--935
 \OT1/cmtt/m/n/12 holds for every point except those in a null set is said to be
  true \OT1/cmtt/m/it/12 almost
  []
 
 
-Overfull \hbox (47.03212pt too wide) in paragraph at lines 940--941
+Overfull \hbox (47.03212pt too wide) in paragraph at lines 934--935
 \OT1/cmtt/m/it/12 everywhere \OT1/cmtt/m/n/12 (a.e.) in $\OML/cmm/m/it/12 X$\OT
 1/cmtt/m/n/12 . In this way, a measure quantifies how significant
  []
 
 
-Overfull \hbox (39.17003pt too wide) in paragraph at lines 942--943
+Overfull \hbox (39.17003pt too wide) in paragraph at lines 936--937
 []\OT1/cmtt/m/n/12 Similarly, familiar concepts of \OT1/cmtt/m/it/12 length\OT1
 /cmtt/m/n/12 , \OT1/cmtt/m/it/12 area \OT1/cmtt/m/n/12 and \OT1/cmtt/m/it/12 vo
 lume \OT1/cmtt/m/n/12 are all formalised
  []
 
 
-Overfull \hbox (66.69232pt too wide) in paragraph at lines 942--943
+Overfull \hbox (66.69232pt too wide) in paragraph at lines 936--937
 \OT1/cmtt/m/n/12 by a family of translation-invariant measures on $\U/msb/m/n/1
 2 R[]$\OT1/cmtt/m/n/12 , known as the $\OML/cmm/m/it/12 n$\OT1/cmtt/m/n/12 -dim
 ensional
  []
 
 
-Overfull \hbox (33.00435pt too wide) in paragraph at lines 944--945
+Overfull \hbox (33.00435pt too wide) in paragraph at lines 938--939
 []\OT1/cmtt/m/n/12 The concept of a measure is foundational to the definition o
 f the Lebesgue
  []
 
 
-Overfull \hbox (41.82713pt too wide) in paragraph at lines 944--945
+Overfull \hbox (41.82713pt too wide) in paragraph at lines 938--939
 \OT1/cmtt/m/n/12 integral. Integration of a function $\OML/cmm/m/it/12 f$ \OT1/
 cmtt/m/n/12 over a measurable set $\OML/cmm/m/it/12 S$ \OT1/cmtt/m/n/12 with re
 spect
  []
 
 
-Overfull \hbox (45.35435pt too wide) in paragraph at lines 945--947
+Overfull \hbox (45.35435pt too wide) in paragraph at lines 939--941
 \OT1/cmtt/m/n/12 while integration with respect to the Lebesgue measure will of
 ten be written
  []
 
 
-Overfull \hbox (45.35435pt too wide) in paragraph at lines 947--949
+Overfull \hbox (45.35435pt too wide) in paragraph at lines 941--943
 \OT1/cmtt/m/n/12 I will not cover the definition of the Lebesgue measure or Leb
 esgue integral
  []
 
 
-Overfull \hbox (1.25432pt too wide) in paragraph at lines 947--949
+Overfull \hbox (1.25432pt too wide) in paragraph at lines 941--943
 \OT1/cmtt/m/n/12 here, but they can be found in most textbooks on measure theor
 y. 
  []
 
 
-Overfull \hbox (41.63107pt too wide) in paragraph at lines 951--952
+Overfull \hbox (41.63107pt too wide) in paragraph at lines 945--946
 \OT1/cmtt/m/n/12 In the special case where $\OML/cmm/m/it/12 ^^V\OT1/cmr/m/n/12
  (\OML/cmm/m/it/12 X\OT1/cmr/m/n/12 ) = 1$\OT1/cmtt/m/n/12 , we refer to $\OML/
 cmm/m/it/12 ^^V$ \OT1/cmtt/m/n/12 as a \OT1/cmtt/m/it/12 probability measure\OT
@@ -1331,64 +1355,64 @@ cmm/m/it/12 ^^V$ \OT1/cmtt/m/n/12 as a \OT1/cmtt/m/it/12 probability measure\OT
  []
 
 
-Overfull \hbox (28.79762pt too wide) in paragraph at lines 951--952
+Overfull \hbox (28.79762pt too wide) in paragraph at lines 945--946
 \OT1/cmtt/m/n/12 and to $\OML/cmm/m/it/12 X$ \OT1/cmtt/m/n/12 as a \OT1/cmtt/m/
 it/12 sample space\OT1/cmtt/m/n/12 . Correspondingly, the term \OT1/cmtt/m/it/1
 2 almost everywhere
  []
 
 
-Overfull \hbox (18.18687pt too wide) in paragraph at lines 951--952
+Overfull \hbox (18.18687pt too wide) in paragraph at lines 945--946
 \OT1/cmtt/m/n/12 is replaced with \OT1/cmtt/m/it/12 almost surely \OT1/cmtt/m/n
 /12 (a.s.), indicating a property that holds
  []
 
 
-Overfull \hbox (0.22101pt too wide) in paragraph at lines 953--954
+Overfull \hbox (0.22101pt too wide) in paragraph at lines 947--948
 []\OT1/cmtt/m/n/12 A function from one $\OML/cmm/m/it/12 ^^[$\OT1/cmtt/m/n/12 -
 algebra to another is called \OT1/cmtt/m/it/12 measurable \OT1/cmtt/m/n/12 if a
 nd
  []
 
 
-Overfull \hbox (33.00435pt too wide) in paragraph at lines 953--954
+Overfull \hbox (33.00435pt too wide) in paragraph at lines 947--948
 \OT1/cmtt/m/n/12 only if the preimage of any measurable set in the codomain is 
 a measurable
  []
 
 
-Overfull \hbox (20.65434pt too wide) in paragraph at lines 953--954
+Overfull \hbox (20.65434pt too wide) in paragraph at lines 947--948
 \OT1/cmtt/m/n/12 set in the domain. A measurable function whose domain is a sam
 ple space
  []
 
 
-Overfull \hbox (43.64778pt too wide) in paragraph at lines 953--954
+Overfull \hbox (43.64778pt too wide) in paragraph at lines 947--948
 \OT1/cmr/m/n/12 
 $ \OT1/cmtt/m/n/12 equipped with a probability measure $\U/msb/m/n/12 P$ \OT1/c
 mtt/m/n/12 is known as a \OT1/cmtt/m/it/12 random variable\OT1/cmtt/m/n/12 . 
  []
 
 
-Overfull \hbox (9.05397pt too wide) in paragraph at lines 955--956
+Overfull \hbox (9.05397pt too wide) in paragraph at lines 949--950
 []\OT1/cmtt/m/n/12 Measurable sets in a sample space are often referred to as \
 OT1/cmtt/m/it/12 events\OT1/cmtt/m/n/12 , and
  []
 
 
-Overfull \hbox (8.30434pt too wide) in paragraph at lines 955--956
+Overfull \hbox (8.30434pt too wide) in paragraph at lines 949--950
 \OT1/cmtt/m/n/12 the measure of such a set is called the probability of the eve
 nt. For
  []
 
 
-Overfull \hbox (28.20367pt too wide) in paragraph at lines 957--958
+Overfull \hbox (28.20367pt too wide) in paragraph at lines 951--952
 []\OT1/cmtt/m/n/12 A more general concept is \OT1/cmtt/m/it/12 expectation\OT1/
 cmtt/m/n/12 . For a real-valued random variable
  []
 
 [25]
-Overfull \hbox (34.82112pt too wide) in paragraph at lines 960--961
+Overfull \hbox (34.82112pt too wide) in paragraph at lines 954--955
 []\OT1/cmtt/m/n/12 For binary-valued random variables $\OML/cmm/m/it/12 X \OT1/
 cmr/m/n/12 : 
  \OMS/cmsy/m/n/12 ! f\OT1/cmr/m/n/12 0\OML/cmm/m/it/12 ; \OT1/cmr/m/n/12 1\OMS/
@@ -1396,62 +1420,62 @@ cmsy/m/n/12 g$\OT1/cmtt/m/n/12 , we have the identity
  []
 
 
-Overfull \hbox (12.92638pt too wide) in paragraph at lines 964--965
+Overfull \hbox (12.92638pt too wide) in paragraph at lines 958--959
 \OT1/cmtt/m/n/12 By defining ``events" as $\OT1/cmr/m/n/12 ^^F$\OT1/cmtt/m/n/12
  -measurable subsets of $\OT1/cmr/m/n/12 
 $\OT1/cmtt/m/n/12 , we allow knowledge
  []
 
 
-Overfull \hbox (34.57648pt too wide) in paragraph at lines 964--965
+Overfull \hbox (34.57648pt too wide) in paragraph at lines 958--959
 \OT1/cmtt/m/n/12 of an event to inform us about which possible values of the hi
 dden $\OML/cmm/m/it/12 !$ \OT1/cmtt/m/n/12 could
  []
 
 
-Overfull \hbox (26.82935pt too wide) in paragraph at lines 964--965
+Overfull \hbox (26.82935pt too wide) in paragraph at lines 958--959
 \OT1/cmtt/m/n/12 have produced the result we actually observe. In this way, the
  knowledge
  []
 
 
-Overfull \hbox (9.87646pt too wide) in paragraph at lines 964--965
+Overfull \hbox (9.87646pt too wide) in paragraph at lines 958--959
 \OT1/cmtt/m/n/12 that $\OML/cmm/m/it/12 !$ \OT1/cmtt/m/n/12 has produced one ob
 served event allows us to draw probabilistic
  []
 
 
-Overfull \hbox (57.70436pt too wide) in paragraph at lines 964--965
+Overfull \hbox (57.70436pt too wide) in paragraph at lines 958--959
 \OT1/cmtt/m/n/12 conclusions about the occurrence of a different, related event
 . For instance,
  []
 
 
-Overfull \hbox (2.12933pt too wide) in paragraph at lines 964--965
+Overfull \hbox (2.12933pt too wide) in paragraph at lines 958--959
 \OT1/cmtt/m/n/12 learning that a die has rolled an even number tells us that it
  cannot
  []
 
 
-Overfull \hbox (1.5292pt too wide) in paragraph at lines 964--965
+Overfull \hbox (1.5292pt too wide) in paragraph at lines 958--959
 \OT1/cmtt/m/n/12 possibly have rolled a $\OT1/cmr/m/n/12 3$\OT1/cmtt/m/n/12 , a
 nd makes the proposition that a $\OT1/cmr/m/n/12 2$ \OT1/cmtt/m/n/12 has been
  []
 
 
-Overfull \hbox (45.35435pt too wide) in paragraph at lines 966--967
+Overfull \hbox (45.35435pt too wide) in paragraph at lines 960--961
 []\OT1/cmtt/m/n/12 In order to capture the relationships between events, and to
  make systematic
  []
 
 
-Overfull \hbox (2.12933pt too wide) in paragraph at lines 966--967
+Overfull \hbox (2.12933pt too wide) in paragraph at lines 960--961
 \OT1/cmtt/m/n/12 inferences about hidden events from observed ones, it is neces
 sary to
  []
 
 
-Overfull \hbox (10.89903pt too wide) in paragraph at lines 968--969
+Overfull \hbox (10.89903pt too wide) in paragraph at lines 962--963
 []\OT1/cmtt/m/n/12 Given two $\OML/cmm/m/it/12 ^^[$\OT1/cmtt/m/n/12 -algebras $
 \OT1/cmr/m/n/12 ^^F[]\OML/cmm/m/it/12 ; \OT1/cmr/m/n/12 ^^F[]$ \OT1/cmtt/m/n/12
  on $\OML/cmm/m/it/12 !$\OT1/cmtt/m/n/12 , we say that $\OT1/cmr/m/n/12 ^^F[]$ 
@@ -1460,39 +1484,39 @@ t/12 -algebra \OT1/cmtt/m/n/12 of
  []
 
 
-Overfull \hbox (0.68439pt too wide) in paragraph at lines 968--969
+Overfull \hbox (0.68439pt too wide) in paragraph at lines 962--963
 \OT1/cmtt/m/n/12 be \OT1/cmtt/m/it/12 coarser \OT1/cmtt/m/n/12 than $\OT1/cmr/m
 /n/12 ^^F[]$\OT1/cmtt/m/n/12 , in the sense that $\OT1/cmr/m/n/12 ^^F[]$ \OT1/c
 mtt/m/n/12 contains events that cannot
  []
 
 
-Overfull \hbox (16.2515pt too wide) in paragraph at lines 968--969
+Overfull \hbox (16.2515pt too wide) in paragraph at lines 962--963
 \OT1/cmtt/m/n/12 be expressed as $\OT1/cmr/m/n/12 ^^F[]$\OT1/cmtt/m/n/12 -measu
 rable sets. Knowing which $\OT1/cmr/m/n/12 ^^F[]$\OT1/cmtt/m/n/12 -events the h
 idden
  []
 
 
-Overfull \hbox (34.57648pt too wide) in paragraph at lines 968--969
+Overfull \hbox (34.57648pt too wide) in paragraph at lines 962--963
 \OML/cmm/m/it/12 !$ \OT1/cmtt/m/n/12 falls under can therefore give us more inf
 ormation about the exact value
  []
 
 
-Overfull \hbox (20.71329pt too wide) in paragraph at lines 970--971
+Overfull \hbox (20.71329pt too wide) in paragraph at lines 964--965
 []\OT1/cmtt/m/n/12 One common example of a sub-$\OML/cmm/m/it/12 ^^[$\OT1/cmtt/
 m/n/12 -algebra arises by considering the set 
  []
 
 
-Overfull \hbox (14.47934pt too wide) in paragraph at lines 971--973
+Overfull \hbox (14.47934pt too wide) in paragraph at lines 965--967
 \OT1/cmtt/m/n/12 consisting of all the preimages of Borel-measurable sets under
  a random
  []
 
 
-Overfull \hbox (26.10309pt too wide) in paragraph at lines 971--973
+Overfull \hbox (26.10309pt too wide) in paragraph at lines 965--967
 \OT1/cmtt/m/n/12 variable $\OML/cmm/m/it/12 X \OT1/cmr/m/n/12 : 
  \OMS/cmsy/m/n/12 ! \U/msb/m/n/12 R$\OT1/cmtt/m/n/12 . This is known as the $\O
 ML/cmm/m/it/12 ^^[$\OT1/cmtt/m/n/12 -algebra generated by $\OML/cmm/m/it/12 X$\
@@ -1500,25 +1524,25 @@ OT1/cmtt/m/n/12 .
  []
 
 
-Overfull \hbox (292.35448pt too wide) in paragraph at lines 974--977
+Overfull \hbox (292.35448pt too wide) in paragraph at lines 968--971
 []\OT1/cmtt/m/n/12 expectation conditional on sigma algebra https://math.stacke
 xchange.com/questions/2373097/condition-on-sigma-algebra
  []
 
 
-Overfull \hbox (20.65434pt too wide) in paragraph at lines 979--980
+Overfull \hbox (20.65434pt too wide) in paragraph at lines 973--974
 []\OT1/cmtt/m/n/12 probability is expectation of indicator function (notation f
 or indicator
  []
 
 
-Overfull \hbox (14.47934pt too wide) in paragraph at lines 983--985
+Overfull \hbox (14.47934pt too wide) in paragraph at lines 977--979
 []\OT1/cmtt/m/n/12 What is independence independence of RVs if and only if inde
 pendence of
  []
 
 
-Overfull \hbox (3.86937pt too wide) in paragraph at lines 989--991
+Overfull \hbox (3.86937pt too wide) in paragraph at lines 983--985
 []\OT1/cmtt/m/n/12 Absolute continuity: $\OML/cmm/m/it/12 ^^V[] \OMS/cmsy/m/n/1
 2 ^^\ \OML/cmm/m/it/12 ^^V[]$ \OT1/cmtt/m/n/12 ($\OML/cmm/m/it/12 mu[]$ \OT1/cm
 tt/m/n/12 is dominated by $\OML/cmm/m/it/12 ^^V[]$\OT1/cmtt/m/n/12 ) if and onl
@@ -1526,208 +1550,208 @@ y if
  []
 
 
-Overfull \hbox (39.17935pt too wide) in paragraph at lines 989--991
+Overfull \hbox (39.17935pt too wide) in paragraph at lines 983--985
 \OT1/cmtt/m/n/12 one measure is absolutely continuous wrt another on a subset o
 f the measure
  []
 
 [26]
-Overfull \hbox (26.82935pt too wide) in paragraph at lines 1001--1002
+Overfull \hbox (26.82935pt too wide) in paragraph at lines 995--996
 []\OT1/cmtt/m/n/12 What is a cadlag []The order book is a cadlag over time. Als
 o the counting
  []
 
 [27]
-Overfull \hbox (30.0pt too wide) in paragraph at lines 1014--1014
+Overfull \hbox (30.0pt too wide) in paragraph at lines 1008--1008
 [] 
  []
 
 ! Undefined control sequence.
-l.1021 Available at: \url
+l.1015 Available at: \url
                          {https://www.levyinstitute.org/pubs/wp\_525.pdf}
 ? 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1017--1022
+Underfull \hbox (badness 10000) in paragraph at lines 1011--1016
 []\OT1/cmtt/m/n/12 Palley, T. I., \OT1/cmtt/m/it/12 Financialization: What It I
 s and Why
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1017--1022
+Underfull \hbox (badness 10000) in paragraph at lines 1011--1016
 \OT1/cmtt/m/it/12 It Matters\OT1/cmtt/m/n/12 , Working Paper No. 525, The Levy 
 Economics
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1017--1022
+Underfull \hbox (badness 10000) in paragraph at lines 1011--1016
 \OT1/cmtt/m/n/12 Institute, December 2007. Paper presented at the conference
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1017--1022
+Underfull \hbox (badness 10000) in paragraph at lines 1011--1016
 \OT1/cmtt/m/n/12 on \Finance-led Capitalism? Macroeconomic Effects of Changes
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1017--1022
+Underfull \hbox (badness 10000) in paragraph at lines 1011--1016
 \OT1/cmtt/m/n/12 in the Financial Sector," sponsored by the Hans Boeckler
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1017--1022
+Underfull \hbox (badness 10000) in paragraph at lines 1011--1016
 \OT1/cmtt/m/n/12 Foundation, Berlin, Germany, October 26{27, 2007. Available
  []
 
 LaTeX Font Info:    Font shape `OT1/cmtt/bx/n' in size <12> not available
-(Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 1027.
+(Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 1021.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1024--1030
+Underfull \hbox (badness 10000) in paragraph at lines 1018--1024
 []\OT1/cmtt/m/n/12 Balakrishnan, S., Wainwright, M. J., and Yu, B., \OT1/cmtt/m
 /it/12 Statistical
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1024--1030
+Underfull \hbox (badness 10000) in paragraph at lines 1018--1024
 \OT1/cmtt/m/it/12 guarantees for the EM algorithm: From population to
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1024--1030
+Underfull \hbox (badness 10000) in paragraph at lines 1018--1024
 \OT1/cmtt/m/it/12 sample-based analysis\OT1/cmtt/m/n/12 , \OT1/cmtt/m/it/12 The
  Annals of Statistics\OT1/cmtt/m/n/12 , 45(1)
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1024--1030
+Underfull \hbox (badness 10000) in paragraph at lines 1018--1024
 \OT1/cmtt/m/n/12 (2017), 77--120. doi = 10.1214/16-AOS1435 []various facts
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1024--1030
+Underfull \hbox (badness 10000) in paragraph at lines 1018--1024
 \OT1/cmtt/m/n/12 about EM algorithm in general, useful in particular because
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1024--1030
+Underfull \hbox (badness 10000) in paragraph at lines 1018--1024
 \OT1/cmtt/m/n/12 it shows the general principle that likelihood gradient =
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1024--1030
+Underfull \hbox (badness 10000) in paragraph at lines 1018--1024
 \OT1/cmtt/m/n/12 EM gradient. balakrishnan, wainwright, yu page 82 as cited at
  []
 
 
-Overfull \hbox (236.47939pt too wide) in paragraph at lines 1024--1030
+Overfull \hbox (236.47939pt too wide) in paragraph at lines 1018--1024
 \OT1/cmtt/m/n/12 https://stats.stackexchange.com/questions/45652/what-is-the-di
 fference-between-em-and-gradient-ascent[] 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1032--1036
+Underfull \hbox (badness 10000) in paragraph at lines 1026--1030
 []\OT1/cmtt/m/n/12 Bouchaud, J.-P., Bonart, J., Donier, J., and Gould, M.,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1032--1036
+Underfull \hbox (badness 10000) in paragraph at lines 1026--1030
 \OT1/cmtt/m/it/12 Trades, Quotes and Prices: Financial Markets Under the
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1032--1036
+Underfull \hbox (badness 10000) in paragraph at lines 1026--1030
 \OT1/cmtt/m/it/12 Microscope\OT1/cmtt/m/n/12 , Cambridge University Press, 2018
 . ISBN =
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1038--1043
+Underfull \hbox (badness 10000) in paragraph at lines 1032--1037
 []\OT1/cmtt/m/n/12 Chen, F. and Stindl, T., \OT1/cmtt/m/it/12 Direct Likelihood
  Evaluation
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1038--1043
+Underfull \hbox (badness 10000) in paragraph at lines 1032--1037
 \OT1/cmtt/m/it/12 for the Renewal Hawkes Process\OT1/cmtt/m/n/12 , \OT1/cmtt/m/
 it/12 Journal of Computational
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1038--1043
+Underfull \hbox (badness 10000) in paragraph at lines 1032--1037
 \OT1/cmtt/m/it/12 and Graphical Statistics\OT1/cmtt/m/n/12 , 27(1) (2018), 119-
 -131. doi =
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1045--1049
+Underfull \hbox (badness 10000) in paragraph at lines 1039--1043
 []\OT1/cmtt/m/n/12 Daley, D. J. and Vere-Jones, D., \OT1/cmtt/m/it/12 An Introd
 uction to the Theory
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1045--1049
+Underfull \hbox (badness 10000) in paragraph at lines 1039--1043
 \OT1/cmtt/m/it/12 of Point Processes: Volume I: Elementary Theory and Methods\O
 T1/cmtt/m/n/12 ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1051--1055
+Underfull \hbox (badness 10000) in paragraph at lines 1045--1049
 []\OT1/cmtt/m/n/12 Embrechts, P., Liniger, T., and Lin, L., \OT1/cmtt/m/it/12 M
 ultivariate Hawkes
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1051--1055
+Underfull \hbox (badness 10000) in paragraph at lines 1045--1049
 \OT1/cmtt/m/it/12 processes: An application to financial data\OT1/cmtt/m/n/12 ,
  Journal
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1051--1055
+Underfull \hbox (badness 10000) in paragraph at lines 1045--1049
 \OT1/cmtt/m/n/12 of Applied Probability, 48(A) (2011), 367--378. doi =
  []
 
 ! Undefined control sequence.
-l.1060 Available at: \url
+l.1054 Available at: \url
                          {https://www.finra.org/media-center/reports-studies...
 
 ? 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1057--1062
+Underfull \hbox (badness 10000) in paragraph at lines 1051--1056
 []\OT1/cmtt/m/n/12 Financial Industry Regulatory Authority, \OT1/cmtt/m/it/12 2
 024 Industry
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1057--1062
+Underfull \hbox (badness 10000) in paragraph at lines 1051--1056
 \OT1/cmtt/m/it/12 Snapshot: Market Data\OT1/cmtt/m/n/12 , FINRA, 2024. Availabl
 e at:
  []
 
 
-Overfull \hbox (137.67934pt too wide) in paragraph at lines 1057--1062
+Overfull \hbox (137.67934pt too wide) in paragraph at lines 1051--1056
 \OT1/cmtt/m/n/12 https://www.finra.org/media-center/reports-studies/2024-indust
 ry-snapshot/market-data
  []
 
 ! Undefined control sequence.
-l.1068 Available at: \url
+l.1062 Available at: \url
                          {http://www.jstor.org/stable/2346010}
 ? 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1064--1069
+Underfull \hbox (badness 10000) in paragraph at lines 1058--1063
 []\OT1/cmtt/m/n/12 Jamshidian, M. and Jennrich, R. I., \OT1/cmtt/m/it/12 Accele
 ration of the EM
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1064--1069
+Underfull \hbox (badness 10000) in paragraph at lines 1058--1063
 \OT1/cmtt/m/it/12 Algorithm by Using Quasi-Newton Methods\OT1/cmtt/m/n/12 , \OT
 1/cmtt/m/it/12 Journal of the Royal
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1064--1069
+Underfull \hbox (badness 10000) in paragraph at lines 1058--1063
 \OT1/cmtt/m/it/12 Statistical Society. Series B (Methodological)\OT1/cmtt/m/n/1
 2 , 59(3) (1997),
  []
@@ -1736,150 +1760,150 @@ Underfull \hbox (badness 10000) in paragraph at lines 1064--1069
 
 
 ]
-Underfull \hbox (badness 10000) in paragraph at lines 1071--1076
+Underfull \hbox (badness 10000) in paragraph at lines 1065--1070
 []\OT1/cmtt/m/n/12 Jamshidian, M. and Jennrich, R. I., \OT1/cmtt/m/it/12 Standa
 rd errors for
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1071--1076
+Underfull \hbox (badness 10000) in paragraph at lines 1065--1070
 \OT1/cmtt/m/it/12 EM estimation\OT1/cmtt/m/n/12 , \OT1/cmtt/m/it/12 Biometrika\
 OT1/cmtt/m/n/12 , 89(1) (2002), 63--75. doi =
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1078--1083
+Underfull \hbox (badness 10000) in paragraph at lines 1072--1077
 []\OT1/cmtt/m/n/12 Jiang, A. Z. and Rodriguez, A., \OT1/cmtt/m/it/12 Improvemen
 ts on Scalable
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1078--1083
+Underfull \hbox (badness 10000) in paragraph at lines 1072--1077
 \OT1/cmtt/m/it/12 Stochastic Bayesian Inference Methods for Multivariate Hawkes
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1078--1083
+Underfull \hbox (badness 10000) in paragraph at lines 1072--1077
 \OT1/cmtt/m/it/12 Processes\OT1/cmtt/m/n/12 , \OT1/cmtt/m/it/12 Statistics and 
 Computing\OT1/cmtt/m/n/12 , 34, article 85 (2024).
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1085--1089
+Underfull \hbox (badness 10000) in paragraph at lines 1079--1083
 []\OT1/cmtt/m/n/12 Laub, P. J., Lee, Y., and Taimre, T., \OT1/cmtt/m/it/12 The 
 Elements of Hawkes
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1091--1096
+Underfull \hbox (badness 10000) in paragraph at lines 1085--1090
 []\OT1/cmtt/m/n/12 Lewis, E. and Mohler, G., \OT1/cmtt/m/it/12 A nonparametric 
 EM algorithm
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1091--1096
+Underfull \hbox (badness 10000) in paragraph at lines 1085--1090
 \OT1/cmtt/m/it/12 for multiscale Hawkes processes\OT1/cmtt/m/n/12 , \OT1/cmtt/m
 /it/12 Journal of Nonparametric
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1091--1096
+Underfull \hbox (badness 10000) in paragraph at lines 1085--1090
 \OT1/cmtt/m/it/12 Statistics\OT1/cmtt/m/n/12 , 1(1) (2011), 1--20. []one exampl
 e of EM algorithm
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1091--1096
+Underfull \hbox (badness 10000) in paragraph at lines 1085--1090
 \OT1/cmtt/m/n/12 applied to point processes. may or may not deserve a direct
  []
 
 ! Undefined control sequence.
-l.1100 \texit
+l.1094 \texit
              {Quantitative Finance},
 ? 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1098--1103
+Underfull \hbox (badness 10000) in paragraph at lines 1092--1097
 []\OT1/cmtt/m/n/12 Morariu-Patrichi, M. and Pakkanen, M. S., \OT1/cmtt/m/it/12 
 State-Dependent
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1098--1103
+Underfull \hbox (badness 10000) in paragraph at lines 1092--1097
 \OT1/cmtt/m/it/12 Hawkes Processes and Their Application to Limit Order Book
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1098--1103
+Underfull \hbox (badness 10000) in paragraph at lines 1092--1097
 \OT1/cmtt/m/it/12 Modelling\OT1/cmtt/m/n/12 , Quantitative Finance, 22(3) (2022
 ), 563--583 doi =
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1105--1109
+Underfull \hbox (badness 10000) in paragraph at lines 1099--1103
 []\OT1/cmtt/m/n/12 Nickel, M. and Le, M., \OT1/cmtt/m/it/12 Learning Multivaria
 te Hawkes Processes
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1105--1109
+Underfull \hbox (badness 10000) in paragraph at lines 1099--1103
 \OT1/cmtt/m/it/12 at Scale\OT1/cmtt/m/n/12 , arXiv preprint arXiv:2002.12501 [c
 s.LG], 2020. doi =
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1111--1116
+Underfull \hbox (badness 10000) in paragraph at lines 1105--1110
 []\OT1/cmtt/m/n/12 Smith, A. C. and Brown, E. N., \OT1/cmtt/m/it/12 Estimating 
 a state-space model
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1111--1116
+Underfull \hbox (badness 10000) in paragraph at lines 1105--1110
 \OT1/cmtt/m/it/12 from point process observations\OT1/cmtt/m/n/12 , \OT1/cmtt/m
 /it/12 Neural Computation\OT1/cmtt/m/n/12 , 15(5)
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1118--1123
+Underfull \hbox (badness 10000) in paragraph at lines 1112--1117
 []\OT1/cmtt/m/n/12 Veen, A. and Schoenberg, F. P., \OT1/cmtt/m/it/12 Estimation
  of Space-Time
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1118--1123
+Underfull \hbox (badness 10000) in paragraph at lines 1112--1117
 \OT1/cmtt/m/it/12 Branching Process Models in Seismology Using an EM-Type
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1118--1123
+Underfull \hbox (badness 10000) in paragraph at lines 1112--1117
 \OT1/cmtt/m/it/12 Algorithm\OT1/cmtt/m/n/12 , \OT1/cmtt/m/it/12 Journal of the 
 American Statistical Association\OT1/cmtt/m/n/12 ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1125--1129
+Underfull \hbox (badness 10000) in paragraph at lines 1119--1123
 []\OT1/cmtt/m/n/12 Zhou, F., Li, Z., Fan, X., Wang, Y., Sowmya, A., and Chen, F
 .,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1125--1129
+Underfull \hbox (badness 10000) in paragraph at lines 1119--1123
 \OT1/cmtt/m/it/12 Efficient inference for nonparametric Hawkes processes using
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1125--1129
+Underfull \hbox (badness 10000) in paragraph at lines 1119--1123
 \OT1/cmtt/m/it/12 auxiliary latent variables\OT1/cmtt/m/n/12 , \OT1/cmtt/m/it/1
 2 The Journal of Machine Learning
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1135--1137
+Underfull \hbox (badness 10000) in paragraph at lines 1129--1131
 []\OT1/cmtt/m/n/12 On Lewis' simulation method for point processes
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1139--1141
+Underfull \hbox (badness 10000) in paragraph at lines 1133--1135
 []\OT1/cmtt/m/n/12 LONG TIME BEHAVIOUR OF A HAWKES PROCESS-BASED LIMIT ORDER BO
 OK
  []
@@ -1887,29 +1911,29 @@ OK
 ! Missing $ inserted.
 <inserted text> 
                 $
-l.1143 ...r.com/chapter/10.1007/978-88-470-1766-5_
+l.1137 ...r.com/chapter/10.1007/978-88-470-1766-5_
                                                   4
 ? 
 ! Missing $ inserted.
 <inserted text> 
                 $
-l.1144 
+l.1138 
        
 ? 
 ! Missing } inserted.
 <inserted text> 
                 }
-l.1144 
+l.1138 
        
 ? 
 ! Extra }, or forgotten \endgroup.
 \par ...m \@noitemerr {\@@par }\fi \else {\@@par }
                                                   \fi 
-l.1144 
+l.1138 
        
 ? 
 
-Overfull \hbox (230.60445pt too wide) in paragraph at lines 1151--1152
+Overfull \hbox (230.60445pt too wide) in paragraph at lines 1145--1146
 []\OT1/cmtt/m/n/12 https://www.santafe.edu/research/results/working-papers/stud
 ies-of-the-limit-order-book-around-large-price 
  []
@@ -1917,49 +1941,49 @@ ies-of-the-limit-order-book-around-large-price
 ! Missing $ inserted.
 <inserted text> 
                 $
-l.1156 ...r.com/chapter/10.1007/978-88-470-1766-5_
+l.1150 ...r.com/chapter/10.1007/978-88-470-1766-5_
                                                   4
 ? 
 ! Missing $ inserted.
 <inserted text> 
                 $
-l.1157 
+l.1151 
        
 ? 
 ! Missing } inserted.
 <inserted text> 
                 }
-l.1157 
+l.1151 
        
 ? 
 ! Extra }, or forgotten \endgroup.
 \par ...m \@noitemerr {\@@par }\fi \else {\@@par }
                                                   \fi 
-l.1157 
+l.1151 
        
 ? 
 [29]
 ! Missing $ inserted.
 <inserted text> 
                 $
-l.1164 ...ww.researchgate.net/publication/4742983_
+l.1158 ...ww.researchgate.net/publication/4742983_
                                                   Estimation_of_SpaceTime_Br...
 
 ? 
 ! Missing $ inserted.
 <inserted text> 
                 $
-l.1165 
+l.1159 
        
 ? 
 ! Missing } inserted.
 <inserted text> 
                 }
-l.1165 
+l.1159 
        
 ? 
 
-Overfull \hbox (337.63889pt too wide) in paragraph at lines 1164--1165
+Overfull \hbox (337.63889pt too wide) in paragraph at lines 1158--1159
 []\OT1/cmtt/m/n/12 https://www.researchgate.net/publication/4742983$[]\OML/cmm/
 m/it/12 stimation[]f[]paceTime[]ranching[]rocess[]odels[]n[]eismology[]sing[]n[
 ]MType[]lgorithm[]$ 
@@ -1968,49 +1992,49 @@ m/it/12 stimation[]f[]paceTime[]ranching[]rocess[]odels[]n[]eismology[]sing[]n[
 ! Extra }, or forgotten \endgroup.
 \par ...m \@noitemerr {\@@par }\fi \else {\@@par }
                                                   \fi 
-l.1165 
+l.1159 
        
 ? 
 ! Missing $ inserted.
 <inserted text> 
                 $
-l.1168 ...//paleo.sscnet.ucla.edu/Lewis-Molher-EM_
+l.1162 ...//paleo.sscnet.ucla.edu/Lewis-Molher-EM_
                                                   Preprint.pdf
 ? 
 ! Missing $ inserted.
 <inserted text> 
                 $
-l.1169 
+l.1163 
        
 ? 
 ! Missing } inserted.
 <inserted text> 
                 }
-l.1169 
+l.1163 
        
 ? 
 ! Extra }, or forgotten \endgroup.
 \par ...m \@noitemerr {\@@par }\fi \else {\@@par }
                                                   \fi 
-l.1169 
+l.1163 
        
 ? 
 
-Overfull \hbox (570.22961pt too wide) in paragraph at lines 1172--1173
+Overfull \hbox (570.22961pt too wide) in paragraph at lines 1166--1167
 []\OT1/cmtt/m/n/12 https://projecteuclid.org/journals/annals-of-statistics/volu
 me-45/issue-1/Statistical-guarantees-for-the-EM-algorithm--From-population-to/1
 0.1214/16-AOS1435.full 
  []
 
 
-Overfull \hbox (452.90456pt too wide) in paragraph at lines 1176--1177
+Overfull \hbox (452.90456pt too wide) in paragraph at lines 1170--1171
 []\OT1/cmtt/m/n/12 https://projecteuclid.org/journals/annals-of-probability/vol
 ume-24/issue-3/Stability-of-nonlinear-Hawkes-processes/10.1214/aop/1065725193.f
 ull 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1178--1179
+Underfull \hbox (badness 10000) in paragraph at lines 1172--1173
 []\OT1/cmtt/m/n/12 Data Sketching for Large-Scale Kalman Filtering
  []
 
@@ -2026,14 +2050,14 @@ LaTeX Warning: There were multiply-defined labels.
  )
 (\end occurred inside a group at level 2)
 
-### simple group (level 2) entered at line 864 ({)
-### simple group (level 1) entered at line 855 ({)
+### simple group (level 2) entered at line 850 ({)
+### simple group (level 1) entered at line 841 ({)
 ### bottom level 
 Here is how much of TeX's memory you used:
- 14841 strings out of 474116
- 293417 string characters out of 5743683
+ 14839 strings out of 474116
+ 293361 string characters out of 5743683
  1943187 words of memory out of 5000000
- 36926 multiletter control sequences out of 15000+600000
+ 36924 multiletter control sequences out of 15000+600000
  568251 words of font info for 80 fonts, out of 8000000 for 9000
  1143 hyphenation exceptions out of 8191
  84i,13n,87p,1131b,851s stack positions out of 10000i,1000n,20000p,200000b,200000s
@@ -2043,25 +2067,29 @@ Here is how much of TeX's memory you used:
 cm/cmitt10.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/
 cm/cmmi10.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/c
 m/cmmi12.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm
-/cmmi6.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/c
-mmi8.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr
-10.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12
-.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.p
-fb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb>
-</usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></u
-sr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/
-local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/l
-ocal/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/loc
-al/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local
-/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/
-texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr/local/t
-exlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb></usr/local/te
-xlive/2024/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/loca
-l/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb>
-Output written on thesis.pdf (41 pages, 362543 bytes).
+/cmmi5.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/c
+mmi6.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmm
+i7.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8
+.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.p
+fb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb
+></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb><
+/usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></us
+r/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/l
+ocal/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/loca
+l/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/t
+exlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/te
+xlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/local/texl
+ive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texliv
+e/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/
+2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/2
+024/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr/local/texlive/20
+24/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb></usr/local/texlive/202
+4/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/local/texlive
+/2024/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb>
+Output written on thesis.pdf (41 pages, 394706 bytes).
 PDF statistics:
- 250 PDF objects out of 1000 (max. 8388607)
- 161 compressed objects within 2 object streams
+ 270 PDF objects out of 1000 (max. 8388607)
+ 173 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
  18 words of extra memory for PDF output out of 10000 (max. 10000000)
 

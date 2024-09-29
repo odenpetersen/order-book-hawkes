@@ -577,9 +577,13 @@ State-dependent multi-kernel multivariate hawkes process with increasing kernel 
 
 Nonparametric estimate of nu, sim study for u-shaped true nu. Probably splines, maybe kde if its fast enough. Compare to quadratic regression
 
-The marks evolve according to state-space model involving various model variables, but have no causal impact on the point process (though obviously there is state-dependence, and the state may include the marks).
+Simple: the marks evolve according to state-space model involving various model variables, but have no causal impact on the point process (though obviously there is state-dependence, and the state may include the marks). More complicated: hidden marks influence the point process; evaluate this with monte carlo EM.
 
 The state might be generalised to a kalman-filter-ish model \cite{SmithBrown}
+
+Intensity might be affected by noise introduced at each event time. Probably can use monte carlo EM for this.
+
+Quadratic hawkes process
 
 $$IRF_{e,e',k}(s,t) = \alpha_{e,e',k} e^{X(s)\cdot c_{e,e',k}}\exp\left(-\beta_{e,e',k}(t-s)\right)$$
 $$\lambda_{e,e',k}(t,\omega) = \int_0^t IRF_{e,e',k}(s,t) d\Lambda_{e',\omega}(s)$$
@@ -698,26 +702,29 @@ At stationary points, we will then have
 
 implying that
 \begin{equation}
-	\hat\nu_\mathrm{MLE} = \frac{N_\mathcal{D}}{t_\mathrm{max}-t_\mathrm{min}}.\footnote{Subject to the Hessian of $\ell$ being negative definite, which is true here.}
+	\hat\nu_\mathrm{MLE} = \frac{N_\mathcal{D}(t_\mathrm{max})}{t_\mathrm{max}-t_\mathrm{min}}.\footnote{Subject to the Hessian of $\ell$ being negative definite, which is true here.}
 \end{equation}
 
 Intuitively, the estimate for the arrival rate $\nu$ is the average number of events per unit time in the observed data. Note also that for the maximum likelihood model, the sample average of the residuals $r$ will be exactly equal to one, since we have
-$$\sum_{i=1}^{N_\mathcal{D}(t_\mathrm{max})} r_i = \bar\Lambda(t_\mathrm{max})=N_\mathcal{D}(t_\mathrm{max}).$$
+$$\sum_{i=1}^{N_\mathcal{D}(t_\mathrm{max})} r_i = \bar\Lambda(t_\mathrm{max})=\hat\nu_\mathrm{MLE}(t_\mathrm{max}-t_\mathrm{min}) =N_\mathcal{D}(t_\mathrm{max}).$$
 
 In the multivariate case, where we have a vector $\nu\in\mathbb{R}_{>0}^n$ containing the arrival rates for each event type $E$, we similarly obtain
 $$\left(\hat\nu_\mathrm{MLE}\right)_E = \frac{N_\mathcal{D}^E\left(t_\mathrm{max}\right)}{t_\mathrm{max}-t_\mathrm{min}}.$$
 
 \subsection{Composite Processes}
-Suppose that the intensity has the form
+Suppose that the intensity of each point process $\mathcal{T}_{\theta_1,\theta_2,\ldots}$ in a parametric family has the form
 $$\lambda^{\theta_1,\theta_2,\ldots}(t,\omega) \coloneq \sum_i \lambda_i^{\theta_i}(t,\omega),$$
-where each component $\lambda_i(t,\omega)$ is parameterised by some vector $\theta_i$ and adapted with respect to the natural filtration $\mathcal{F}$ of the point process. Then the loglikelihood will be
+where each component $\lambda_i(t,\omega)$ is parameterised by some vector $\theta_i$ and adapted with respect to the natural filtration $\mathcal{F}$ of $\mathcal{T}_{\theta_1,\theta_2,\ldots}$. Then the loglikelihood will be
 $$\ell(\theta_1,\theta_2,\ldots;\mathcal{D}) = \int_{t_\mathrm{min}}^{t_\mathrm{max}}\log\left(\sum_i \left(\lambda_i^{\theta_i}\right)_{\mathcal{D}}(t)\right)d\Lambda_\mathcal{D}(t)-\sum_i \bar\Lambda_i\left(t_\mathrm{max}\right),$$
 where $$(\lambda_i^{\theta_i})_\mathcal{D} \coloneq \lim_{s\to t^+}\mathbb{E}_{\mathbb{P}\vert\mathcal{F}_t,\mathcal{D}_t}\left[\lambda_i^{\theta_i}(s)\right]$$
 \textcolor{red}{Is this the right definition to use? it should coincide with component intensities in the case of a composite point process, as noted below. It seems to depend on continuity of the first moment, and so maybe more restrictions need to be placed on the component processes}
 
 and
-$$\bar\Lambda_i(t) \coloneq \int_{t_\mathrm{min}}^t \left(\lambda_i^{\theta_i}\right)_\mathcal{D}(s)ds$$
-In the case where $\lambda^{\theta_1,\theta_2,\ldots}$ is the intensity of a composite point process whose components are adapted to the natural filtration of the overall point process, and have intensities $\lambda_i^{\theta_i}$, the functions $\left(\lambda_i^{\theta_i}\right)_\mathcal{D}$ will just be the empirical intensity of the components.\textcolor{red}{Is this true? is there a simple proof?}
+$$\bar\Lambda_i(t) \coloneq \int_{t_\mathrm{min}}^t \left(\lambda_i^{\theta_i}\right)_\mathcal{D}(s)ds.$$
+
+Define
+$$B_{i,t}^{\theta_1,\theta_2,\ldots} \coloneq \frac{\left(\lambda_i^{\theta_i}\right)_\mathcal{D}(t)}{\lambda_\mathcal{D}^{\theta_1,\theta_2,\ldots}(t)}$$
+to be the ratios of each component to the overall intensity.
 
 By the chain rule, we then have
 \textcolor{red}{Why can I exchange derivative and integral here}
@@ -728,68 +735,52 @@ By the chain rule, we then have
 		= & \int_{t_\mathrm{min}}^{t_\mathrm{max}}\frac{\frac{\partial}{\partial\theta_i}\left(\lambda_i^{\theta_i}\right)_\mathcal{D}(t)}{\lambda^{\theta_1,\theta_2,\ldots}_\mathcal{D}(t)}d\Lambda_\mathcal{D} - \int_{t_\mathrm{min}}^{t_\mathrm{max}}\frac{\partial}{\partial\theta_i}\left(\lambda_i^{\theta_i}\right)_\mathcal{D}(t)dt\\
 		= & \int_{t_\mathrm{min}}^{t_\mathrm{max}}\frac{\frac{\partial}{\partial\theta_i}\left(\lambda_i^{\theta_i}\right)_\mathcal{D}(t)}{\left(\lambda_i^{\theta_i}\right)_\mathcal{D}(t)}B_{i,t}d\Lambda_\mathcal{D} - \int_{t_\mathrm{min}}^{t_\mathrm{max}}\frac{\partial}{\partial\theta_i}\left(\lambda_i^{\theta_i}\right)_\mathcal{D}(t)dt\\
 		= & \int_{t_\mathrm{min}}^{t_\mathrm{max}} \left(\frac{\partial}{\partial\theta_i}\log\left(\left\vert\left(\lambda_i^{\theta_i}\right)_\mathcal{D}(t)\right\vert\right)\right) \left(\left\vert B_{i,t}\right\vert d\Lambda_\mathcal{D}\right) - \int_{t_\mathrm{min}}^{t_\mathrm{max}}\frac{\partial}{\partial\theta_i}\left(\lambda_i^{\theta_i}\right)_\mathcal{D}(t)dt,\\
-		\frac{\partial^2}{\partial \theta_i^2}\ell(\theta_1,\theta_2,\ldots;\mathcal{D})
-		= & \int_{t_\mathrm{min}}^{t_\mathrm{max}} \frac{\frac{\partial^2}{\partial\theta_i^2}\left(\lambda_i^{\theta_i}\right)_\mathcal{D}(t) - \left(\frac{\partial}{\partial\theta_i}\left(\lambda_i^{\theta_i}\right)_\mathcal{D}(t)\right) \left(\frac{\partial}{\partial\theta_i}\left(\lambda_i^{\theta_i}\right)_\mathcal{D}(t)\right)^T }{\left(\lambda_i^{\theta_i}\right)_\mathcal{D}(t)} B_{i,t} d\Lambda_\mathcal{D} \\
-		  & - \int_{t_\mathrm{min}}^{t_\mathrm{max}} \left(\frac{\partial^2}{\partial\theta_i^2}\left(\lambda_i^{\theta_i}\right)_\mathcal{D}(t)\right) dt\\
 	\end{align}
 \end{equation*}
 \textcolor{red}{Can the last equation be written in terms of log?}
-where
-$$B_{i,t} \coloneq \frac{\left(\lambda_i^{\theta_i}\right)_\mathcal{D}(t)}{\lambda_\mathcal{D}^{\theta_1,\theta_2,\ldots}(t)}$$
-are the ratios of each component to the overall intensity. In the case where the point process is a composite of processes with intensities $\lambda_i^{\theta_i}$, these represent the probability that an event at $t$ is from the $i$th component point process.\textcolor{red}{Is this true? is there a simple proof?}
+
+\textcolor{red}{Fixing $B$ and iteratively maximising (or newtons method, or gradient steps) can only stop at a stationary point; these are the fixed points of such a procedure. If the $B$s are positive then convergence is guaranteed, covered in next section. Also notice that expected gradient is equal to $\ell$ gradient, meaning that small improvements to $E[\ell]$ should also improve $\ell$. So it makes sense to iteratively maximise, and hope for convergence.}
 
 \section{Expectation Maximisation}
-We know that the loglikelihood for a composite process is given by
-$$\ell(\theta_1,\theta_2,\ldots;\mathcal{D}) = \int_{t_\mathrm{min}}^{t_\mathrm{max}}\log\left(\sum_i \left(\lambda_i^{\theta_i}\right)_{\mathcal{D}}(t)\right)d\Lambda_\mathcal{D}(t)-\sum_i \bar\Lambda_i\left(t_\mathrm{max}\right).$$
+So long as $\left(\lambda_i^{\theta_i}\right)_\mathcal{D}$ are positive,\footnote{ In the case where $\lambda^{\theta_1,\theta_2,\ldots}$ is the intensity of a composite point process whose components are adapted to the natural filtration of $\mathcal{T}_{\theta_1,\theta_2,\ldots}$, and have intensities $\lambda_i^{\theta_i}$, the functions $\left(\lambda_i^{\theta_i}\right)_\mathcal{D}$ will just be the empirical intensity of the components\textcolor{red}{Is this true? is there a simple proof?}, and therefore will each be positive definite functions. The values of $B_{i,t}$ will then represent the probability that an event at $t$ is from the $i$th component point process.\textcolor{red}{Is this true? is there a simple proof?} } we have
+$$\log\left(\sum_i \left(\lambda_i^{\theta_i}\right)_{\mathcal{D}}(t)\right) = \sum_i \log\left(\left(\lambda_i^{\theta_i}\right)_\mathcal{D}(t)\right)B_{i,t}^{\theta_1,\theta_2,\ldots} - \sum_i \log\left( B_{i,t}^{\theta_1,\theta_2,\ldots}\right)B_{i,t}^{\theta_2,\theta_2,\ldots},$$
+By Gibb's inequality, it follows that
+$$- \sum_i \log\left( B_{i,t}^{\theta_1,\theta_2,\ldots}\right)B_{i,t}^{\theta_1,\theta_2,\ldots} \leq - \sum_i \log\left( B_{i,t}^{\theta_1',\theta_2',\ldots}\right)B_{i,t}^{\theta_1,\theta_2,\ldots} $$
 
-$$\log\left(\sum_i \left(\lambda_i^{\theta_i}\right)_{\mathcal{D}}(t)\right) = \sum_i \log\left(\left\vert\left(\lambda_i^{\theta_i}\right)_\mathcal{D}(t)\right\vert\right)B_{i,t} - \sum_i \log\left(\left\vert B_{i,t}\right\vert\right)B_{i,t} \geq \sum_i \log\left(\left(\lambda_i^{\theta_i}\right)_{\mathcal{D}}(t)\right)$$
+\textcolor{red}{EM algorithm and proof of convergence.}
 
-\textcolor{red}{In the case where probas are all positive, jensens inequality says that likelihood is minorised by likelihood-fixing-probas. Then iteration is guaranteed to converge to a stationary point. However, in the case of negative probas, I don't think there's a guarantee}
 
-\textcolor{red}{Motivate iterative methods: find an iteration whose fixed points are stationary points. Is there a way to show that this converges?}
-
-\textcolor{red}{MM algorithm paper:   Quantile Regression via an MM Algorithm David R. Hunter Kenneth Lange Pages 60-77 | Received 01 Jun 1998, Published online: 21 Feb 2012}
-
-\subsection{Information Theory and EM}
 \textcolor{red}{Can cite original dempster paper? As well as the one that corrects the errors in that paper}
 
-\subsection{EM for Hawkes Processes}
-Branching matrix vs exo/endo classification. Usefulness for multikernel and other limitations of gradient based MLE.
-
-\begin{align*}
-	B_{e,e',k}(s,t)
-	&= \frac{IRF_{e,e',k}(s,t)}{\lambda_{e}(t)} \\
-\end{align*}
-\begin{align*}
-	\sum_{e'} \sum_{k} \int_0^t B_{e,e',k}(s,t)d\Lambda_{e',\omega}(s) = 1
-\end{align*}
-
-Branching matrix:
-\begin{align*}
-	B_{i,j,k} = \frac{IRF_{e_j,e_i,k}(t_i,t_j)}{\lambda_{e_j}(t_j)}
-\end{align*}
+\subsection{EM for State-Dependent Hawkes Processes}
+- Equations
 
 - Visualisation of branching matrix. How does it evolve throughout the fitting procedure?
+
 - Quasi EM approximation
+
 - Closed form constant time M step for multivariate state dependent hawkes processes
+
 - Method of scoring (Newton's method)
+
 - Negative probabilities. Conditions for kernel nonnegativity? (Probably not tractable)
-
-\subsection{Generalised Fixed Point Methods}
-\textcolor{red}{Is it a contraction mapping?}
-\textcolor{red}{Are there any iterative methods other than EM that are also guaranteed to give stationary points if they converge?}
-\textcolor{red}{Minorisation-Maximisation}
-
-\section{Uncertainty quantification for MLE}
-Asymptotic normality
-
-Parametric Bootstrap
 
 \section{Inference for the Mark Process}
 Kalman filter? Ways to couple this with the point process? (Monte carlo EM?)
 
 \section{Monte Carlo EM}
-this actually makes it pretty easy to do hidden events
+I think this makes it possible to do hidden marks
+
+\section{Hidden Marks}
+\subsection{Discrete}
+Markov
+\subsection{Continuous}
+Gaussian Process
+
+\section{Uncertainty Quantification}
+Asymptotic normality
+
+Parametric Bootstrap
 
 \section{Computational Concerns}
 Sensor fusion for parallelisation
@@ -797,11 +788,6 @@ Sensor fusion for parallelisation
 Momentum (analyse autocorrelation of parameter changes throughout the learning process)
 
 Exploiting sparsity \cite{NickelLe}
-
-\section{Bayesian Approach}
-- Uncertainty quantification
-- Less likely to get stuck in local optima
-- Jeffreys prior: $\sqrt{\det \mathcal{I}}$
 
 \section{Model Selection}
 
@@ -864,6 +850,9 @@ $\texttt{https://quant.stackexchange.com/questions/59593/what-are-some-currently
 Point process control \texttt{https://pages.stern.nyu.edu/~rcaldent/courses/B60.4308_files/Point-Process.pdf}
 
 
+Recent Paper - Limit Order Book Dynamics and Order Size Modelling Using Compound Hawkes Process https://arxiv.org/abs/2312.08927 https://www.sciencedirect.com/science/article/pii/S1544612324011863/pdfft?md5=a6db8ba8fcd787042e962ad8b575732b&pid=1-s2.0-S1544612324011863-main.pdf
+
+
 Databento info:
 CME:
 ES
@@ -872,6 +861,11 @@ OPRA:
 SPX - Index options
 SPY - Index ETF options
 https://databento.medium.com/getting-futures-tick-sizes-and-notional-tick-values-in-python-with-databento-ba03cfded553
+
+https://databento.com/portal/datasets/XNAS.ITCH/ETF/SPY
+https://databento.com/portal/datasets/GLBX.MDP3/Futures/MES
+https://databento.com/portal/datasets/GLBX.MDP3/Futures/ES
+https://databento.com/docs/examples/order-book/limit-order-book/example
 \section{Summary of datasets}
 - data structure and granularity
 - which assets are involved

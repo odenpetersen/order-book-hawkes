@@ -404,13 +404,12 @@ Integrating out $\omega$ with respect to $\mathbb{P}$ then gives us the identity
 $$\Lambda_\mathbb{P}\left((t,t+\epsilon]\right) = \mathbb{E}_\mathbb{P}\left[N_\mathcal{T}(t+\epsilon)\right] - \mathbb{E}_\mathbb{P}\left[N_\mathcal{T}(t)\right],$$
 allowing us to write the expectation measure in terms of a finite difference of the first moment of $N_\mathcal{T}$.
 
-If $\mathbb{E}_\mathbb{P}\left[N_\mathcal{T}(t)\right]$ is right-differentiable at $t$, we can further say that
-$$\lim_{\epsilon\to0}\frac{\Lambda_\mathbb{P}\left((t,t+\epsilon]\right)}{\epsilon} = \lim_{\epsilon\to0}\frac{\mathbb{E}_\mathbb{P}\left[N_\mathcal{T}(t+\epsilon)\right] - \mathbb{E}_\mathbb{P}\left[N_\mathcal{T}(t)\right]}{\epsilon} = \frac{d\mathbb{E}_\mathbb{P}\left[N_\mathcal{T}(t)\right]}{dt}$$
-for sufficiently small $\epsilon$, where the last term is the right-derivative. For brevity, I will write
-$$\lambda_{\mathbb{P}}(t) \coloneq \frac{d\mathbb{E}_\mathbb{P}\left[N_\mathcal{T}(t)\right]}{dt},$$
-again using the right-derivative.
+If $\mathbb{E}_\mathbb{P}\left[N_\mathcal{T}(t)\right]$ is differentiable at $t$, we can further say that
+$$\lim_{\epsilon\to0}\frac{\Lambda_\mathbb{P}\left((t,t+\epsilon]\right)}{\epsilon} = \lim_{\epsilon\to0}\frac{\mathbb{E}_\mathbb{P}\left[N_\mathcal{T}(t+\epsilon)\right] - \mathbb{E}_\mathbb{P}\left[N_\mathcal{T}(t)\right]}{\epsilon} = \frac{d\mathbb{E}_\mathbb{P}\left[N_\mathcal{T}(t)\right]}{dt}.$$
+For brevity, I will write
+$$\lambda_{\mathbb{P}}(t) \coloneq \frac{d\mathbb{E}_\mathbb{P}\left[N_\mathcal{T}(t)\right]}{dt}.$$
 
-Assuming further that $\mathbb{E}_\mathbb{P}\left[N_\mathcal{T}(t)\right]$ is differentiable on some open interval $(t,t+\epsilon')$, \textcolor{red}{Prove this is Radon-Nikodym derivative of $\Lambda_\mathbb{P}$ in the open interval}
+Assuming further that $\mathbb{E}_\mathbb{P}\left[N_\mathcal{T}(t)\right]$ is differentiable on some open interval $(t,t+\epsilon')$, \textcolor{red}{Prove this is Radon-Nikodym derivative of $\Lambda_\mathbb{P}$ in the open interval}. I will therefore refer to this quantity as the \textit{expectation density}.
 
 It then follows from the fundamental theorem of calculus that
 $$\int_t^{t+\epsilon} \lambda_{\mathbb{P}}(s)ds = \lambda_{\mathbb{P}}(t)\cdot\epsilon + o(\epsilon),\quad \epsilon\to 0.$$
@@ -420,7 +419,11 @@ $$\Lambda_{\mathbb{P}}\left((t,t+\epsilon]\right)=\lambda_{\mathbb{P}}(t)\cdot\e
 Therefore the expected number of events occurring in a small interval $(t,t+\epsilon]$ is approximately proportional to its length.
 
 If we instead take the expectations above conditioned on $\mathcal{F}_t$, we can define a stochastic process
-$$\lambda(t,\omega) \coloneq \lambda_{\mathbb{P}\vert\mathcal{F}_t}(t,\omega),$$
+$$\lambda(t,\omega) \coloneq \lim_{s\to t^-}\lambda_{\mathbb{P}\vert\mathcal{F}_s}(t,\omega)$$
+as the left limit of the expectation density as the filtration index approaches $t$.
+
+\textcolor{red}{Add a note somewhere to check the whole document for correct usage of left vs right limit of $\lambda$. This is very important.}
+
 known as the \textit{intensity} or \textit{arrival rate} of the point process. This represents our best estimate of the number of events that will arrive in the next $\epsilon$ units of time, for very small $\epsilon$, based on all the information contained in the filtration up to $t$.
 
 \textcolor{red}{Existence and uniqueness shown in https://projecteuclid.org/journals/annals-of-probability/volume-24/issue-3/Stability-of-nonlinear-Hawkes-processes/10.1214/aop/1065725193.full under restrictions on the kernel}
@@ -742,7 +745,7 @@ By the chain rule, we then have
 \textcolor{red}{Fixing $B$ and iteratively maximising (or newtons method, or gradient steps) can only stop at a stationary point; these are the fixed points of such a procedure. If the $B$s are positive then convergence is guaranteed, covered in next section. Also notice that expected gradient is equal to $\ell$ gradient, meaning that small improvements to $E[\ell]$ should also improve $\ell$. So it makes sense to iteratively maximise, and hope for convergence.}
 
 \section{Expectation Maximisation}
-So long as $\left(\lambda_i^{\theta_i}\right)_\mathcal{D}$ are positive,\footnote{ In the case where $\lambda^{\theta_1,\theta_2,\ldots}$ is the intensity of a composite point process whose components are adapted to the natural filtration of $\mathcal{T}_{\theta_1,\theta_2,\ldots}$, and have intensities $\lambda_i^{\theta_i}$, the functions $\left(\lambda_i^{\theta_i}\right)_\mathcal{D}$ will just be the empirical intensity of the components\textcolor{red}{Is this true? is there a simple proof?}, and therefore will each be positive definite functions. The values of $B_{i,t}$ will then represent the probability that an event at $t$ is from the $i$th component point process.\textcolor{red}{Is this true? is there a simple proof?} } we have
+If $\left(\lambda_i^{\theta_i}\right)_\mathcal{D}$ are positive,\footnote{ In the case where $\lambda^{\theta_1,\theta_2,\ldots}$ is the intensity of a composite point process whose components are adapted to the natural filtration of $\mathcal{T}_{\theta_1,\theta_2,\ldots}$, and have intensities $\lambda_i^{\theta_i}$, the functions $\left(\lambda_i^{\theta_i}\right)_\mathcal{D}$ will just be the empirical intensity of the components\textcolor{red}{Is this true? is there a simple proof?}, and therefore will each be positive definite functions. The values of $B_{i,t}$ will then represent the probability that an event at $t$ is from the $i$th component point process.\textcolor{red}{Is this true? is there a simple proof?} } we have
 $$\log\left(\sum_i \left(\lambda_i^{\theta_i}\right)_{\mathcal{D}}(t)\right) = \sum_i \log\left(\left(\lambda_i^{\theta_i}\right)_\mathcal{D}(t)\right)B_{i,t}^{\theta_1,\theta_2,\ldots} - \sum_i \log\left( B_{i,t}^{\theta_1,\theta_2,\ldots}\right)B_{i,t}^{\theta_2,\theta_2,\ldots},$$
 By Gibb's inequality, it follows that
 $$- \sum_i \log\left( B_{i,t}^{\theta_1,\theta_2,\ldots}\right)B_{i,t}^{\theta_1,\theta_2,\ldots} \leq - \sum_i \log\left( B_{i,t}^{\theta_1',\theta_2',\ldots}\right)B_{i,t}^{\theta_1,\theta_2,\ldots} $$
@@ -768,14 +771,89 @@ $$- \sum_i \log\left( B_{i,t}^{\theta_1,\theta_2,\ldots}\right)B_{i,t}^{\theta_1
 \section{Inference for the Mark Process}
 Kalman filter? Ways to couple this with the point process? (Monte carlo EM?)
 
+\section{Hidden Events}
+\begin{equation*}
+	\begin{align}
+		& \mathbb{P}^\theta(t\in\mathcal{T} \vert \mathcal{D}, \mathcal{H}_t) \\
+		= & \mathbb{P}^\theta(t\in\mathcal{T}\vert \mathcal{D}_t, \mathcal{H}_t) \frac{\mathbb{P}^\theta(\mathcal{D}_{t\to T} \vert t\in\mathcal{T}, \mathcal{D}_t, \mathcal{H}_t)}{\mathbb{P}^\theta(\mathcal{D}_{t\to T} \vert t\in\mathcal{T}, \mathcal{D}_t, \mathcal{H}_t)\lambda_{\mathcal{D},\mathcal{H}}dt + \mathbb{P}^\theta(\mathcal{D}_{t\to T} \vert t\not\in\mathcal{T}, \mathcal{D}_t, \mathcal{H}_t)(1-\lambda_{\mathcal{D},\mathcal{H}}dt)} \\
+		= & \mathbb{P}^\theta(t\in\mathcal{T}\vert \mathcal{D}_t, \mathcal{H}_t) \frac{\mathbb{P}^\theta(\mathcal{D}_{t\to T}\vert t\in\mathcal{T}, \mathcal{D}_t, \mathcal{H}_t)}{\mathbb{P}^\theta(\mathcal{D}_{t\to T}\vert t\not\in\mathcal{T}, \mathcal{D}_t, \mathcal{H}_t)}
+	\end{align}
+\end{equation*}
+
+$$\lambda_{\mathbb{P} \vert \mathcal{D}, \mathcal{H}_t}^\theta = \lambda_{\mathcal{D},\mathcal{H}}^\theta \frac{\mathbb{P}^\theta(\mathcal{D}_{t\to T}\vert t\in\mathcal{T}, \mathcal{D}_t, \mathcal{H}_t)}{\mathbb{P}^\theta(\mathcal{D}_{t\to T}\vert t\not\in\mathcal{T}, \mathcal{D}_t, \mathcal{H}_t)}$$
+
+\begin{equation*}
+	\begin{align}
+		& \lambda_{\mathbb{P} \vert \mathcal{D}}^\theta \\
+		= & \lambda_{\mathcal{D}}^\theta \frac{\mathbb{P}^\theta(\mathcal{D}_{t\to T}\vert t\in\mathcal{T}, \mathcal{D}_t)}{\mathbb{P}^\theta(\mathcal{D}_{t\to T}\vert t\not\in\mathcal{T}, \mathcal{D}_t)} \\
+		= & \lambda_\mathcal{D}^\theta \exp\left( \int_t^T \log\left(1 + \frac{\lambda_\text{from t and hidden descendants}}{\lambda_\text{exogenous to t plus observed and descendents}}\right) d\Lambda - \int_t^T \lambda_\text{from t and hidden descendants}dt \right)
+	\end{align}
+\end{equation*}
+Can bound this above by bounding denominator below and numerator above using monotonicity of exponential kernel :)
+
+
+For metaorders with fixed duration and no descendants this can be evaluated quickly. Unfortunately this makes things nondifferentiable:( But can approximated with a `bump' function with bounded support
+More generally, can use bump times exp(polynomial), possibly with a dynamic `duration' component that varies as a function of history, and possibly with descendants
+
 \section{Monte Carlo EM}
 I think this makes it possible to do hidden marks
+
+\begin{equation*}
+	\begin{align}
+		\mathbb{E}\left[\int \log\lambda d\Lambda - \int \lambda dt \vert \mathcal{D}\right] \\
+		= \int \left[\int \log\lambda d\Lambda - \int \lambda dt\right] p(\lambda \vert\mathcal{D})d\mu(\lambda) \\
+		= \int \left[\int \log\lambda d\Lambda - \int \lambda dt\right] \frac{p(\mathcal{D}_{after} \vert \lambda,\mathcal{D}_{before})p(\lambda \vert \mathcal{D}_{before})}{p(\mathcal{D}_{after}\vert \mathcal{D}_{before})}d\mu(\lambda) \\
+		= \frac{\mathbb{E} \left[\left(\int \log\lambda d\Lambda - \int \lambda dt\right)p(\mathcal{D}\vert\lambda)\right]}{p(\mathcal{D})} \\
+		= \frac{\mathbb{E} \left[\left(\int \log\lambda d\Lambda - \int \lambda dt\right)p(\mathcal{D}\vert\lambda)\right]}{\mathbb{E}\left[p(\mathcal{D}\vert\lambda)\right]} \\
+	\end{align}
+\end{equation*}
+This is basically particle filtering, I think?
+
+$$H(s) = U H(s) + \epsilon_u(s)$$
+$$X(s) = O H(s) + \epsilon_i(s)$$
+
+\begin{equation*}
+	\begin{align}
+		\sum_s \mathbb{E}\left[\int \left(\log(\alpha) + X(s)c + H(s)c_H - \beta (t-s)\right) B_{s,t} d\Lambda(t) \\
+		- \int \alpha \exp\left(X(s)c + H(s)c_H -\beta (t-s)\right) dt \big\vert \mathcal{D}\right]
+	\end{align}
+\end{equation*}
+
+\begin{equation*}
+	\begin{align}
+		\mathbb{E}\left(\sum_s \int H(s) B_{s,t} d\Lambda(t) - \int \alpha H(s)\exp\left(X(s)c + H(s)c_H -\beta (t-s)\right) dt \big\vert \mathcal{D}\right)
+	\end{align}
+\end{equation*}
 
 \section{Hidden Marks}
 \subsection{Discrete}
 Markov
-\subsection{Continuous}
-Gaussian Process
+
+\section{Quadratic Hawkes Processes}
+\begin{equation*}
+	\begin{align}
+		& \int k\log(\alpha \sum \exp(-\beta(t-s))) d\Lambda - \alpha^k \int \left(\sum\exp(-\beta(t-s))\right)^k dt \\
+		= & \int k \log(\alpha) d\Lambda + \int k\log(\sum \exp(-\beta(t-s))) d\Lambda - \alpha^k \int \left(\sum\exp(-\beta(t-s))\right)^k dt \\
+		\\
+		& \frac{\partial}{\partial \alpha} \\
+		= & \int \frac{k}{\alpha}d\Lambda - k\alpha^{k-1} \int \left(\sum \exp(-\beta (t-s))\right)^k dt \\
+		\\
+		& \frac{\partial}{\partial \beta} \\
+		= & \int k \frac{\sum \exp(-\beta(t-s))(s-t)}{\sum \exp(-\beta(t-s))} d\Lambda - \alpha^k \int k \left(\sum \exp(-\beta (t-s))\right)^{k-1} \left(\sum \exp(-\beta(t-s))(s-t)\right) dt
+		\\
+		& \frac{\partial}{\partial k} \\
+		= & \int \log(\alpha \sum \exp(-\beta(t-s))) d\Lambda - \int \log\left(\alpha\sum\exp(-\beta(t-s))\right) \left(\alpha\sum\exp(-\beta(t-s))\right)^k dt
+	\end{align}
+\end{equation*}
+
+\begin{equation*}
+	\begin{align}
+		& \int_a^b \log(c e^{sx}) c e^x dx \\
+		= & \log(c) \int_a^b e^x dx + cs\int_a^b x e^x dx \\
+		= & \log(c)(e^b-e^a) + cs \left(\left[x e^x\right]_a^b - \int_a^b e^x dx\right) \\
+		= & \log(c)(e^b-e^a) + cs \left(be^b - a e^a - e^b + e^a\right)
+	\end{align}
+\end{equation*}
 
 \section{Uncertainty Quantification}
 Asymptotic normality
@@ -818,6 +896,62 @@ What does inserting a single exogenous event do to the order book, price, etc? A
 \cite{AbergelJedidi} \cite{Toke} sources that use hawkes process models to simulate an order book for analysis purposes
 
 \chapter{Application to KOSPI/SPY Data} %Maybe make this 2 different chapters
+Move from complex mark models, simple point process models $\to$ simple mark models, complex point process models. Reduces behaviour to emergence.
+
+Models for the point process
+\begin{enumerate}
+	\item Poisson Process
+	\item Inhomogenous Poisson Process on multiple days of data, check for residual autocorrelation (Polynomial, spline, mixture of truncated gaussians - almost KDE but not quite. Information criteria model selection.)
+	\item Hawkes Process with Inhomogenous Background (+ sinusoid kernel)
+	\item IHP with state dependence. Which variables?
+	\item IHP with regression - generalisation of state dependence. Again, which variables?
+	\item IHP with 'reverse' state dependence - depends on state just before triggered event rather than just state at triggering event. Is this worth it?
+	\item More event types. With `factor' model. Marks should play as little a role as possible.
+	\item Quadratic and higher order
+	\item Day-specific metaorders with some distribution of schedules (eg volume, time, price-sensitive, liquidity-sensitive). These can insert in response to various market phenomena. This then `explains away' some of the activity, depressing the estimates for the regular kernels. They're basically ordinary kernels of their own. But the parameters are drawn from a distribution. And there can be multiple metaorders, drawn from some mixture distribution.
+\end{enumerate}
+
+Models for the marks/state
+\begin{enumerate}
+	\item State dependence \& markov switching
+	\item Gaussian mixture. Examine residuals. May need to try tdist mixture.
+	\item Autoregression
+	\item Autoregression w/ GARCH
+	\item Kalman Filter (on marks only. Does this work, though? Does it mess with the point process somehow?); can I have KF with heteroskedasticity somehow?
+	\item Options factor model. How to weight strikes?
+\end{enumerate}
+
+Diagnostics
+\begin{itemize}
+	\item Likelihood, parameter count, information criteria, CV likelihood
+	\item Residual autocorrelation (Ljung-Box pval), residual distribution (KS pval)
+	\item Microprice quality: signature plot of realised vol against time horizon
+	\item Predicting volatility. Baseline = GARCH w/ EMA features, Baseline = implied vol.
+	\item Predicting volume traded
+	\item Predicting liquidity
+	\item Price impact of trades (function of size) and passive quotes
+	\item Check whether things have a relationship with: spread, recent volume, predicted volatility, realised volatility, etc.; include plot if needed
+	\item Filtered vs smoothed metaorders
+\end{itemize}
+
+Model Characteristics
+\begin{itemize}
+	\item Shape of background rate
+	\item Kernel function learned for each event type against each other
+	\item How kernel function changes throughout the day based on time-varying coefficients
+	\item How kernel function responds to various book features
+	\item Metaorder duration/size/impact
+	\item TWAP and VWAP (what DMA calls percent of volume) cost for various sizes,urgencies; can also test with foreknowledge of closing price. TWAP with altered schedule over the course of a day (DMA book calls this `tilting'). What are the recommendations here?
+\end{itemize}
+
+Strategies - The ideal situation is that these look good wrt midprice, ok wrt bid/ask spread costs, bad when market impact is considered. Don't know fees
+\begin{itemize}
+	\item Market making into a spread arb
+	\item Microprice crossing spread arb - shouldn't happen often
+	\item Vol factors stat arb - does it just sell vol or wings?
+\end{itemize}
+
+how to quantify compute time? number of EM steps, etc
 
 \textcolor{red}{Hawkes processes and their applications to finance: a review https://www.tandfonline.com/doi/full/10.1080/14697688.2017.1403131}
 \textcolor{red}{https://www.tandfonline.com/journals/rejf20/collections/Hawkes-Processes-in-Finance}

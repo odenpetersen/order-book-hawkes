@@ -1,0 +1,87 @@
+\documentclass[usenames,dvipsnames,handout]{beamer}
+\include{preamble}
+%\setbeamercovered{transparent}
+
+\begin{document}
+
+\frame{\titlepage}
+
+\begin{frame}{Stock Prices}
+	Graph
+	normally modeled with time series models. eg autoregression, state models, garch
+	these models have had some success but don't describe the process of price formation from first principles
+\end{frame}
+
+\begin{frame}{Limit Order Book}
+	Markets are venues for buyers and sellers to come together to exchange financial assets
+	Limit order book diagram
+	Order components
+	Modeling individual order arrivals, cancellations, and trades allows us to simulate the evolution of the limit order book
+\end{frame}
+
+\begin{frame}{Order Book Events}
+	For order insertions, cancellations we need to model size, price, side, and time.
+	First three can be modeled with standard time series tools. But modeling arrival time process is nontrivial. Some parts of the day have lots of arrivals, others don't.
+	graph of intraday activity bucketed by minute
+\end{frame}
+
+\begin{frame}{Inhomogenous Poisson Process Model}
+	graph of intraday activity bucketed by minute
+	overlay maxlikelihood spline intensity
+
+	counting process overlaid with integral $\bar{\Lambda}$ of intensity
+\end{frame}
+
+\begin{frame}{Likelihood function for Point Process Models}
+	Explain why the loglikelihood formula is reasonable
+\end{frame}
+
+\begin{frame}{Residuals}
+	Why integral of intensity should be iid exponential
+	Show that it isnt $\to$ motivate autoregressive intensity
+\end{frame}
+
+\begin{frame}{Hawkes Processes}
+	Formula for intensity
+	kernel is linear combination of exponential functions. can approximate analytic functions on $[0,t]$ uniformly well with enough exponential components by weierstrass approximation theorem.
+	Can treat events as coming from a mixture of multiple point processes. As is common with mixture models, use an EM algorithm to fit.
+	Explain how to get branching matrix.
+\end{frame}
+
+\begin{frame}{State Dependence}
+	Book imbalance vs time until next buy event / time until next sell event
+	Motivate state dependence
+	Formula for state dependence - discrete and continuous
+	Maybe some more details on book imbalance
+\end{frame}
+
+\begin{frame}{Point Process Simulation}
+	Detail Ogata algorithm
+	Original paper uses markov state switching. I can use time series model for orders and limit order book simulation to make this a bit more sophisticated.
+\end{frame}
+
+\begin{frame}{Model Results}
+	Parametric bootstrap
+	IC by model
+	crossvalidation loglikelihood
+	actual vs expected counts
+	residual distribution and autocorrelation and ks pval table
+	replication number and distance to average parent for various kernels
+\end{frame}
+
+\begin{frame}{Price Impact Function}
+	Graph of impact vs size
+	VWAP vs TWAP vs 
+\end{frame}
+
+\section{appendix}
+
+\begin{frame}{EM and branching matrix details}
+\end{frame}
+
+\begin{frame}{Future directions}
+	Options markets
+	Metaorder modelling via random kernels each day
+\end{frame}
+
+\end{document}

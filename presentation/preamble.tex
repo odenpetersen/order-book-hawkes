@@ -1,0 +1,86 @@
+\usepackage{amsmath} % Improves structure of typed out maths
+\usepackage{mathtools} % Improves upon deficiencies of amsmath package
+\usepackage{amssymb} % Adds some handy symbols to use.
+\usepackage{amsthm} % Adds some neat formulas to use, e.g. \begin{proof} etc.
+
+\usepackage{media9} % Allows for the inclusion of GIF files.
+
+% Below are other packages I suggest you add
+%\usepackage{geometry} % Default page margins can be altered.
+\usepackage{microtype} % Improves spacing between letters.
+%\usepackage{booktabs} % Improves tables. Can now create without vertical separators.
+%\usepackage{array} % Includes more options for arrays
+
+%\usepackage{graphicx} % Add images to your document
+%\usepackage{xcolor}
+%\usepackage{cleveref} % Better cross-referencing
+%\usepackage{hyperref} % For adding hyperlinks
+%\usepackage{fancyhdr} % Customise headers & footers in document
+
+%\usepackage[parfill]{parskip}
+
+%\usepackage{enumerate}
+\usepackage{tikz, pgf, pgfplots}
+\pgfplotsset{compat=1.15}
+
+\usetheme{Warsaw}
+%\useinnertheme{rounded}
+\useoutertheme{WarsawNoListHeader}
+
+
+\definecolor{quantsocpurple1}{RGB}{150, 61, 249}
+\definecolor{quantsocpurple2}{RGB}{90, 1, 191}
+\definecolor{quantsocpurple3}{RGB}{238, 227, 255}
+\definecolor{quantsocalerted}{RGB}{160, 31, 31}
+\definecolor{quantsocexample}{RGB}{17, 79, 20}
+%\definecolor{alerttextcolor}{RGB}{147, 8, 216}
+
+\setbeamercolor{palette primary}{bg=quantsocpurple1,fg=white}
+\setbeamercolor{palette secondary}{bg=quantsocpurple1,fg=white}
+\setbeamercolor{palette tertiary}{bg=quantsocpurple1,fg=white}
+\setbeamercolor{palette quaternary}{bg=quantsocpurple1,fg=white}
+\setbeamercolor{structure}{fg=quantsocpurple1} % itemize, enumerate, etc
+\setbeamercolor{section in toc}{fg=quantsocpurple1} % TOC sections
+
+% Override palette coloring with secondary
+\setbeamercolor{subsection in head/foot}{bg=quantsocpurple2,fg=white}
+
+\setbeamercolor{block title}{bg=quantsocpurple1}
+\setbeamercolor{block title alerted}{bg=quantsocalerted}
+\setbeamercolor{block title example}{bg=quantsocexample}
+
+%\setbeamercolor{alerted text}{fg=alerttextcolor}
+
+\AtBeginEnvironment{alertblock}{\setbeamercolor{itemize item}{fg=quantsocalerted}}
+\AtBeginEnvironment{alertblock}{\setbeamercolor{itemize subitem}{fg=quantsocalerted}}
+\AtBeginEnvironment{alertblock}{\setbeamercolor{itemize subsubitem}{fg=quantsocalerted}}
+\AtBeginEnvironment{alertblock}{\setbeamercolor{enumerate item}{fg=quantsocalerted}}
+\AtBeginEnvironment{alertblock}{\setbeamercolor{enumerate subitem}{fg=quantsocalerted}}
+\AtBeginEnvironment{alertblock}{\setbeamercolor{enumerate subsubitem}{fg=quantsocalerted}}
+
+\AtBeginEnvironment{exampleblock}{\setbeamercolor{itemize item}{fg=quantsocexample}}
+\AtBeginEnvironment{exampleblock}{\setbeamercolor{itemize subitem}{fg=quantsocexample}}
+\AtBeginEnvironment{exampleblock}{\setbeamercolor{itemize subsubitem}{bg=quantsocexample!80, fg=quantsocexample}}
+\AtBeginEnvironment{exampleblock}{\setbeamercolor{enumerate item}{fg=quantsocexample}}
+\AtBeginEnvironment{exampleblock}{\setbeamercolor{enumerate subitem}{fg=quantsocexample}}
+\AtBeginEnvironment{exampleblock}{\setbeamercolor{enumerate subsubitem}{fg=quantsocexample}}
+
+%\setbeamertemplate{footline}[frame number]
+\title{Point Process Modeling of Limit Order Books}
+\subtitle{}
+
+\author[] % (optional)
+{Oden Petersen}
+
+\date{}
+\logo{\includegraphics[scale=0.025]{qslogo.jpeg}}
+\institute{UNSW Mathematics and Statistics}
+
+%\AtBeginSection[]
+%{
+%  \begin{frame}
+%    \frametitle{Today's plan}
+%    \tableofcontents[currentsection]
+%  \end{frame}
+%}
+%------------------------------------------------------------

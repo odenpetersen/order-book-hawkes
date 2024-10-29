@@ -1,0 +1,3 @@
+/home/soms/Honours/src/kospi/build/CMakeFiles/json_parser.dir
+/home/soms/Honours/src/kospi/build/CMakeFiles/edit_cache.dir
+/home/soms/Honours/src/kospi/build/CMakeFiles/rebuild_cache.dir

@@ -1,0 +1,1 @@
+. "/home/soms/Honours/src/kospi/conanbuildenv-release-x86_64.sh"

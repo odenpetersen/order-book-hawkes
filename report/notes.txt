@@ -1,0 +1,73 @@
+Some updates beforehand:
+Theoretical parts of the writing for the inference chapter are mostly done. There are still parts I want to wait on the applied work before finalising; these are all around specific models rather than general techniques.
+I have working C++ code now for processing the empirical datasets, which is much faster than Python. The mathematical parts are very similar, I can basically just copy-paste these while verifying the formulas are correct.
+I am looking into how to make this parallel; it should be quite easy to do this at the level of daily data. I think I will need to use Katana particularly for any simulation studies (parametric bootstrapping; asymptotic analysis; causal inference for price impact evaluation; etc). If this is difficult for some reason it's not the end of the world, but I think it will be possible and will add some good components to the final report.
+I now have a more concrete roadmap for how to approach the applied work. Outline below and also in the pdf.
+Was a little busy last week but I did manage to get some more theoretical reading done so I'm pretty confident now in which models will prove interesting/useful vs which will be infeasible
+We'll be doing practice presentations in week 8, then thesis submission week 10 and final presentations week 11. Will try to share as much content as I can for feedback as early as I can. We can talk more about progress so far when we meet today.
+
+More detailed thoughts below, feel free to skim since I can answer any questions in the meeting.
+
+Applied Roadmap
+Two datasets: one for S&P500 futures, one for korean index (KOSPI) options.
+Both datasets have multiple different products traded on the same underlying index.
+S&P500 is slightly easier to work with. Will focus on this one for now. It tracks each individual order over its entire lifetime (submitted, modified, traded/cancelled), and I also have code to construct the limit order book from this. I have 72 days of data.
+KOSPI data I believe I have ~10 days. Only shows the 10 best bid and ask level sizes, as well as trade sizes/sides, recorded at the time of every book update. I will discuss why this might be interesting below.
+
+All of my models use EM-based fitting with a single pass through the data for each E step. On each pass through the data, I maintain a constant set of accumulator variables, and the updated parameters are a function of these. This can be parallelised across many days at once (using Katana), so I can get good error bounds (and faster fitting because the M steps are more precise).
+
+Models
+The most obvious 'event type' is the cartesian product of TICKER x SIDE (bid/ask) x EVENT TYPE (add/modify/trade/cancel). I can estimate a poisson model trivially by counting the number of each event type and dividing by length of trading session.
+The next thing to try is an inhomogenous poisson model. The data volume makes KDE tricky because it is a quadratic-time algorithm. Using a polynomial U-shape didn't seem flexible enough to fit the curve properly. I could try a spline, but I think a mixture model is probably simpler to implement. This is similar to KDE (e.g. I could use a mixture of bell curve shapes) while being faster to compute and more parsimonious. This is compatible with EM fitting. The number of components can be selected automatically with AIC/BIC; I can fit a model with n components, then add an extra component (can use the existing parameters for the existing components to speed this up), and keep adding components until the information criteria gets worse.
+Fitted across multiple days, there will likely still be residual autocorrelation (strong Ljung-Box statistic) because the background rate is the same across days. From here, I can implement ordinary multivariate exponential hawkes with inhomogenous background. I've tested this already on one day of data for a homogenous background and a single event type. But I have python code for the full thing, so I'll copy this over when I can.
+I can use a mixture of multiple multivariate exponential hawkes kernels. With enough of them, this should be able to fit any continuous kernel shape. It also admits inhibitory or non-monotonic kernels. I already do this in the python code so again this shouldn't be a challenge. Similarly for state-dependence.
+
+May not get to these:
+I have formulas for fitting a model with dependence on continuous state variables. These can include functions of time, in which case the kernel can be made to vary intraday. This uses EM with a newton step so may take more compute time. In particular, I think there should be dependence on: volume ahead of an order in the queue (increases cancellation rate); imbalance of top book levels; imbalance of the entire book at deeper levels; recent price direction/volatility; amount of liquidity/size of spread; some function of order distance from midprice, potentially adjusted for volatility. I can fit with a variety of variables and use hessian information to get error bars that inform variable selection.
+I have formulas for fitting a quadratic hawkes process, as well as cubic etc., again with a newton step.
+
+I don't think I am likely to do these:
+KOSPI options: rather than assuming a unique event type for every strike price, I can reduce the event space into events corresponding to: directional moves, realised volatility, implied volatility changes, volatility curve shape changes. I think this would be a novel application but theoretically it is not that special.
+Modelling day-specific behaviour: I can imagine modeling a distribution from which 'additional' kernels are randomly drawn each day. These may correspond for instance to 'metaorders': institutions wanting to buy a large amount of the product in a timely manner without moving the price too much too quickly. The intensity from these kernels is added to the existing kernels common to all days, representing liquidity providers. Interesting questions here would include whether these day-specific kernels tend to be consistent buyers/sellers while the common kernels are directionless (either noise trading or liquidity provision); as well as modeling the realised price impact of these 'metaorders', and examining whether they can be predicted throughout the day or only discovered at the end of the day. Mathematically, I would do this by selecting random kernel parameters, weighting each sample by its likelihood on the daily data, and re-fitting the distribution they are selected from to this weighted population. This corresponds to a monte carlo EM algorithm for the parameters of the distribution from which the kernels are selected each day.
+
+Visualisations
+Visualise background rate U-shape
+For an ordinary exponential hawkes process with a mixture of many exponential kernels, I can visualise the overall kernel shape that results. Similarly for state-dependent HPs, though there is a different kernel for each state.
+For a mixture of exponential kernels that also have dependence on continuous state, the kernel will change over time and with different states of the market. I may need to bucket into quartiles and visualise the average kernel as well as a standard deviation. If the variables it depends on are just functions of time (eg mononomials of degree up to k), this is just a kernel that changes throughout the day, so it is easier to visualise.
+For quadratic/cubic/higher hawkes processes, I can approximate intensities that are any smooth function of a sum of kernels. This is quite a general setting. I can visualise the resulting function of intensity, though it will probably just be monotonic increasing.
+Visualise a small section of the branching matrix over the course of the EM algorithm
+Visualise parameter values throughout the EM algorithm
+Visualise different paths & simulated paths
+Plot intensity function
+Plot the data - price, vol, etc.
+Price impact curves
+
+Diagnostics
+Crossvalidation likelihood is the most reliable, and I have enough data to make this feasible.
+I can use information criteria for automated model selection. I will report them on the training data, but I think crossvalidation probably requires fewer assumptions to trust.
+Feature selection can be assisted by asymptotic hessian information
+Parametric bootstrap will confirm whether the asymptotics have kicked in
+
+Experiments with Fitted Models
+I can use simulation to make predictions at each point in time for the future value of the midprice. Presumably this will have poor predictive power over long time horizons. However, this smoothed estimate may have better statistical behaviour than the midprice, e.g. less autocorrelation of differences. This has practical value as a better prediction target for ML models.
+I can similarly use simulation to make volatility predictions, and compare this to a model that just uses price information without order book or point process information (e.g. a baseline GARCH). Similarly for predicting volume and liquidity.
+Price impact of buy/sell orders - what does this correlate with? Size is an obvious one; empirically impact is often found to be proportional to sqrt(size).
+Price impact of TWAP vs VWAP - two strategies for buying large amounts of a product over the course of a day. I have a textbook chapter that describes these in detail.
+
+
+Will probably easier to give feedback on things once they're done, so I'll spend more time over the next week on getting concrete results for the essential steps above.
+
+
+
+
+
+Intro - say a bit more about point processes since these are the bulk of the thesis
+Conclusion - avenues for future work
+
+Highlight these:
+Lit review
+Novelty of the work - EM state dependence, analysis, different data, etc.
+Comparison to existing methods
+
+One sentence is not a paragraph
+

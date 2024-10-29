@@ -229,7 +229,7 @@ This is the abstract
 
 \chapter{Introduction}\label{s-intro}
 
-On a single day in 2023, the US stock market saw an average of around \$500 billion dollars worth of shares traded on various exchanges and other venues, exceeding the annual GDP of a typical European country \cite{FINRA2024}. Modern securities markets facilitate the exchange of shares and other financial assets at extremely high frequency, as a result of aggressive investment in specialised networking hardware, custom-made computer architectures, and high-throughput machine learning systems. In facilitating capital flows for the global economy, financial markets have at the same time managed to claim an increasing fraction of resources and attention, with economic consequences that are not yet fully understood \cite{Palley2007}.
+On an average day in 2023, the US stock market saw around \$500 billion dollars worth of shares traded on various exchanges and other venues, exceeding the annual GDP of a typical European country \cite{FINRA2024}. Modern securities markets facilitate the exchange of shares and other financial assets at extremely high frequency, as a result of aggressive investment in specialised networking hardware, custom-made computer architectures, and high-throughput machine learning systems. In facilitating capital flows for the global economy, financial markets have at the same time managed to claim an increasing fraction of resources and attention, with economic consequences that are not yet fully understood \cite{Palley2007}.
 
 Despite many mysteries and open questions about the origins and dynamics of market phenomena, the financial sector itself has readily adapted to the increasing scale and complexity of the markets in which it operates. The practical design of exchange rules and trading systems has in large part been an empirical endeavour on the part of market participants, operators, and regulators. Many phenomena have been observed to emerge in an apparently decentralised fashion from the application of exploitative heuristics and predictive algorithms that interact with exchanges and aggregate to produce desirable outcomes. While users of trading strategies aim to maintain acceptable risk levels while generating profits over the long term, market operators and regulators are tasked with the design of incentive mechanisms that exploit this self-interested behaviour to improve market outcomes, including reduced transaction costs, fast and accurate incorporation of external information (such as economic news or earnings reports), and adherence to various concepts of fairness, propriety, and legality.
 
@@ -245,24 +245,20 @@ A matching engine is tasked with receiving and acting on various messages from m
 
 \bigskip
 
-A typical matching engine permits two kinds of incoming messages, known as \textit{order insertion} and \textit{order cancellation}, and maintains an internal state consisting of a single data structure, known as a \textit{limit order book}.
-
-\medskip
-
-An order insertion message indicates a participant's willingness to buy (or sell) some quantity of a particular asset at or below (respectively, above) a particular price, and results in the addition of an \textit{order} to the limit order book $\mathcal{L}$.
-
-Conversely, an order cancellation message results in the removal of a particular order from the limit order book, either in part (by reducing the remaining volume associated with the order) or in full (by removing the order entirely from the book). \textcolor{red}{It might be good to include a statistic about roughly how large cancellation rates are, to highlight the importance of this message type.}
+A typical matching engine permits two kinds of incoming messages, known as \textit{order insertion} and \textit{order cancellation}, and maintains an internal state consisting of a single data structure, known as a \textit{limit order book}.  An order insertion message indicates a participant's willingness to buy (or sell) some quantity of a particular asset at or below (respectively, above) a particular price, and results in the addition of an \textit{order} to the limit order book $\mathcal{L}$.  Conversely, an order cancellation message results in the removal of a particular order from the limit order book, either in part (by reducing the remaining volume associated with the order) or in full (by removing the order entirely from the book). \textcolor{red}{It might be good to include a statistic about roughly how large cancellation rates are, to highlight the importance of this message type.}
 
 Formally, a limit order book can be defined as a set of tuples (``orders'') of the form
 $$(\text{side},\text{price},\text{time},\text{size}) = (s,p,t,q)\in \{-1,1\}\times P\times T\times Q.$$
 
-Each published order represents an intention to buy (or sell) some quantity of an asset at a maximum (respectively, minimum) price, as illustrated in figure \ref{fig:limitorder}.
+Each published order represents an intention to buy (or sell) some quantity of an asset at a maximum (respectively, minimum) price.
 
 \begin{figure}[h]
 	$$\left(\underbrace{-1}_{\fontsize{8}{8}\begin{matrix} \text{+1 for a buy order}\\ \text{-1 for a sell order}\end{matrix}}\fontsize{12}{8},\underbrace{84.1}_{\fontsize{8}{8}\begin{matrix}\text{The least favourable price}\\\text{(maximum for buy,}\\\text{minimum for sell)}\\\text{at which the order can trade}\end{matrix}}\fontsize{12}{8},\underbrace{9:52}_{\fontsize{8}{8}\begin{matrix}\text{The time at which the}\\\text{order was first published}\end{matrix}}\fontsize{12}{8},\underbrace{2}_{\fontsize{8}{8}\begin{matrix}\text{The maximum quantity}\\\text{of the product that will}\\\text{be traded with this order}\end{matrix}}\right)$$
 	\caption{Components of an example limit order}
 	\label{fig:limitorder}
 \end{figure}
+
+For example, Figure \ref{fig:limitorder} shows the structure of a limit order submitted at 9:52am, expressing an intention to sell up to two units of a particular security for a price at least as favourable as \$84.10 per unit.
 
 \newpage
 \section{The Matching Algorithm}
@@ -332,9 +328,11 @@ Notably, if $\text{mid}_\mathcal{L}$ is taken to represent the fair value of the
 
 \subsection{Price-Time Priority}
 
-\textcolor{red}{Explain}
+\textcolor{red}{Explain - adverse selection?}
 
 \section{Queueing Models of the Order Book}
+
+\textcolor{red}{Yet to be fully written}
 
 Queue depletions are related to price changes \cite{BouchaudEtAl}
 
@@ -349,12 +347,12 @@ Importance of arrival time modeling
 
 \texttt{https://www.amazon.com/Point-Processes-Queues-Martingale-Statistics/dp/0387905367}
 
-\section{Overview of Point Processes}
-With the goal of modelling the arrival time process, I will now provide an introductory overview of point processes. In the next section, I will highlight some key variants described in existing literature that are relevant to order book modeling.
+\chapter{Point Process Models}
+With the goal of modelling the arrival time process, I will now provide an introductory overview of point processes, and then highlight some key variants that are relevant to order book modeling.
 
 This section will make extensive use of theoretical concepts described in the appendix \textcolor{red}{Make sure to update this if there ends up being more than one appendix}. For an overview of measure theory, probability spaces, and stochastic processes, please refer to the relevant sections.
 
-\subsection{Definition}
+\section{Overview of Point Processes}
 Given a probability space $(\Omega,\Sigma,\mathbb P)$, and a measurable space $(T,\Sigma_T)$ representing times, a point process is any increasing sequence of random times $$\mathcal T : \Omega\to T^\mathbb{N},$$
 meaning that $\mathcal{T}(\omega)_n$ is increasing in $n$ for any $\omega\in\Omega$.
 
@@ -382,16 +380,15 @@ $$\Lambda_\omega(S) \coloneq \left\vert S\cap \mathcal{T}(\omega)\right\vert.$$
 
 For any finite or countable collection of disjoint sets $A_n\in\Sigma$, we have
 $$\Lambda_\omega\left(\bigcup_n A_n\right) = \left\vert \bigcup_n \left(A_n\cap\mathcal{T}(\omega)\right)\right\vert.$$
-Is this a measure on $(T,\Sigma_T)$? Since subsets of disjoint sets are also disjoint, the terms in the union on the right-hand side will be disjoint, and so
+Since subsets of disjoint sets are also disjoint, the terms in the union on the right-hand side will be disjoint, and so
 $$\Lambda_\omega\left(\bigcup_n A_n\right) = \sum_n\left\vert A_n\cap \mathcal{T}(\omega)\right\vert = \sum_n \Lambda_\omega(A_n).$$
-So this is indeed a measure.
+Thus $\Lambda_\omega$ is a measure on $(T,\Sigma_T)$.
 
 \subsection{The Expectation Measure}
 Taking the expectation of the counting measure with respect to some measure $\mathbb{P}$ on a measurable space $(\Omega,\Sigma)$ gives the \textit{expectation measure},
 $$\Lambda_\mathbb{P}(S)\coloneq \mathbb{E}_\mathbb{P}\left[\Lambda_\omega(S)\right] = \int_\Omega \Lambda_\omega(S)d\mathbb{P}(\omega).$$
 
-Is this a measure on $(T,\Sigma_T)$? Since $\Lambda_\omega(S)$ is a non-negative function of $\omega$, it follows that $$\Lambda_{\mathbb{P}} : \Sigma_T \to \mathbb{R}_{\geq 0}\cap\{\infty\}.$$ Furthermore, for any finite or countable sequence of $A_n\in B(\mathbb{R})$, we have $$\Lambda_\mathbb{P}\left(\bigcup_n A_n\right) = \int_\Omega \Lambda_\omega\left(\bigcup_n A_n\right)d\mathbb{P}(\omega) = \int_\Omega \sum_n \Lambda_\omega(A_n) d\mathbb{P}(\omega),$$
-by the countable additivity of $\Lambda_\omega$.
+Since $\Lambda_\omega(S)$ is a non-negative function of $\omega$, it follows that $$\Lambda_{\mathbb{P}} : \Sigma_T \to \mathbb{R}_{\geq 0}\cap\{\infty\}.$$ Furthermore, for any finite or countable sequence of $A_n\in B(\mathbb{R})$, we have $$\Lambda_\mathbb{P}\left(\bigcup_n A_n\right) = \int_\Omega \Lambda_\omega\left(\bigcup_n A_n\right)d\mathbb{P}(\omega) = \int_\Omega \sum_n \Lambda_\omega(A_n) d\mathbb{P}(\omega),$$ by the countable additivity of $\Lambda_\omega$. Thus $\Lambda_\mathbb{P}$ is a measure on $(T,\Sigma_T)$.
 
 To handle the sum inside the integral, we can write each term as a sum of indicator functions:
 $$\Lambda_\omega(A_n) = \left\vert A_n\cap \mathcal{T}(\omega)\right\vert = \sum_i 1_{A_n}\left(\mathcal{T}(\omega)_i\right).$$
@@ -460,9 +457,7 @@ For each extension:
 
 
 \subsection{Poisson Processes}
-Probably the simplest modeling assumption we can make is to assume that the intensity of the process is a constant $\nu\in\mathbb{R}$.
-
-A Poisson process is a point process for which the following two properties hold.
+The simplest modeling assumption we can make is to assume that the intensity of the process is a constant $\nu\in\mathbb{R}$. A Poisson process is a point process for which the following two properties hold.
 \begin{enumerate}
 	\item For any finite collection of disjoint measurable sets $A_n\in\Sigma_T$, their counting measures $\Lambda_\omega(A_n)$ are independent random variables.
 	\item For any measurable set $A\in\Sigma_T$, we have $$\Lambda_{\mathbb P}(A) = \nu \mu_{\mathrm{Lebesgue}}(A)\propto\mu_{\mathrm{Lebesgue}}(A).$$
@@ -592,6 +587,31 @@ $$IRF_{e,e',k}(s,t) = \alpha_{e,e',k} e^{X(s)\cdot c_{e,e',k}}\exp\left(-\beta_{
 $$\lambda_{e,e',k}(t,\omega) = \int_0^t IRF_{e,e',k}(s,t) d\Lambda_{e',\omega}(s)$$
 $$\lambda_e(t,\omega) = \sum_{e'} \sum_k \lambda_{e,e',k}(t,\omega) + \text{spline intensity}(t)$$
 
+\chapter{Simulation}
+Will play a key role in (1) use of the model for `experimental' studies (2) parametric bootstrap (3) metaorder monte carlo em (if i end up doing this)
+
+\section{Simulation Methods for Point Process Models}
+Immigration-birth interpretation \cite{MorariuPatrichiPakkanen}
+(aka Watson-Galton models)
+
+\textcolor{red}{Pseudocode}
+
+Ogata thinning \bibitem{Ogata}
+
+\textcolor{red}{Pseudocode}
+
+\textcolor{red}{Do these have different time complexity? Memory complexity?}
+
+\section{Simulation Study of Estimation Methods}
+Convergence analysis for simple models (eg univariate)
+
+\section{Impulse Response Function}
+Causal analysis, price impact of orders.
+
+What does inserting a single exogenous event do to the order book, price, etc? Are there analytical formulas for this?
+
+
+\cite{AbergelJedidi} \cite{Toke} sources that use hawkes process models to simulate an order book for analysis purposes
 
 \chapter{Estimation}%\label{something}
 
@@ -714,6 +734,7 @@ $$\sum_{i=1}^{N_\mathcal{D}(t_\mathrm{max})} r_i = \bar\Lambda(t_\mathrm{max})=\
 In the multivariate case, where we have a vector $\nu\in\mathbb{R}_{>0}^n$ containing the arrival rates for each event type $E$, we similarly obtain
 $$\left(\hat\nu_\mathrm{MLE}\right)_E = \frac{N_\mathcal{D}^E\left(t_\mathrm{max}\right)}{t_\mathrm{max}-t_\mathrm{min}}.$$
 
+
 \subsection{Composite Processes}
 Suppose that the intensity of each point process $\mathcal{T}_{\theta_1,\theta_2,\ldots}$ in a parametric family has the form
 $$\lambda^{\theta_1,\theta_2,\ldots}(t,\omega) \coloneq \sum_i \lambda_i^{\theta_i}(t,\omega),$$
@@ -754,6 +775,131 @@ $$- \sum_i \log\left( B_{i,t}^{\theta_1,\theta_2,\ldots}\right)B_{i,t}^{\theta_1
 
 
 \textcolor{red}{Can cite original dempster paper? As well as the one that corrects the errors in that paper}
+
+\subsection{Hawkes Processes}
+
+\begin{equation*}
+	\begin{align}
+		\ell(\alpha,\beta; \mathcal{D}) & = \sum_j\left( \int_{t_\mathrm{min}}^{t_\mathrm{max}} \log\left(\sum_i \int_{t_\mathrm{min}}^t \alpha_{i,j}\exp(-\beta_{i,j}(t-s)) d\Lambda_\mathcal{D}^i(s)\right)d\Lambda_\mathcal{D}^j(t)\right) \\ & - \sum_j\sum_i\left( \int_{t_\mathrm{min}}^{t_\mathrm{max}} \int_{t_\mathrm{min}}^t \alpha_{i,j}\exp(-\beta_{i,j}(t-s))d\Lambda_\mathcal{D}^i(s) dt \right)
+		\\
+		\frac{\partial\ell}{\partial\alpha_{i,j}} &= \int_{t_\mathrm{min}}^{t_\mathrm{max}} \frac{\lambda_\mathcal{D}^{i,j}(t)}{\alpha_{i,j}\lambda_\mathcal{D}^j(t)}d\Lambda_\mathcal{D}^j(t) - \int_{t_\mathrm{min}}^{t_\mathrm{max}} \frac{\lambda_\mathcal{D}^{i,j}(t)}{\alpha_{i,j}}dt \\
+		\frac{\partial^2\ell}{\partial\alpha_{i,j}\partial\alpha_{i,j}} &= \int_{t_\mathrm{min}}^{t_\mathrm{max}} \left( \frac{\lambda_\mathcal{D}^{i,j}(t)}{\alpha_{i,j}^2\lambda_\mathcal{D}^j(t)} - \frac{\lambda_\mathcal{D}^{i,j}(t)}{\alpha_{i,j}^2\lambda_\mathcal{D}^j(t)} - \left(\frac{\lambda_\mathcal{D}^{i,j}(t)}{\alpha_{i,j}\lambda_\mathcal{D}^j(t)}\right)^2 \right) d\Lambda_\mathcal{D}^j(t) \\&- \int_{t_\mathrm{min}}^{t_\mathrm{max}} \left( \frac{\lambda_\mathcal{D}^j(t)}{\alpha_{i,j}^2} - \frac{\lambda_\mathcal{D}^j(t)}{\alpha_{i,j}^2} \right) dt\\
+		&= - \int_{t_\mathrm{min}}^{t_\mathrm{max}} \left(\frac{\lambda_\mathcal{D}^{i,j}(t)}{\alpha_{i,j}\lambda_\mathcal{D}^j(t)}\right)^2 d\Lambda_\mathcal{D}^j(t)\\
+		\frac{\partial^2\ell}{\partial\alpha_{i,j}\partial\alpha_{k,j}} &= \int_{t_\mathrm{min}}^{t_\mathrm{max}} \frac{\lambda_\mathcal{D}^{i,j}(t)\lambda_\mathcal{D}^{k,j}(t)}{\alpha_{i,j}\alpha_{k,j}\lambda_\mathcal{D}^j(t)} d\Lambda_\mathcal{D}^j(t)\\
+		\frac{\partial^2\ell}{\partial\alpha_{i,j}\partial\alpha_{k,l}}  &= 0\\
+	\end{align}
+\end{equation*}
+
+\begin{equation*}
+	\begin{align}
+		\gamma_\mathcal{D}^{i,j}(t) &= -\frac{\partial}{\partial\beta_{i,j}}\lambda_\mathcal{D}^{i,j}(t) = \int_{t_\mathrm{min}}^t (t-s)\alpha_{i,j}\exp(-\beta_{i,j}(t-s))d\Lambda_\mathcal{D}^j(s) \\
+		\gamma_\mathcal{D}^{i,j}(t+\delta) &= \int_{t_\mathrm{min}}^{t+\delta} (t+\delta-s)\alpha_{i,j}\exp(-\beta_{i,j}(t+\delta-s))d\Lambda_\mathcal{D}^j(s) \\
+		&= \delta\exp(-\beta_{i,j}\delta) \left( \lambda_\mathcal{D}^{i,j}(t) + \int_{t}^{t+\delta} \alpha_{i,j}\exp(-\beta_{i,j}(t-s))d\Lambda_\mathcal{D}^j(s) \right) \\ &+ \exp(-\beta_{i,j}\delta) \left( \gamma_\mathcal{D}^{i,j}(t) + \int_{t}^{t+\delta} (t-s)\alpha_{i,j}\exp(-\beta_{i,j}(t-s))d\Lambda_\mathcal{D}^j(s) \right) \\
+		\Gamma_\mathcal{D}^{i,j}(t) &= \int_{t_\mathrm{min}}^t\gamma_\mathcal{D}^{i,j}(s)ds \\
+		\Gamma_\mathcal{D}^{i,j}(t+\delta) &= \Gamma_\mathcal{D}^{i,j}(t) + \int_0^\delta\gamma_\mathcal{D}^{i,j}(t+\delta')d\delta' \\
+		&= \Gamma_\mathcal{D}^{i,j}(t) + \lambda_\mathcal{D}^{i,j}(t)\int_0^\delta \delta'\exp(-\beta_{i,j}\delta')d\delta' + \gamma_\mathcal{D}^{i,j}(t)\int_0^\delta \exp(-\beta_{i,j}\delta')d\delta' \\
+		&+ \int_{t_\mathrm{min}}^t\int_t^{t+\delta}\ldots d\Lambda_\mathcal{D}^j(s)du \\
+		&= \Gamma_\mathcal{D}^{i,j}(t) + \frac{\lambda_\mathcal{D}^{i,j}(t)}{\beta_{i,j}^2}(1-(\beta_{i,j}\delta+1)\exp(-\beta_{i,j}\delta)) + \frac{\gamma_\mathcal{D}^{i,j}(t)}{\beta_{i,j}}(1-\exp(-\beta_{i,j}\delta)) \\
+		&+ \int_{t_\mathrm{min}}^t\int_t^{t+\delta}\ldots d\Lambda_\mathcal{D}^j(s)du \\
+	\end{align}
+\end{equation*}
+
+\begin{equation*}
+	\begin{align}
+		\phi_\mathcal{D}^{i,j}(t) &= -\frac{\partial}{\partial\beta_{i,j}}\gamma_\mathcal{D}^{i,j}(t) = \int_{t_\mathrm{min}}^t (t-s)^2\alpha_{i,j}\exp(-\beta_{i,j}(t-s))d\Lambda_\mathcal{D}^j(s) \\
+		\phi_\mathcal{D}^{i,j}(t+\delta) &= \int_{t_\mathrm{min}}^{t+\delta} (t+\delta-s)^2\alpha_{i,j}\exp(-\beta_{i,j}(t+\delta-s))d\Lambda_\mathcal{D}^j(s) \\
+		&= \exp(-\beta_{i,j}\delta)\int_{t_\mathrm{min}}^{t+\delta} (\delta^2+2\delta(t-s)+(t-s)^2)\alpha_{i,j}\exp(-\beta_{i,j}(t-s))d\Lambda_\mathcal{D}^j(s) \\
+		&= \delta^2\exp(-\beta_{i,j}\delta) \left( \lambda_\mathcal{D}^{i,j}(t) + \int_{t}^{t+\delta} \alpha_{i,j}\exp(-\beta_{i,j}(t-s))d\Lambda_\mathcal{D}^j(s) \right) \\
+		&+ 2\delta\exp(-\beta_{i,j}\delta) \left( \gamma_\mathcal{D}^{i,j}(t) + \int_{t}^{t+\delta} (t-s)\alpha_{i,j}\exp(-\beta_{i,j}(t-s))d\Lambda_\mathcal{D}^j(s) \right) \\
+		&+ \exp(-\beta_{i,j}\delta) \left( \phi_\mathcal{D}^{i,j}(t) + \int_{t}^{t+\delta} (t-s)^2\alpha_{i,j}\exp(-\beta_{i,j}(t-s))d\Lambda_\mathcal{D}^j(s) \right) \\
+		\Phi_\mathcal{D}^{i,j}(t) &= \int_{t_\mathrm{min}}^t \phi_\mathcal{D}^{i,j}(s) ds \\
+		\Phi_\mathcal{D}^{i,j}(t+\delta) &= \Phi_\mathcal{D}^{i,j}(t) + \int_0^\delta\phi_\mathcal{D}^{i,j}(t+\delta')d\delta' \\
+		&= \Phi_\mathcal{D}^{i,j}(t) + \lambda_\mathcal{D}^{i,j}(t)\int_0^\delta\delta'^2\exp(-\beta_{i,j}\delta')d\delta'\\
+		&+ 2\gamma_\mathcal{D}^{i,j}(t)\int_0^\delta\delta'\exp(-\beta_{i,j}\delta')d\delta' + \phi_\mathcal{D}^{i,j}(t)\int_0^\delta\exp(-\beta_{i,j}\delta')d\delta'\\
+		&+ \int_t^{t+\delta}\int_t^{t+\delta'}\ldots d\Lambda_\mathcal{D}^{j}(s) \\
+		&= \Phi_\mathcal{D}^{i,j}\left(t\right) + \frac{\lambda_\mathcal{D}^{i,j}\left(t\right)}{\beta_{i,j}^3}\left(2-\exp\left(-\beta_{i,j}\delta\right)\left(\left(\beta_{i,j}\delta\right)^2-2\beta_{i,j}\delta+2\right)\right)\\
+		&+ \frac{2\gamma_\mathcal{D}^{i,j}(t)}{\beta_{i,j}^2}(1-\exp(-\beta_{i,j}\delta)(\beta_{i,j}\delta+1))\\
+		&+ \frac{\phi_\mathcal{D}^{i,j}(t)}{\beta_{i,j}}(1-\exp(-\beta_{i,j}\delta))\\
+		&+ \int_t^{t+\delta}\int_t^{t+\delta'}\ldots d\Lambda_\mathcal{D}^{j}(s)
+	\end{align}
+\end{equation*}
+
+\begin{equation*}
+	\begin{align}
+		\frac{\partial\ell}{\partial\beta_{i,j}} &= -\int_{t_\mathrm{min}}^{t_\mathrm{max}}\frac{\gamma_\mathcal{D}^{i,j}(t)}{\lambda_\mathcal{D}^{j}(t)}d\Lambda_\mathcal{D}^j(t) + \Gamma_\mathcal{D}^{i,j}(t_\mathrm{max}) \\
+		&= -\int_{t_\mathrm{min}}^{t_\mathrm{max}}\frac{\gamma_\mathcal{D}^{i,j}(t)}{\lambda_\mathcal{D}^{j}(t)}d\Lambda_\mathcal{D}^j(t) + \Gamma_\mathcal{D}^{i,j}(t_\mathrm{max}) \\
+		\frac{\partial^2\ell}{\partial\beta_{i,j}\partial\beta_{i,j}} &= \int_{t_\mathrm{min}}^{t_\mathrm{max}} \left( \frac{\phi_\mathcal{D}^{i,j}(t)}{\lambda_\mathcal{D}^{j}(t)} - \left(\frac{\gamma_\mathcal{D}^{i,j}(t)}{\lambda_\mathcal{D}^{j}(t)}\right)^2 \right) d\Lambda_\mathcal{D}^j(t) - \Phi(t_\mathrm{max}) \\
+		&= \int_{t_\mathrm{min}}^{t_\mathrm{max}} \left( \frac{\phi_\mathcal{D}^{i,j}(t)}{\lambda_\mathcal{D}^{j}(t)} - \left(\frac{\gamma_\mathcal{D}^{i,j}(t)}{\lambda_\mathcal{D}^{j}(t)}\right)^2 \right) d\Lambda_\mathcal{D}^j(t) - \Phi(t_\mathrm{max}) \\
+		\frac{\partial^2\ell}{\partial\beta_{i,j}\partial\beta_{k,j}} &= -\int_{t_\mathrm{min}}^{t_\mathrm{max}}\frac{\gamma_\mathcal{D}^{i,j}(t)\gamma_\mathcal{D}^{k,j}(t)}{\lambda_\mathcal{D}^{j}(t)^2}d\Lambda_\mathcal{D}^j(t) \\
+		\frac{\partial^2\ell}{\partial\beta_{i,j}\partial\beta_{k,l}} &= 0\\
+		\frac{\partial^2\ell}{\partial\beta_{i,j}\partial\alpha_{i,j}} &= -\int_{t_\mathrm{min}}^{t_\mathrm{max}} \frac{\gamma_\mathcal{D}^{i,j}(t)}{\alpha_{i,j}\lambda_\mathcal{D}^{j}(t)} \left( 1 - \frac{\lambda_\mathcal{D}^{i,j}(t)}{\lambda_\mathcal{D}^{j}(t)} \right) d\Lambda_\mathcal{D}^j(t) + \frac{\Gamma_\mathcal{D}^{i,j}(t_\mathrm{max})}{\alpha_{i,j}} \\
+		&= -\int_{t_\mathrm{min}}^{t_\mathrm{max}} \frac{\gamma_\mathcal{D}^{i,j}(t)}{\alpha_{i,j}\lambda_\mathcal{D}^{j}(t)} \left( 1 - \frac{\lambda_\mathcal{D}^{i,j}(t)}{\lambda_\mathcal{D}^{j}(t)} \right) d\Lambda_\mathcal{D}^j(t) + \frac{\Gamma_\mathcal{D}^{i,j}(t_\mathrm{max})}{\alpha_{i,j}} \\
+		\frac{\partial^2\ell}{\partial\beta_{i,j}\partial\alpha_{k,j}} &= \int_{t_\mathrm{min}}^{t_\mathrm{max}}\frac{\gamma_\mathcal{D}^{i,j}(t)\lambda_\mathcal{D}^{k,j}(t)}{\alpha_{k,j}\lambda_\mathcal{D}^{j}(t)^2}d\Lambda_\mathcal{D}^j(t) \\
+		\frac{\partial^2\ell}{\partial\beta_{i,j}\partial\alpha_{k,l}} &= 0
+	\end{align}
+\end{equation*}
+
+\subsection{Continuous-State Hawkes Processes}
+
+Piecewise constant multivariate cadlag state process $X^-(t)$ with right-limit $X^+(t)$
+
+\begin{equation*}
+	\begin{align}
+		\lambda_{i,j}(t) &= \alpha_{i,j} \exp(X^-(t)\cdot b_{i,j})\int_{t_\mathrm{min}}^t \exp(X^+(s)\cdot a_{i,j}) \exp(-\beta_{i,j}(t-s)) d\Lambda_\mathcal{D}^i(s) \\
+		\lambda_j(t) &= \sum_i \lambda_{i,j}(t) \\
+		\gamma_{i,j}(t) &= -\frac{\partial\lambda_{i,j}(t)}{\partial\beta_{i,j}} = \alpha_{i,j} \exp(X^-(t)\cdot b_{i,j})\int_{t_\mathrm{min}}^t \exp(X^+(s)\cdot a_{i,j}) (t-s)\exp(-\beta_{i,j}(t-s)) d\Lambda_\mathcal{D}^i(s) \\
+	\end{align}
+\end{equation*}
+
+\begin{equation*}
+	\begin{align}
+		\ell(\alpha,\beta,a,b; \mathcal{D}) &= \sum_j\left( \int_{t_\mathrm{min}}^{t_\mathrm{max}} \log\left(\lambda_j(t)\right)d\Lambda_\mathcal{D}^j(t) - \int_{t_\mathrm{min}}^{t_\mathrm{max}}\lambda_j(t)dt \right) \\
+		\frac{\partial\ell}{\partial\alpha_{i,j}} &= \int_{t_\mathrm{min}}^{t_\mathrm{max}} \frac{\lambda_\mathcal{D}^{i,j}(t)}{\alpha_{i,j}\lambda_\mathcal{D}^j(t)}d\Lambda_\mathcal{D}^j(t) - \int_{t_\mathrm{min}}^{t_\mathrm{max}} \frac{\lambda_\mathcal{D}^{i,j}(t)}{\alpha_{i,j}}dt \\
+		\frac{\partial^2\ell}{\partial\alpha_{i,j}\partial\alpha_{i,j}} &= \int_{t_\mathrm{min}}^{t_\mathrm{max}} \left( \frac{\lambda_\mathcal{D}^{i,j}(t)}{\alpha_{i,j}^2\lambda_\mathcal{D}^j(t)} - \frac{\lambda_\mathcal{D}^{i,j}(t)}{\alpha_{i,j}^2\lambda_\mathcal{D}^j(t)} - \left(\frac{\lambda_\mathcal{D}^{i,j}(t)}{\alpha_{i,j}\lambda_\mathcal{D}^j(t)}\right)^2 \right) d\Lambda_\mathcal{D}^j(t) \\&- \int_{t_\mathrm{min}}^{t_\mathrm{max}} \left( \frac{\lambda_\mathcal{D}^j(t)}{\alpha_{i,j}^2} - \frac{\lambda_\mathcal{D}^j(t)}{\alpha_{i,j}^2} \right) dt\\
+		&= - \int_{t_\mathrm{min}}^{t_\mathrm{max}} \left(\frac{\lambda_\mathcal{D}^{i,j}(t)}{\alpha_{i,j}\lambda_\mathcal{D}^j(t)}\right)^2 d\Lambda_\mathcal{D}^j(t)\\
+		\frac{\partial^2\ell}{\partial\alpha_{i,j}\partial\alpha_{k,j}} &= \int_{t_\mathrm{min}}^{t_\mathrm{max}} \frac{\lambda_\mathcal{D}^{i,j}(t)\lambda_\mathcal{D}^{k,j}(t)}{\alpha_{i,j}\alpha_{k,j}\lambda_\mathcal{D}^j(t)} d\Lambda_\mathcal{D}^j(t)\\
+		\frac{\partial^2\ell}{\partial\alpha_{i,j}\partial\alpha_{k,l}}  &= 0\\
+		\frac{\partial\ell}{\partial\beta_{i,j}} &= -\int_{t_\mathrm{min}}^{t_\mathrm{max}}\frac{\gamma_\mathcal{D}^{i,j}(t)}{\lambda_\mathcal{D}^{j}(t)}d\Lambda_\mathcal{D}^j(t) + \Gamma_\mathcal{D}^{i,j}(t_\mathrm{max}) \\
+		&= -\int_{t_\mathrm{min}}^{t_\mathrm{max}}\frac{\gamma_\mathcal{D}^{i,j}(t)}{\lambda_\mathcal{D}^{j}(t)}d\Lambda_\mathcal{D}^j(t) + \Gamma_\mathcal{D}^{i,j}(t_\mathrm{max}) \\
+		\frac{\partial^2\ell}{\partial\beta_{i,j}\partial\beta_{i,j}} &= \int_{t_\mathrm{min}}^{t_\mathrm{max}} \left( \frac{\phi_\mathcal{D}^{i,j}(t)}{\lambda_\mathcal{D}^{j}(t)} - \left(\frac{\gamma_\mathcal{D}^{i,j}(t)}{\lambda_\mathcal{D}^{j}(t)}\right)^2 \right) d\Lambda_\mathcal{D}^j(t) - \Phi(t_\mathrm{max}) \\
+		&= \int_{t_\mathrm{min}}^{t_\mathrm{max}} \left( \frac{\phi_\mathcal{D}^{i,j}(t)}{\lambda_\mathcal{D}^{j}(t)} - \left(\frac{\gamma_\mathcal{D}^{i,j}(t)}{\lambda_\mathcal{D}^{j}(t)}\right)^2 \right) d\Lambda_\mathcal{D}^j(t) - \Phi(t_\mathrm{max}) \\
+		\frac{\partial^2\ell}{\partial\beta_{i,j}\partial\beta_{k,j}} &= -\int_{t_\mathrm{min}}^{t_\mathrm{max}}\frac{\gamma_\mathcal{D}^{i,j}(t)\gamma_\mathcal{D}^{k,j}(t)}{\lambda_\mathcal{D}^{j}(t)^2}d\Lambda_\mathcal{D}^j(t) \\
+		\frac{\partial^2\ell}{\partial\beta_{i,j}\partial\beta_{k,l}} &= 0\\
+		\frac{\partial^2\ell}{\partial\beta_{i,j}\partial\alpha_{i,j}} &= -\int_{t_\mathrm{min}}^{t_\mathrm{max}} \frac{\gamma_\mathcal{D}^{i,j}(t)}{\alpha_{i,j}\lambda_\mathcal{D}^{j}(t)} \left( 1 - \frac{\lambda_\mathcal{D}^{i,j}(t)}{\lambda_\mathcal{D}^{j}(t)} \right) d\Lambda_\mathcal{D}^j(t) + \frac{\Gamma_\mathcal{D}^{i,j}(t_\mathrm{max})}{\alpha_{i,j}} \\
+		&= -\int_{t_\mathrm{min}}^{t_\mathrm{max}} \frac{\gamma_\mathcal{D}^{i,j}(t)}{\alpha_{i,j}\lambda_\mathcal{D}^{j}(t)} \left( 1 - \frac{\lambda_\mathcal{D}^{i,j}(t)}{\lambda_\mathcal{D}^{j}(t)} \right) d\Lambda_\mathcal{D}^j(t) + \frac{\Gamma_\mathcal{D}^{i,j}(t_\mathrm{max})}{\alpha_{i,j}} \\
+		\frac{\partial^2\ell}{\partial\beta_{i,j}\partial\alpha_{k,j}} &= \int_{t_\mathrm{min}}^{t_\mathrm{max}}\frac{\gamma_\mathcal{D}^{i,j}(t)\lambda_\mathcal{D}^{k,j}(t)}{\alpha_{k,j}\lambda_\mathcal{D}^{j}(t)^2}d\Lambda_\mathcal{D}^j(t) \\
+		\frac{\partial^2\ell}{\partial\beta_{i,j}\partial\alpha_{k,l}} &= 0
+		\frac{\partial\ell}{\partial b_{i,j,k}} &= \int_{t_\mathrm{min}}^{t_\mathrm{max}} \frac{X^-(t)_k \lambda_{i,j}(t)}{\lambda_j(t)}d\Lambda_\mathcal{D}^j(t) - \int_{t_\mathrm{min}}^{t_\mathrm{max}}X^-(t)_k \lambda_{i,j}(t)dt\\
+		\frac{\partial^2\ell}{\partial b_{i,j,k}\partial b_{i,j,l}} &= \int_{t_\mathrm{min}}^{t_\mathrm{max}} \frac{X^-(t)_k X^-(t)_l \lambda_{i,j}(t)}{\lambda_j(t)}\left( 1 - \frac{\lambda_{i,j}(t)}{\lambda_j(t)} \right) d\Lambda_\mathcal{D}^j(t) \\ &- \int_{t_\mathrm{min}}^{t_\mathrm{max}} X^-(t)_k X^-(t)_l \lambda_{i,j}(t) dt\\
+		\lambda_{i,j}^k(t) &= \alpha_{i,j} \exp(X^-(t)\cdot b_{i,j})\int_{t_\mathrm{min}}^t X^+(s)_k\exp(X^+(s)\cdot a_{i,j}) \exp(-\beta_{i,j}(t-s)) d\Lambda_\mathcal{D}^i(s) \\
+		\lambda_{i,j}^{k,l}(t) &= \alpha_{i,j} \exp(X^-(t)\cdot b_{i,j})\int_{t_\mathrm{min}}^t X^+(s)_k X^+(s)_l \exp(X^+(s)\cdot a_{i,j}) \exp(-\beta_{i,j}(t-s)) d\Lambda_\mathcal{D}^i(s) \\
+		\frac{\partial\ell}{\partial a_{i,j,k}} &= \int_{t_\mathrm{min}}^{t_\mathrm{max}} \frac{\lambda_{i,j}^k(t)}{\lambda_j(t)}d\Lambda_\mathcal{D}^j(t) - \int_{t_\mathrm{min}}^{t_\mathrm{max}} \lambda_{i,j}^k(t)dt\\
+		\frac{\partial^2\ell}{\partial a_{i,j,k}\partial a_{i,j,l}} &= \int_{t_\mathrm{min}}^{t_\mathrm{max}} \left( \frac{\lambda_{i,j}^{k,l}(t)}{\lambda_j(t)} - \frac{\lambda_{i,j}^k(t)\lambda_{i,j}^l(t)}{\lambda_j(t)^2} \right) d\Lambda_\mathcal{D}^j(t) - \int_{t_\mathrm{min}}^{t_\mathrm{max}} \lambda_{i,j}^{k,l}(t)dt\\
+	\end{align}
+\end{equation*}
+
+This nests ordinary state-dependence if you have one positive and one negative kernel
+
+\subsection{Continuous-State Power Hawkes Processes}
+\begin{equation*}
+	\begin{align}
+		\lambda_\mathcal{D}^{i,j}(t) &= \alpha_{i,j} \exp(X^-(t)\cdot b_{i,j})\int_{t_\mathrm{min}}^t \exp(X^+(s)\cdot a_{i,j}) \exp(-\beta (t-s)) d\Lambda_\mathcal{D}^i(s) \\
+		\lambda_\mathcal{D}^j(t) &= \sum_i \lambda_\mathcal{D}^{i,j}(t)\right \\
+		\ell(\alpha,\beta,a,b; \mathcal{D}) &= \sum_j\left( \int_{t_\mathrm{min}}^{t_\mathrm{max}} k\log\left(\lambda_\mathcal{D}^j(t)\right)d\Lambda_\mathcal{D}^j(t) - \int_{t_\mathrm{min}}^{t_\mathrm{max}}\lambda_\mathcal{D}^j(t)^k dt \right) \\
+		\frac{\partial\ell}{\partial k} &= \sum_j\left( \int_{t_\mathrm{min}}^{t_\mathrm{max}} \log\left(\lambda_\mathcal{D}^j(t)\right)d\Lambda_\mathcal{D}^j(t) - \int_{t_\mathrm{min}}^{t_\mathrm{max}}\lambda_\mathcal{D}^j(t)^k \log(\lambda_\mathcal{D}^j(t)) dt \right) \\
+		\frac{\partial^2\ell}{\partial k\partial k} &= -\sum_j\left( \int_{t_\mathrm{min}}^{t_\mathrm{max}}\lambda_\mathcal{D}^j(t)^k \log(\lambda_\mathcal{D}^j(t))^2 dt \right) \\
+		\frac{\partial\ell}{\partial\theta_{i,j}} &= k\int_{t_\mathrm{min}}^{t_\mathrm{max}} \frac{\frac{\partial}{\partial\theta_{i,j}} \lambda_\mathcal{D}^{i,j}(t)}{\lambda_\mathcal{D}^j(t)}d\Lambda_\mathcal{D}^{j}(t) - k\int_{t_\mathrm{min}}^{t_\mathrm{max}} \lambda_\mathcal{D}^j(t)^{k-1} \frac{\partial \lambda_\mathcal{D}^{i,j}(t)}{\partial \theta_{i,j}} dt \\
+		\frac{\partial^2\ell}{\partial\theta_{i,j}\partial\theta_{i,j}} &= k\int_{t_\mathrm{min}}^{t_\mathrm{max}} \left( \frac{\frac{\partial^2}{\partial\theta_{i,j}\partial\theta_{i,j}} \lambda_\mathcal{D}^{i,j}(t)}{\lambda_\mathcal{D}^j(t)} - \left(\frac{\frac{\partial}{\partial\theta_{i,j}}\lambda_\mathcal{D}^{i,j}(t)}{\lambda_\mathcal{D}^i(t)}\right)^2 \right) d\Lambda_\mathcal{D}^{j}(t) \\
+		&- k\int_{t_\mathrm{min}}^{t_\mathrm{max}} \left( (k-1)\lambda_\mathcal{D}^j(t)^{k-2} \left(\frac{\partial \lambda_\mathcal{D}^{i,j}(t)}{\partial \theta_{i,j}}\right)^2 + \lambda_\mathcal{D}^j(t)^{k-1} \frac{\partial^2 \lambda_\mathcal{D}^{i,j}(t)}{\partial \theta_{i,j}\partial\theta_{i,j}} \right) dt \\
+		\frac{\partial \lambda_\mathcal{D}^{i,j}(t)}{\partial \alpha_{i,j}} &= \frac{\lambda_\mathcal{D}^{i,j}(t)}{\alpha_{i,j}} \\
+		\frac{\partial^2 \lambda_\mathcal{D}^{i,j}(t)}{\partial \alpha_{i,j}\partial\alpha_{i,j}} &= \frac{\lambda_\mathcal{D}^{i,j}(t)}{\alpha_{i,j}^2} \\
+		\frac{\partial \lambda_\mathcal{D}^{i,j}(t)}{\partial b_{i,j}} &= X^-(t)\lambda_\mathcal{D}^{i,j}(t) \\
+		\frac{\partial^2 \lambda_\mathcal{D}^{i,j}(t)}{\partial b_{i,j}\partial b_{i,j}} &= X^-(t) X^-(t)^T \lambda_\mathcal{D}^{i,j}(t) \\
+		\frac{\partial^2 \lambda_\mathcal{D}^{i,j}(t)}{\partial a_{i,j}\partial a_{i,j}} &= \alpha_{i,j}\exp(X^-(t)\cdot b_{i,j}) \int_{t_\mathrm{min}}^t X^+(s) X^+(s)^T \exp(X^+(s)\cdot a_{i,j})\exp(-\beta(t-s))d\Lambda_\mathcal{D}^i(s) \\
+	\end{align}
+\end{equation*}
+
+This nests the previous with $n^2$ kernels and a possible sign flip
 
 \subsection{EM for State-Dependent Hawkes Processes}
 - Equations
@@ -839,7 +985,7 @@ Markov
 		= & \int \frac{k}{\alpha}d\Lambda - k\alpha^{k-1} \int \left(\sum \exp(-\beta (t-s))\right)^k dt \\
 		\\
 		& \frac{\partial}{\partial \beta} \\
-		= & \int k \frac{\sum \exp(-\beta(t-s))(s-t)}{\sum \exp(-\beta(t-s))} d\Lambda - \alpha^k \int k \left(\sum \exp(-\beta (t-s))\right)^{k-1} \left(\sum \exp(-\beta(t-s))(s-t)\right) dt
+		= & \int k \frac{\sum \exp(-\beta(t-s))(s-t)}{\sum \exp(-\beta(t-s))} d\Lambda \\ & - \alpha^k \int k \left(\sum \exp(-\beta (t-s))\right)^{k-1} \left(\sum \exp(-\beta(t-s))(s-t)\right) dt
 		\\
 		& \frac{\partial}{\partial k} \\
 		= & \int \log(\alpha \sum \exp(-\beta(t-s))) d\Lambda - \int \log\left(\alpha\sum\exp(-\beta(t-s))\right) \left(\alpha\sum\exp(-\beta(t-s))\right)^k dt
@@ -855,7 +1001,10 @@ Markov
 	\end{align}
 \end{equation*}
 
+
 \section{Uncertainty Quantification}
+Fisher information calculations (different to observed information)
+
 Asymptotic normality
 
 Parametric Bootstrap
@@ -871,31 +1020,57 @@ Exploiting sparsity \cite{NickelLe}
 
 \textcolor{red}{Performance of information criteria for selection of Hawkes process models of financial data https://www.tandfonline.com/doi/full/10.1080/14697688.2017.1403140}
 
-\chapter{Generative Sampling}
-\section{Simulation Methods}
-Immigration-birth interpretation \cite{MorariuPatrichiPakkanen}
-(aka Watson-Galton models)
-
-\textcolor{red}{Pseudocode}
-
-Ogata thinning \bibitem{Ogata}
-
-\textcolor{red}{Pseudocode}
-
-\textcolor{red}{Do these have different time complexity? Memory complexity?}
-
-\section{Simulation Study of Estimation Methods}
-Convergence analysis for simple models (eg univariate)
-
-\section{Impulse Response Function}
-Causal analysis, price impact of orders.
-
-What does inserting a single exogenous event do to the order book, price, etc? Are there analytical formulas for this?
-
-
-\cite{AbergelJedidi} \cite{Toke} sources that use hawkes process models to simulate an order book for analysis purposes
 
 \chapter{Application to KOSPI/SPY Data} %Maybe make this 2 different chapters
+
+\textcolor{red}{Introduce}
+
+\section{Dataset}
+
+20240920 and before - ESU4 september expiry
+20240922 and after - ESZ4 december expiry
+
+\section{Point Process Modelling}
+\subsection{Santa Fe Model}
+Poisson Processes
+Add a mixture distribution to model the arrivals to the book
+Make base rate depend on volume in front and distance from mid
+\subsection{Inhomogeneity}
+
+Piecewise Linear Spline
+
+Components have the form $\lambda^e(t) = a\max(t-k,0)$
+
+\begin{equation*}
+	\begin{align}
+		\ell &= \sum_e \int \left(\log(a_e) + \log(\max(t-k,0)\right) d\Lambda_e - \sum_e \int a_e\max(t-k,0) dt \\
+			&= \sum_e \int \left(\log(a_e) + \log(\max(t-k,0)\right) d\Lambda_e - \frac{1}{2}(t_\mathrm{max} -k)^2\sum_e a_e \\
+		\frac{\partial\ell}{\partial a_e} &= \frac{1}{a_e} \Lambda_e(t_\mathrm{max}) - \frac{1}{2}(t_\mathrm{max}-k)^2\\ 
+		\frac{\partial^2 \ell}{\partial a_e ^2} &= -\frac{\Lambda_e(t_\mathrm{max})}{a_e^2}\\
+		\frac{\partial\ell}{\partial k} &= -\sum_e \int \frac{1_{t>k}}{\max(t-k,0)} d\Lambda_e - (k-t_\mathrm{max})\sum_e a_e \\
+		\frac{\partial^2\ell}{\partial k^2} &= \sum_e \int \frac{1_{t>k}}{\max(t-k,0)^2} d\Lambda_e - \sum_e a_e \\
+		\frac{\partial^2\ell}{\partial k\partial a_e} &= t_\mathrm{max}-k\\
+	\end{align}
+\end{equation*}
+
+\subsection{Hawkes Kernel}
+\subsection{State Dependence}
+discrete and regressive, as well as `reverse' state dependence - dependence on state just before triggered event rather than just state at trigerring event. Quantify which of these is the best. Feature selection using hessian info
+
+More event types with `factor' model. Marks should play as little a role as possible
+
+State variables in original MPP paper - spread, queue imbalance.
+\subsection{Regression}
+
+\subsection{Power Hawkes}
+quadratic and beyond
+
+\subsection{Idiosyncratic Daily Behaviour}
+
+
+\section{notes}
+Baseline time series model - Zero-inflated gaussian or tdist mixture with GARCH vol and autoregressive midprice changes
+
 Move from complex mark models, simple point process models $\to$ simple mark models, complex point process models. Reduces behaviour to emergence.
 
 Models for the point process
@@ -1034,6 +1209,7 @@ queue-reactive process is a little bit more fit for purpose
 
 \section{Regression on marks}
 not sure what this will look like yet. how to justify? which variables are reasonable to use?
+Show that discrete state dependence is nested inside composite model with regression on appropriately engineered features
 
 
 \chapter{Conclusion}\label{ccl}

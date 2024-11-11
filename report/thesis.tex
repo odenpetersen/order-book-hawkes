@@ -229,7 +229,7 @@ This is the abstract
 
 \chapter{Introduction}\label{s-intro}
 
-On an average day in 2023, the US stock market saw around \$500 billion dollars worth of shares traded on various exchanges and other venues, exceeding the annual GDP of a typical European country \cite{FINRA2024}. Modern securities markets facilitate the exchange of shares and other financial assets at extremely high frequency, as a result of aggressive investment in specialised networking hardware, custom-made computer architectures, and high-throughput machine learning systems. In facilitating capital flows for the global economy, financial markets have at the same time managed to claim an increasing fraction of resources and attention, with economic consequences that are not yet fully understood \cite{Palley2007}.
+On an average day in 2023, the US stock market saw around \$500 billion dollars worth of shares traded on various exchanges and other venues, almost 2\% of the annual GDP \cite{FINRA2024}. Modern securities markets facilitate the exchange of shares and other financial assets at extremely high frequency, as a result of aggressive investment in specialised networking hardware, custom-made computer architectures, and high-throughput machine learning systems. In facilitating capital flows for the global economy, financial markets have at the same time managed to claim an increasing fraction of resources and attention, with economic consequences that are not yet fully understood \cite{Palley2007}.
 
 Despite many mysteries and open questions about the origins and dynamics of market phenomena, the financial sector itself has readily adapted to the increasing scale and complexity of the markets in which it operates. The practical design of exchange rules and trading systems has in large part been an empirical endeavour on the part of market participants, operators, and regulators. Many phenomena have been observed to emerge in an apparently decentralised fashion from the application of exploitative heuristics and predictive algorithms that interact with exchanges and aggregate to produce desirable outcomes. While users of trading strategies aim to maintain acceptable risk levels while generating profits over the long term, market operators and regulators are tasked with the design of incentive mechanisms that exploit this self-interested behaviour to improve market outcomes, including reduced transaction costs, fast and accurate incorporation of external information (such as economic news or earnings reports), and adherence to various concepts of fairness, propriety, and legality.
 
@@ -260,19 +260,29 @@ Each published order represents an intention to buy (or sell) some quantity of a
 
 For example, Figure \ref{fig:limitorder} shows the structure of a limit order submitted at 9:52am, expressing an intention to sell up to two units of a particular security for a price at least as favourable as \$84.10 per unit.
 
+\textcolor{red}{Describe tick sizes, lot sizes.}
+
 \newpage
 \section{The Matching Algorithm}
 \subsection{The Bid and Ask}
-When an order insertion message is received, the exchange will attempt to form trades with the existing orders in the book such that as much volume as possible is matched. Any volume that cannot be matched will be added to the orders already in the book.
+In order to describe the process by which changes to $\mathcal{L}$ results in trades, I will consider partitioning $\mathcal{L}$ into a \textit{bid side}, $$\mathcal{L}^+=\{(1,p,t,q)\in\mathcal{L}\},$$ and an \textit{ask side}, $$\mathcal{L}^-=\{(-1,p,t,q)\in\mathcal{L}\}.$$
 
-As a result of this matching, the total volume posted to the book may be depleted over time, even in the absence of cancellations. Any time a buy order has a price equal to or greater than that of a sell order, volume will be matched and a trade will occur. Consequently, the most competitive buy price (known as the \textit{bid}) will always be less than the most competitive sell price (known as the \textit{ask}), i.e.
-	$$\text{bid}_\mathcal{L} = \max_{\left\{p : (1,p,t,q)\in\mathcal{L}\right\}} p \leq \min_{\left\{p : (-1,p,t,q)\in\mathcal{L}\right\}} p = \text{ask}_\mathcal{L}.$$
+The most competitive prices on each side of the book are known as the \textit{bid price} and \textit{ask price}, given by
+$$\text{bid}_\mathcal{L} = \max_{\left\{p : (1,p,t,q)\in\mathcal{L}\right\}} p,$$
+$$\text{ask}_\mathcal{L} = \min_{\left\{p : (-1,p,t,q)\in\mathcal{L}\right\}} p.$$
+These prices are known as the \textit{top levels} of the order book.
 
-An excessively high bid price will be depleted by traders seeking to sell the product at a premium to its true value. Conversely, an excessively low ask price will be pushed up by participants hoping to buy at a discount. It is therefore common to regard the bid and ask as lower and upper bounds respectively on the consensus fair price of the product.
+Whenever an order insertion message is received whose addition would result in $\text{bid}_\mathcal{L}\geq \text{ask}_\mathcal{L}$, the exchange will attempt to form trades with the existing orders on the opposing side of the book, such that as much volume as possible is matched. Existing orders on the opposing side of the book will be removed or depleted to equal the volume of the incoming order, and volume that cannot be matched at a price agreeable to the incoming order will finally be added to \mathcal{L}. As a result of this process, the invariant
+$$\text{bid}_\mathcal{L} < \text{ask}_\mathcal{L}$$
+is maintained after the processing of each book event.
+
+Because existing orders in $\mathcal{L}$ may be matched against incoming orders, the total volume posted to the book may be depleted over time, even in the absence of cancellations.
+
+A book whose bid price exceeds the fair value of the product will be depleted on the bid side by traders seeking to sell the product at a premium to its true value. Conversely, an ask price below the fair value will be forced up by participants hoping to buy at a discount. It is therefore common to regard the bid and ask as lower and upper bounds respectively on the consensus fair price of the product.
 
 Motivated by this, the \textit{midprice} is a naive point estimate for the consensus fair price, defined by
 	$$\text{mid}_\mathcal{L} = \frac{1}{2}\left(\text{bid}_\mathcal{L} + \text{ask}_\mathcal{L}\right).$$
-Many other proxies for the consensus fair price exist, and it is common to use these as prediction targets in the construction of trading signals. \textcolor{red}{I might discuss them later}
+Many other proxies for the consensus fair price exist that make greater use of information contained in $\mathcal{L}$, and it is common to use these as prediction targets in the construction of trading signals. \textcolor{red}{I might discuss them later}
 
 \begin{figure}[h]
 \begin{tikzpicture}
@@ -316,25 +326,42 @@ Many other proxies for the consensus fair price exist, and it is common to use t
 \filldraw[black] (0,-0.5) circle (2pt) node[anchor=west]{mid};
 \filldraw[black] (0,-1.5) circle (2pt) node[anchor=east]{bid};
 \end{tikzpicture}
-\caption{An example order book, arranged by order price and time}
+\caption{An example order book, arranged by order price and time}\label{examplebook}
 \end{figure}
 
 \subsection{Liquidity}
-At any point in time, the contents of the limit order book represent trading opportunities presented to all market participants. The abundance of these opportunities, also known as \textit{liquidity}, represents a positive externality insofar as it allows impatient traders (\textit{liquidity takers}) to buy or sell products precisely under those circumstances where it is favourable to them. Conversely, order publishers (\textit{liquidity providers}) must adhere to the terms of trades formed against a posted order, regardless of whether it is in their interests.
+At any point in time, the contents of the limit order book represent trading opportunities presented to all market participants. The abundance of these opportunities, also known as \textit{liquidity}, represents a positive externality insofar as it allows impatient traders (\textit{liquidity takers}) to buy or sell products precisely under those circumstances where it is favourable to them. Conversely, order publishers (\textit{liquidity providers}) must adhere to the terms of trades formed against a posted order, regardless of whether it is in their interests at the time the trade occurs.
 
 One common measure for market liquidity is the \textit{bid-ask spread}, defined as
 	$$\text{spread}_\mathcal{L} = \text{ask}_\mathcal{L} - \text{bid}_\mathcal{L}.$$
-Notably, if $\text{mid}_\mathcal{L}$ is taken to represent the fair value of the product, the \textit{half-spread}, i.e. $\frac{1}{2}\text{spread}_\mathcal{L}$, represents the premium paid to liquidity providers by participants trading against the posted bid or ask. There are many other components and measures of liquidity \textcolor{red}{which I may discuss later}.
+This can be described in units of price, but may also be described as a percentage of the midprice or as a multiple of the tick size (in which case we say the market is $n$ ticks wide at some point in time).
+Notably, if $\text{mid}_\mathcal{L}$ is taken to represent the fair value of the product, then the \textit{half-spread}, i.e. $\frac{1}{2}\text{spread}_\mathcal{L}$, represents the premium paid to liquidity providers by participants trading against the posted bid or ask. There are many other aspects of liquidity, including the quantity posted at each level, and the impact (instantaneous and permanent) of trades on the order book, \textcolor{red}{which I may discuss later}.
 
-\subsection{Price-Time Priority}
+\textcolor{red}{Adverse selection: large orders predict price moves}
 
-\textcolor{red}{Explain - adverse selection?}
+\subsection{Queue Priority}
+When an order is submitted to the matching engine resulting in a trade, there may be some ambiguity about which existing orders it is to be matched against. For instance, consider the book displayed in figure~\ref{examplebook}, with a bid price of $83.9$ and an ask price of $84.1$, and suppose that a new buy order $(1,84.2,9:53,2)$ arrives. Because the buy order has a price of $84.2$, its addition to the book would raise the bid price to $84.2$, exceeding the ask price of $84.1$. Consequently, it needs to be matched against any of the sell orders with a price at least as favourable as $84.2$, i.e. $(-1,84.1,9:26,3)$, $(-1,84.1,9:52,2)$, and $(-1,84.2,9:10,1)$. It is not initially clear whether we should match two units against the first order, or against the second order, or match one unit against each of any two orders.
+
+To eliminate this ambiguity, \textit{queue priority} rules are set out that describe how to match incoming orders against opposing orders. In almost all cases, these rules obey \textit{price priority}, where an existing order can only participate in a match if every order on the same side with a more competitive price has already been matched in full. This incentivises participants to submit orders with maximally competitive prices to increase the probability of a match, decreasing the bid-ask spread.
+
+Beyond this, the two most common matching rules are known as \textit{time priority} and \textit{pro-rata}, which govern how matches are assigned in the case where orders have identical prices. Time priority requires that an order cannot participate in a match until all orders at the same price that have an earlier submission time have been fully matched. This incentivises early submission of orders and disincentivises cancellations. Pro-rata matching, on the other hand, seeks to allocate matches among orders with the same price in approximate proportion to the number of units in each order.
+
+The ES and MES contracts traded on the Chicago Mercantile Exchange, which I will consider in \textcolor{red}{which chapter}, follow a pro-rata matching rule set out in \textcolor{red}{citation}. In order to determine a match from orders at a given price level, the size of each existing order is divided by the sum of all order sizes at that level, and this fraction is multiplied by the size of the incoming order and rounded down to the nearest integer. If the allocated trade quantity is less than two, it is rounded down to zero. After matching has taken place in this fashion, there may still be unmatched units in the incoming order, in which case they are matched against the remaining orders on the level according to time priority, and then if there are still unmatched units in the incoming order they may be matched against the next best price level or added to the order book.
+
+% https://cmegroupclientsite.atlassian.net/wiki/spaces/EPICSANDBOX/pages/46110273/Supported+Matching+Algorithms#SupportedMatchingAlgorithms-Pro-Rata
 
 \section{Queueing Models of the Order Book}
+Changes in the price of a product over time may be viewed as emergent from individual order book events. For instance, changes to either the bid or ask price must result either from the addition of orders to the book or the depletion of a level due to cancellations or trades. From this perspective, the midprice is seen to follow a jump process governed by the evolution of the order book, which in turn is governed by the arrival of insertions or cancellations.
 
-\textcolor{red}{Yet to be fully written}
+Analysing price changes from the perspective of event arrivals was originally \textcolor{red}{(double check originality)} proposed in \textcolor{red}{cite the sante fe paper}
+%https://www.researchgate.net/publication/10810561_Quantitative_Model_of_Price_Diffusion_and_Market_Friction_Based_on_Trading_as_a_Mechanistic_Random_Process
+, where the arrival of order insertion and cancellation are taken to be governed by a Poisson process model. Despite the simplicity of their approach, they show that it replicates known empirical findings apparently unrelated to the model specification, such as the concavity of price impact (the expected change in midprice) as a function of trade size. This has come to be known as the Santa Fe model for limit order book evolution.
 
-Queue depletions are related to price changes \cite{BouchaudEtAl}
+Chapter 5 of Bouchaud et. al. (2018) proposes queueing models for the top levels of the order book in a one-tick wide market. Under the assumption of Poisson processes for arrivals of insertion and cancellation requests at these levels (assuming identical rate parameters for the bid and ask), they 
+\textcolor{red}{Describe Bouchaud et al work}
+\cite{BouchaudEtAl}
+
+\textcolor{red}{Describe queue imbalance. It will be referred to later on}
 
 Evolution of the limit order book over time $\to$ motivate the emphasis on modeling arrival times
 
@@ -360,8 +387,8 @@ Concretely, $T$ may be chosen to be $\mathbb{R}_{\geq 0}$, and equipped with the
 
 The times in the point process are often referred to as \textit{event times}, with the implication that the sequence represents the times at which some event of interest occurs (for instance, the arrival of messages sent to a matching engine).
 
-{\noindent}For any point process, there exists a corresponding càdlàg stochastic process $N_{\mathcal T}:T\times\Omega\to\mathbb{N}$ known as the \textit{counting process}, that gives the number of events having occurred before or at a given time. This is defined as
-$$N_{\mathcal T}(t,\omega) = \vert \{i\in\mathbb N \vert \mathcal{T}(\omega)_i \leq t\} \vert.$$
+{\noindent}For any point process, there exists a corresponding càdlàg stochastic process $N_{\mathcal T}:\Omega\times T\to\mathbb{N}$ known as the \textit{counting process}, that gives the number of events having occurred before or at a given time. This is defined as
+$$N_{\mathcal T}(\omega,t) = \vert \{i\in\mathbb N \vert \mathcal{T}(\omega)_i \leq t\} \vert.$$
 
 \textcolor{red}{Overlay barcode plot for trade times with corresponding counting process}
 
@@ -396,7 +423,7 @@ Then, since $A_n$ are measurable sets, the indicator functions are each measurab
 
 \subsection{Intensity of a Point Process}
 For a point process $\mathcal{T}$, the counting measure of a half-open interval $(t,t+\epsilon]$ can be written in terms of the counting process $N_\mathcal{T}$ in the form
-$$\Lambda_\omega\left((t,t+\epsilon]\right) = N_\mathcal{T}(t+\epsilon,\omega) - N_\mathcal{T}(t,\omega).$$
+$$\Lambda_\omega\left((t,t+\epsilon]\right) = N_\mathcal{T}(\omega,t+\epsilon) - N_\mathcal{T}(\omega,t).$$
 Integrating out $\omega$ with respect to $\mathbb{P}$ then gives us the identity
 $$\Lambda_\mathbb{P}\left((t,t+\epsilon]\right) = \mathbb{E}_\mathbb{P}\left[N_\mathcal{T}(t+\epsilon)\right] - \mathbb{E}_\mathbb{P}\left[N_\mathcal{T}(t)\right],$$
 allowing us to write the expectation measure in terms of a finite difference of the first moment of $N_\mathcal{T}$.
@@ -416,37 +443,44 @@ $$\Lambda_{\mathbb{P}}\left((t,t+\epsilon]\right)=\lambda_{\mathbb{P}}(t)\cdot\e
 Therefore the expected number of events occurring in a small interval $(t,t+\epsilon]$ is approximately proportional to its length.
 
 If we instead take the expectations above conditioned on $\mathcal{F}_t$, we can define a stochastic process
-$$\lambda(t,\omega) \coloneq \lim_{s\to t^-}\lambda_{\mathbb{P}\vert\mathcal{F}_s}(t,\omega)$$
-as the left limit of the expectation density as the filtration index approaches $t$.
+$$\lambda(\omega,t) \coloneq \lim_{s\to t^-}\lambda_{\mathbb{P}\vert\mathcal{F}_s}(\omega,t)$$
+as the left limit of the expectation density as the filtration index approaches $t$. This is commonly known as the \textit{intensity} or \textit{arrival rate} of the point process, and represents the expected number of events that will arrive in the next $\epsilon$ units of time, for very small $\epsilon$, based on the information contained in the filtration up to time $t$.
+
+\textcolor{red}{Show that $\mathbb{E}_{\mathbb{P}\vert\mathcal{F}_s}[\lambda(\omega,t)] = \lambda_{\mathbb{P}\vert\mathcal{F}_s}(t)$ for $s<t$}
 
 \textcolor{red}{Add a note somewhere to check the whole document for correct usage of left vs right limit of $\lambda$. This is very important.}
-
-known as the \textit{intensity} or \textit{arrival rate} of the point process. This represents our best estimate of the number of events that will arrive in the next $\epsilon$ units of time, for very small $\epsilon$, based on all the information contained in the filtration up to $t$.
 
 \textcolor{red}{Existence and uniqueness shown in https://projecteuclid.org/journals/annals-of-probability/volume-24/issue-3/Stability-of-nonlinear-Hawkes-processes/10.1214/aop/1065725193.full under restrictions on the kernel}
 
 \subsection{Residuals and the Compensator Process}
-\textcolor{red}{Define residuals, explain why they're $Exp(1)$ distributed}
-Notation for $i$-th residual is just $r_i$
-\textcolor{red}{They're independent according to theorem 3.3 from MORARIU-PATRICHI, M. AND PAKKANEN, M. S.}
+Given some point process $\mathcal{T}$ with intensity $\lambda$, we may define the stochastic process
+$$\bar\Lambda(\omega,t)=\int_{t_\mathrm{min}}^t \lambda(\omega,s)ds,$$
+known as the \textit{compensator process} of $\mathcal{T}$. Since $\lambda$ is adapted to some filtration $\mathcal{F}$, it follows \textcolor{red}{why} that $\bar\Lambda$ will be similarly adapted to $\mathcal{F}$.
 
-\textcolor{red}{Define the compensator process $\bar\Lambda(t,\omega)=\int_{t_\mathrm{min}}^t \lambda(s,\omega)ds$ for a point process with intensity process $\lambda(t)$. Note properties of this. I make use of this notation in the estimation chapter.}
+Since $\lambda$ is positive \textcolor{red}{what if its zero?}, any realisation of $\bar\Lambda$ must be increasing in $t$. The random sequence $\tau(\omega)=\left\{\bar\Lambda(\omega,\mathcal{T}(\omega)_i)\right\}_{i\in\mathbb{N}}$ will therefore be increasing for each $\omega$, making it a point process. Theorem 7.4.1 from Daley and Vere-Jones (2003) \cite{DaleyVereJones} demonstrates that regardless of the initial point process $\mathcal{T}$, the transformed process $\tau$ is a Poisson process with unit rate, implying that the quantities
+$$r_i(\omega)\coloneq \int_{\mathcal{T}(\omega)_i}^{\mathcal{T}(\omega)_{i+1}}\lambda(\omega,t)dt = \tau(\omega)_{i+1}-\tau(\omega)_{i}$$
+for each $i\in\mathbb{N}$ are independent and follow an $\mathrm{Exp}(1)$ distribution.
+
+These are commonly known as the \textit{residuals} of the point process, and serve as a common diagnostic tool for evaluating model quality. Deviation from $\mathrm{Exp}(1)$ or serial dependence between residuals are common signs of model misspecification or misestimation, and may give qualitative hints about how to improve the fit of a model to empirical data.
 
 \subsection{Marked and Multivariate Point Processes}
 
 A point process \mathcal{T} may be \textit{marked}, in which case it is associated with one or more random sequences of marks $$\mathcal{X}:\Omega\to X^\mathbb{N},$$
 drawn from a set $X$, that represent additional information about each event. These may be adapted to the filtration $\mathcal{F}$ \textcolor{red}{In what sense?}
 
-A common special case of this is when $\mathcal{X}$ is partitioned into a finite number of \textit{event types}, in which case we may refer to $\mathcal{T}$ as a \textit{multivariate point process}.
+A common special case of this is when $X$ is partitioned into a set $E$ of \textit{event types}, and define a random sequence $\mathcal{E}\in E^\mathbb{N}$ whose $i$th entry is the event type of $\mathcal{X}_i$. In this case we may refer to $(\mathcal{T},\mathcal{E})$ as a \textit{multivariate point process}.
 
-Each part $E$ of the partition then has an associated point process $$\mathcal{T}_E = \mathcal{T}_{\{n\in\mathbb{N} : \mathcal{X}_n\in E\}},$$ formed by the subsequence of times where the corresponding element of $\mathcal{X}$ is in $E$. These point processes will then have their own counting functions, intensities, and other characteristics. It is common to arrange these in vector form, with one entry for each event type.
+Each part $e$ of the partition then has an associated point process $$\mathcal{T}_e = \mathcal{T}_{\{n\in\mathbb{N} : \mathcal{X}_n\in e\}},$$ formed by the subsequence of times where the corresponding element of $\mathcal{X}$ is in $e$. These point processes will then have their own counting functions, intensities, and other characteristics. It is common to arrange these quantities in vector form, with one entry for each event type. For instance, the counting function of a multivariate point process will be a function $N_\mathcal{T}:\Omega\times T \to \mathbb{N}^{\vert E\vert}$.
 
-On the other hand, given a collection of point processes adapted with respect to a common filtration, we can form a single marked point process by interleaving the sequences of event times. The counting process, counting measure, expectation measure, and intensity of the combined process will be the sum of those for the individual point processes.
+On the other hand, given a collection of point processes adapted with respect to a common filtration, we can form a single marked point process by interleaving the sequences of event times. The counting process, counting measure, expectation measure, and intensity of the combined process will be the sum of those for the individual point processes. \textcolor{red}{Can i relate this to composite point processes}
 
 \textcolor{red}{Barcode plot and counting process for buys and sells, and the combined process}
 
 %Marked point processes have marks that are not independent of the point process itself. This is probably important to note. Continuous marks can also have this property; usually they won't affect the future behaviour of the point process though.
 
+\subsection{Composite Point Processes}
+Given point processes $\mathcal{T}_1, \mathcal{T}_2, \ldots \mathcal{T}_n$ whose counting processes are adapted to a common filtration $\mathcal{F}$, we may construct a \textit{composite point process} whose set of event times is the union of the event times in each $\mathcal{T}$.
+\textcolor{red}{Define these in a way that leads into hawkes processes. They should be adapted to the natural filtration on the overall point process (NOT the individual point processes, this would preclude interaction between them)}
 
 \section{Point Process Models of Book Updates}
 
@@ -457,142 +491,119 @@ For each extension:
 
 
 \subsection{Poisson Processes}
-The simplest modeling assumption we can make is to assume that the intensity of the process is a constant $\nu\in\mathbb{R}$. A Poisson process is a point process for which the following two properties hold.
+The simplest modeling assumption we can make is to assume that the intensity of the process is a constant $\nu\in\mathbb{R}$. A point process \mathcal{T} whose intensity $\lambda$ is given by some positive constant $\nu$ is known as a Poisson process. Equivalently, if $\mathcal{T}$ has counting measures $\Lambda_\omega$, we say that it is a Poisson process with rate $\nu$ if and only if the following two properties hold:
 \begin{enumerate}
 	\item For any finite collection of disjoint measurable sets $A_n\in\Sigma_T$, their counting measures $\Lambda_\omega(A_n)$ are independent random variables.
 	\item For any measurable set $A\in\Sigma_T$, we have $$\Lambda_{\mathbb P}(A) = \nu \mu_{\mathrm{Lebesgue}}(A)\propto\mu_{\mathrm{Lebesgue}}(A).$$
 \end{enumerate}
 \textcolor{red}{Why is this the same as saying that the intensity is constant?}
+The random variables $\mathcal{T}(\omega)_{i+1}-\mathcal{T}(\omega)_i$ for each $i\in\mathbb{N}$ will then be independently $\mathrm{Exp}(\nu)$ distributed, with a mean of $\frac{1}{\nu}$. \textcolor{red}{Is there a quick proof of this}
+
+By Markov's inequality, we know that
+\begin{equation*}
+	\begin{align}
+		\mathbb{P}\left(\mathcal{T}(\omega)_k\leq k^2) &= \mathbb{P}\left(-\mathcal{T}(\omega)_k\geq -k^2\right) \\
+		&\leq \frac{\mathbb{E}_\mathbb{P}[\mathcal{T}(\omega)_k]}{k^2} = \frac{\mathbb{E}_\mathbb{P}[\sum_{j=0}^{k-1} \mathcal{T}(\omega)_{j+1}-\mathcal{T}(\omega)_j]}{k^2} = \frac{k}{k^2\nu} = \frac{1}{k\nu}, \\
+	\end{align}
+\end{equation*}
+from which it follows that
+$$\lim_{n\to\infty} \mathcal{T}(\omega)_n = \infty, \mathbb{P}\text{-a.s.},$$
+and hence the Poisson process is non-explosive.
 
 In the multivariate case with $n$ event types, we have a vector $\nu\in\mathbb{R}_{>0}^n$ containing the constant intensities of each individual point process.
-
-\textcolor{red}{This definition might require a reference.}
-
-\textcolor{red}{Is there a proof of existence and nonexplosiveness?}
-
-\textcolor{red}{Explain why the times between events are exponentially distributed. Can use the linearity of residuals to prove this succinctly, since residuals are exponentially distributed.}
-
-\textcolor{red}{There is a link here to the sante fe order book model, described in the Bouchaud source, which is an example of the application of poisson arrivals.}
 
 \includegraphics[width=0.75\textwidth]{poisson_sim.png}
 
 \textcolor{red}{I think I should change this to be separate plots. Can show the intensity function for each; e.g. for inhomogenous it's the same for every realisation, but for hawkes process the intensity function is itself random.}
 
 \subsection{Inhomogeneous Poisson Process}
-An inhomogeneous Poisson process is a generalisation of the Poisson process for which the second condition is replaced by the weaker requirement that every measurable set $A\in\Sigma_T$ with finite Lebesgue measure $\mu_{\mathrm{Lebesgue}}(A)$ has a finite expectation measure. \textcolor{red}{Is this weaker version even needed, or is it sufficient to just drop the condition entirely?}
+An inhomogeneous Poisson process is a generalisation of the Poisson process for which the second condition is replaced by the weaker requirement that every measurable set $A\in\Sigma_T$ with finite Lebesgue measure $\mu_{\mathrm{Lebesgue}}(A)$ has a finite expectation measure, and every $A$ satisfying $\mu_\mathrm{Lebesgue}(A)=0$ also satisfies $\Lambda_\mathbb{P}(A)=0$.
 
-As a result, although the intensity $\lambda(t,\omega)$ is constant in $\omega$ (i.e. deterministic) \textcolor{red}{how do we know it is?}, it can vary as a function of $t$. This is useful for modeling deterministic seasonality in the point process, such as having more events near the start/end of each trading session or near known events such as news releases.
+By the Radon-Nikodym theorem, since $\Lambda_\mathbb{P}$ is absolutely continuous with respect to $\mu_\mathrm{Lebesgue}$, the expectation density $\lambda_\mathbb{P}$ exists. Furthermore, because the counting measure on $(t,t+\epsilon]$ is independent from the counting measure on any disjoint set, we have that $\lambda_\mathbb{P}(\omega,t)$ is adapted to the same filtration $\mathcal{F}$ as the counting process, from which it follows that the intensity process is simply $\lambda=\lambda_\mathbb{P}$ and is therefore constant with respect to $\omega$.
+
+Since $\lambda$ is deterministic, the compensator process $\bar\Lambda$ will also be deterministic (i.e. a function of $t$ only), which allows us to simulate an inhomogenous point process by taking the random sequence $\left\{{\bar\Lambda}^{-1}(\tau(\omega)_i)\right\}_{i\in\mathbb{N}}$ for some Poisson process $\tau$, so long as the inverse function ${\bar\Lambda}^{-1}$ exists (i.e. $\bar\Lambda$ is strictly increasing).
+
+Deterministic variation in $\lambda$ as a function of $t$ is useful for modeling deterministic seasonality in the point process, such as having more events near the start and end of each trading session, or near known events such as news releases.
 
 \textcolor{red}{Show U-shape from empirical data}
 \textcolor{red}{Show U-shape from quadratic IPP}
 
-\subsection{Composite Point Processes}
-\textcolor{red}{Define these in a way that leads into hawkes processes. They should be adapted to the natural filtration on the overall point process (NOT the individual point processes, this would preclude interaction between them)}
-
-\subsection{Autoregressive Point Processes}
-In the case of the homogenous and inhomogenous poisson processes, the intensity function is deterministic. While such an assumption for modeling the arrival of independent events, it is common in financial markets for events to ``cluster'' together in a non-deterministic fashion, with the intensity dependent on the recency of previous event occurrences. One explicit test for this is to examine the autocorrelation of residuals, \textcolor{red}{which will be covered in some section of the applications chapter}.
+\subsection{Hawkes Processes}
+In the case of the homogenous and inhomogenous Poisson processes, the intensity function is deterministic, i.e. constant in $\omega$. While such an assumption is appropriate for modeling the arrival of independent events, it is common in financial markets for events to ``cluster'' together in a non-deterministic fashion, with the intensity dependent on the recent historical behaviour of the point process. One explicit test for this phenomenon is to examine the autocorrelation of residuals of an inhomogenous Poisson process model, \textcolor{red}{which will be covered in some section of the applications chapter}.
 \textcolor{red}{Show ACF of inter-arrival times}
 
-The increase in intensity seen after a series of related events in quick succession is known as \textit{self-excitation}\footnote{In the case of multivariate point processes, interactions between event types are often called \textit{cross-exciting}. The opposite behaviour, where recent occurrences temporarily decrease the intensity, is known as \textit{self-inhibition} or \textit{cross-inhibition}.}, and requires us to introduce a stochastic component to the intensity of our model that will depend on the realised history of the point process up until $t$. By analogy with time series literature, the dependence of forecasts on recent history is referred to as \textit{autoregressive}.
+The increase in intensity seen after a series of related events in quick succession is known as \textit{self-excitation}\footnote{In the case of multivariate point processes, interactions between different event types are often called \textit{cross-exciting}. The opposite behaviour, where recent occurrences temporarily decrease the intensity, is known as \textit{self-inhibition} or \textit{cross-inhibition}.}, and requires us to introduce a stochastic component to the intensity of our model that will depend on the realised history of the point process up until $t$. By analogy with time series literature, the dependence of forecasts on recent history is referred to as \textit{autoregressive}.
 
 A popular class of autoregressive models are known as \textit{Hawkes Processes}, first introduced by 
 \textcolor{red}{Original hawkes process paper https://academic.oup.com/biomet/article-abstract/58/1/83/224809?redirectedFrom=fulltext}
 \textcolor{red}{Discuss history of their application to financial datasets}
 
-Hawkes process models require that the intensity process have the functional form
-$$\lambda(t,\omega) = \nu + \int_{t_\mathrm{\min}}^t k(t-s)d\Lambda_\omega(s),$$
-where $\nu\in\mathbb{R}_{>0}$ represents a constant arrival rate, $k$ is a kernel function encoding the self-excitation behaviour of each event, and $t_\mathrm{\min}$ is the earliest time events can occur, such as the opening time of a trading session.
-\textcolor{red}{Existence of such processes is established... where?}
+Univariate Hawkes process models require that the intensity process have the functional form
+$$\lambda(\omega,t) = \nu + \int_{t_\mathrm{min}}^t k(t-s)d\Lambda_\omega(s),$$
+where $\nu\in\mathbb{R}_{>0}$ represents a constant arrival rate, $k$ is a kernel function encoding the impact of each event on the future intensity, and $t_\mathrm{\min}$ is the earliest time events can occur, such as the opening time of a trading session. I will assume that $k$ takes positive values for nonnegative arguments, and is zero for negative arguments. \textcolor{red}{Existence and nonexplosiveness of such processes is established... where?}
 
-Long-run mean $$\overline\lambda = \lim_{t\to\infty} \mathbb E\left[\lambda(t)\right]$$
+In the case of a multivariate point process $(\mathcal{T},\mathcal{E})$, we can generalise this functional form to
+$$\lambda_e(\omega,t) = \nu_e + \sum_{e'} \int_{t_\mathrm{min}}^t k_{e',e}(t-s)d\Lambda_\omega^{e'}(s),$$
+where $k_{e',e}$ is the kernel associated with the pair of event types $(e',e)\in E^2$. For convenience, we can arrange the $\lambda_e(\omega,t)$ and $\Lambda_\omega$ into $\vert E\vert$-dimensional vector-valued functions $\lambda(\omega,t)$ and $\Lambda_\omega$. Similarly, the base rates $\nu_e$ can be arranged into a vector $\nu$, and the functions $k_{e',e}$ into a matrix-valued function $k(t-s)$. Then finally we have
+$$\lambda(\omega,t) = \nu + \int_{t_\mathrm{min}}^t k(t-s)^T d\Lambda_\omega(s).$$
 
-$$\bar\lambda = \nu + \bar\lambda \int_0^\infty k(t)dt$$
+Let $K(t)=\int_0^t k(u)du$.
 
-Stability requires $\int_0^\infty k(t)dt < 1$. Not sure if sufficient condition.
+\textcolor{red}{Since $\lambda$ can't take on negative values, the kernel function must be positive. Show also that it must have finite L1 norm}
 
-Multidimensional:
-$$\bar\lambda = \nu + K \bar\lambda$$
-$$\bar\lambda = (I-K)^{-1}\nu$$
-Requires $\vert\det K\vert < 1$ (why? and what about if there are directions orthogonal to $\nu$?)
-\textcolor{red}{Define K}
+It is possible to generate samples from a multivariate Hawkes process $(\mathcal{T},\mathcal{E})$ in the following manner. Firstly, draw samples from a multivariate Poisson process $\mathcal{T}'$ with rate $\nu$, and let $\tau_0$ be the resulting sequence of pairs $(t,e)\in T\times E$, ordered by time. For each $e$, we have the function $K_{e_i,e}$ and its inverse function $K_{e_i,e}^{-1}$. Draw samples from an independent Poisson process $\pi_i^e$ with unit rate until one of the times exceeds $K_{e_i,e}(\infty)$. Following this, let $$g_i^e=\{(K_{e_i,e}^{-1}(t)+\tau_{i,i}',e) \vert t\in\pi_i^e\},$$ where $\tau_{i,i}'$ is the time component of the pair $\tau_{i,i}$. Lastly, let $$\tau_{i+1}=\tau_i\cup \bigcup_{e\in E}g_i^e.$$ Then the sequence of pairs $\{\tau_{i,i}\}_{i\in\mathbb{N}}$ will be distributed in accordance with the desired multivariate Hawkes process. \textcolor{red}{Proof? or source? Immigration-birth interpretation \cite{MorariuPatrichiPakkanen} (aka Watson-Galton models). Introduce the term \textit{parent event}}
+\textcolor{red}{Stability criterion. I think it's $\det K<1$. but how to prove. have $\bar\lambda = (I-K)^{-1}\nu$.}
 
-Why use exponential kernel? Possible reasons why others might be more correct eg polynomial kernel captures long memory better
-Special case of $\beta=0$ may be worth including in the final kernel. (Integrated point process?)
+For computational simplicity, it is often convenient to use a kernel of the form
+$$k_{e',e}(u) = \sum_i \alpha_{e',e,i}\exp(-\beta_{e',e,i} u),$$
+for some real numbers $\alpha_{e',e,i}$ and positive real numbers $\beta_{e',e,i}$.
+Suppose that $k_{e',e}$ has some different functional form, but is still continuous. The Weierstrass approximation theorem guarantees that every continuous function on some closed interval can be uniformly approximated as closely desired by polynomials. Since polynomials in $\exp(-u)$ with no constant term can be written in the above form, and this is a continuous bijective function of $u$, it follows that any continuous function on a closed interval can be approximated arbitrarily well by a kernel of this form and a constant term. Since the constant term is arbitrarily well approximated by very small values of $\beta_{e',e,i}$, we can approximate any other continuous kernel function arbitrarily well by a linear combination of decreasing exponentials.
+\textcolor{red}{This proof needs more detail. Use triangle inequality}
+
+\textcolor{red}{Explain why it is better computationally}
 
 According to \texttt{https://ieeexplore.ieee.org/document/7416001 https://arxiv.org/pdf/1401.0903}, hawkes processes are fully determined by the first two moments of the intensity function. Proof in the paper.
 
-\subsection{Quadratic Hawkes Processes}
-\textcolor{red}{We'll see}
-
 \subsection{State Dependence}
-Vinovskaya proposes regime-switching independent of the point process
-Moriaru-Patrichi and Pakkanen generalise this by coupling state transitions with the event sequence. They consider conditioning on only the state of the triggering event (their 2.3), as well as conditioning on both the state of the triggering event and the current state (their 4.2).
-Moriaru-Patrichi and Pakkanen find that conditioning on the state of the order book improves the fit of the model. (How?)
+Just as the arrivals of events in the limit order book governs the evolution of its state over time, we might reasonably expect that the arrival rate of certain kinds of events is dependent on the present state of the order book, as captured by a variety of features. Vinkovskaya (2014) \cite{Vinkovskaya} proposed a regime-switching variant of the Hawkes process model for which the kernel function additionally depends on whether the market was one tick wide at the time of the parent event, finding a greater self-excitation effect for the various event types in the one-tick-wide regime.
 
-``Cohen and Elliott (2013) introduce a one-dimensional Markov-modulated Hawkes process following (2.4), where X is an exogenous Markov process in a finite state space (exogenous in the sense that the counting process does not influence X).  The key feature of their work is that they assume X to be unobservable, leading them to derive a filtering procedure for the estimation of the current state of X.'' (hidden states)
+Moriaru-Patrichi and Pakkanen (2022) \cite{MoriaruPatrichiPakkanen} find similarly that a regime-switching variant learns different parameters for the one-tick-wide regime, as well as in a model using five different states based on queue imbalance. Their work is distinguished from prior regime-switching approaches in the sense that they also model the evolution of the order book state over time as a finite state-switching process, with transition probabilities at each event time also dependent on the event type. While this coupling of a point process model with state-switching behaviour admits broader application than simple modeling of arrival times, this is not the primary focus of the work, and the simple nature of their state model leaves room for further extension.
 
+The model of \cite{MoriaruPatrichiPakkanen} takes the form
+$$\lambda_e(\omega,t) = \nu_{\mathcal{X}(\omega,t),e} + \sum_{e'\in E}\int_{t_\mathrm{min}}^t k_{\mathcal{X}(\omega,s),e',e}(t-s)d\Lambda_\omega^{e'}(s),$$
+where $\mathcal{X}(\omega,t)$ is a discrete-valued stochastic process representing the order book state, with jumps only at the event times of the point process.
 
-`` This two-way interaction between N and X makes them fully coupled, just like the order flow and the state of the LOB in an order-driven market. It also distinguishes the model from the existing regime switching Hawkes processes (Wang et al., 2012; Cohen and Elliott, 2013; Vinkovskaya, 2014; Swishchuk and Huffman, 2020), where the state process evolves exogenously, receiving no feedback from the point process''
+Notably, the focus of prior work has been primarily on the case with a finite number of discrete states, possibly obtained by discretisation of a continuous quantity such as queue imbalance. Consideration of multiple state variables quickly becomes difficult, as the number of states grows exponentially in the number of independent state variables. No prior information is taken into account regarding the monotonicity of excitation with respect to continuous state variables, and no extrapolation can take place on this basis.
 
+It also seems important for the model to update based on the very latest information about the state of the order book. Presently, such information is only taken into account at the times of the parent events, and may well be out of date at the time when the intensity function is evaluated. To address this, I will first propose a more general model of the form
+$$\lambda_e(\omega,t) = \nu_{\mathcal{X}(\omega,t),e} + \sum_{e'\in E}\int_{t_\mathrm{min}}^t k_{\mathcal{X}(\omega,s),\mathcal{X}(\omega,t),e',e}(t-s)d\Lambda_\omega^{e'}(s).$$
 
-The first of these:
-	$$\tilde\lambda_{ex}(t)=\phi_e(X(t),x)\left(\nu_e+\sum_{e'\in\mathcal E,x'\in \mathcal X}\int_{[0,t)}k_{e',e}(t-s,x')d\tilde N_{e'x'}(s)\right), & t\geq 0, & e\in\mathcal E, & x\in\mathcal X.$$
+Assuming that for each $(e',e)$ the kernel function $k$ is separable in $\mathcal{X}(s)$, $\mathcal{X}(t)$, and $t-s$, \textcolor{red}{explain why this assumption still lets us approximate any true situation with enough component kernels}, we obtain
+$$\lambda_e(\omega,t) = \nu_{\mathcal{X}(\omega,t),e} + \sum_{e'\in E}\int_{t_\mathrm{min}}^t A(\mathcal{X}(\omega,s))B(\mathcal{X}(\omega,t))k_{e',e}(t-s)d\Lambda_\omega^{e'}(s).$$
 
-The second:
-	$$\tilde\lambda_{ex}(t)=\nu_{ex}+\sum_{e'\in\mathcal E,x'\in\mathcal X}\int_{[0,t)}k_{e'x'ex}(t-s)d\tilde N_{e'x'}(s), t\geq 0, e\in\mathcal E, x\in\mathcal X.$$
+Finally, $A$ and $B$ may be generalised from finite-valued functions of the current limit order book state to continuous functions of the form $\exp(c\cdot X(t))$, where $X(t)$ is a feature vector derived from the full order book state $\mathcal{X}(t)$ and $c$ is a coefficient vector of the same size. This functional form is selected to ensure that $A$ and $B$ are necessarily positive while still being flexibly parameterised.
 
+\textcolor{red}{Emphasise that this is novel}
 
-1. markov switching
-2. linear state space model / kalman filter (we'll see if i get around to figuring out how to work this)
-
-\subsection{Regression on marks}
-
-Multiply the kernel by $\exp\left(X\cdot\beta\right)$ where $X$ is a vector of mark variables and $\beta$ are coefficients.
 \textcolor{red}{transfer functions should be separable, see [6.25 Definition] in https://www.research-collection.ethz.ch/bitstream/handle/20.500.11850/151886/eth-1112-02.pdf}
 
-\subsection{Adding structure to the event space}
-For a finite number of event types (e.g. 10 book levels) this just corresponds to constraining the coefficient matrices.
+\subsection{Raising the Intensity to a Power}
+Though the Hawkes process intensity manages to capture self-exciting feedback loops in the behaviour of the point process, it may be the case that a nonlinear response to a series of events is warranted, in the sense that two identical events in close succession should contribute more or less than double to the intensity what a single event might contribute on its own.
 
-For a continuous event space it is a bit more complicated
+One way to achieve this is to raise the classical expression for a Hawkes process intensity to some positive real power $k$, as in
+$$\lambda_e(\omega,t) = \nu_{\mathcal{X}(\omega,t),e} + \sum_{e'\in E}\int_{t_\mathrm{min}}^t A(\mathcal{X}(\omega,s))B(\mathcal{X}(\omega,t))k_{e',e}(t-s)d\Lambda_\omega^{e'}(s).$$
 
-
-Another way to look at this is just having marks but the distribution of the marks is not constant - this works too. This approach is nice because it admits Kalman filtering. (Is it possible to mix Kalman filtering in event time, volume time, and wall time? Maybe better to just use wall time though.)
-
-\subsection{Hidden Events}
-\textcolor{red}{Seems relevant https://www.cambridge.org/core/journals/advances-in-applied-probability/article/abs/an-elementary-derivation-of-moments-of-hawkes-processes/79A7355542F08087C8AE828C664A3049}
-
-\textcolor{red}{Hawkes Process Inference with Missing Data https://aaai.org/papers/12116-hawkes-process-inference-with-missing-data/ makes use of monte carlo EM algorithm https://www.jstor.org/stable/2290005?seq=1}
-
-\textcolor{red}{Hawkes processes with hidden marks https://www.tandfonline.com/doi/full/10.1080/1351847X.2020.1820356?scroll=top&needAccess=true}
-
-Meta-orders. Kernel is product of an ordinary kernel and an EMA on the meta-order hidden events. See model in \cite{BouchaudEtAl} 10.4.3.
-
-Could also be used to correct for the quasi-EM approximation.
-
-\section{the most general model}
-\textcolor{red}{Here for ideas/reference but I dont think this section will be in the final report}
-State-dependent multi-kernel multivariate hawkes process with increasing kernel components and possible inhibition.
-
-Nonparametric estimate of nu, sim study for u-shaped true nu. Probably splines, maybe kde if its fast enough. Compare to quadratic regression
-
-Simple: the marks evolve according to state-space model involving various model variables, but have no causal impact on the point process (though obviously there is state-dependence, and the state may include the marks). More complicated: hidden marks influence the point process; evaluate this with monte carlo EM.
-
-The state might be generalised to a kalman-filter-ish model \cite{SmithBrown}
-
-Intensity might be affected by noise introduced at each event time. Probably can use monte carlo EM for this.
-
-Quadratic hawkes process
-
-$$IRF_{e,e',k}(s,t) = \alpha_{e,e',k} e^{X(s)\cdot c_{e,e',k}}\exp\left(-\beta_{e,e',k}(t-s)\right)$$
-$$\lambda_{e,e',k}(t,\omega) = \int_0^t IRF_{e,e',k}(s,t) d\Lambda_{e',\omega}(s)$$
-$$\lambda_e(t,\omega) = \sum_{e'} \sum_k \lambda_{e,e',k}(t,\omega) + \text{spline intensity}(t)$$
+\textcolor{red}{Explain why it is better computationally to have exponential form and to share a common beta}
+\subsection{Hidden States}
+\textcolor{red}{I might mention that people tried this but it wont be in the thesis at all. Most likely delete}
+``Cohen and Elliott (2013) introduce a one-dimensional Markov-modulated Hawkes process following (2.4), where X is an exogenous Markov process in a finite state space (exogenous in the sense that the counting process does not influence X).  The key feature of their work is that they assume X to be unobservable, leading them to derive a filtering procedure for the estimation of the current state of X.'' (hidden states)
 
 \chapter{Simulation}
+Simulation of the limit order book allows for 
+
 Will play a key role in (1) use of the model for `experimental' studies (2) parametric bootstrap (3) metaorder monte carlo em (if i end up doing this)
 
 \section{Simulation Methods for Point Process Models}
-Immigration-birth interpretation \cite{MorariuPatrichiPakkanen}
-(aka Watson-Galton models)
 
 \textcolor{red}{Pseudocode}
 
@@ -641,11 +652,11 @@ $$p(\mathcal{D}) = \exp\left(\int_{t_\mathrm{min}}^{t_\mathrm{max}}\log(\lambda_
 \section{Branching Probabilities}
 \textcolor{red}{I originally wrote this for hawkes processes, but can be made more general now since I'm gonna describe what it means to condition on $\mathcal{D},\mathcal{F}$ above, and these are just probabilities wrt this conditional measure. Endo/exo can still be given as an example. If I don't make it more general I need to make it clear that it's only relevant to hawkes processes.}
 It is common to regard events in the point process as having either been generated by a ``background'' poisson process with arrival rate $\nu$, or else ``triggered'' by some previous event. The first kind are known as \textit{exogenous events}, while the second kind are \textit{endogenous events}. From the form of the intensity, it follows \textcolor{red}{why?} that the probability of an event at time $t$ being from the background process, conditioning on the natural filtration $\mathcal{F}_t$,\textcolor{red}{Is this defined properly?} will be
-$$B_{\mathrm{exo},t}\coloneq \frac{\nu}{\lambda(t,\omega)},$$
+$$B_{\mathrm{exo},t}\coloneq \frac{\nu}{\lambda(\omega,t)},$$
 while the probability of it being endogenous will be
 $$B_{\mathrm{endo},t}\coloneq \int_{t_\mathrm{min}}^t B_{s,t}d\Lambda_\omega(s)$$
 where
-$$B_{s,t} \coloneq \frac{k(t-s)}{\lambda(t,\omega)}$$
+$$B_{s,t} \coloneq \frac{k(t-s)}{\lambda(\omega,t)}$$
 is the probability of an event at $t$ having been triggered by an event at $s$.
 
 Notice the dependence on $\omega$, implying that these probabilities (often known as \textit{branching probabilities}) are specific to a particular realisation of the process.
@@ -705,7 +716,7 @@ Furthermore, we have
 \textcolor{red}{why can we bring the derivative inside the integral?}
 
 \subsection{Poisson Processes}
-Suppose we have a family of poisson process models parameterised by their constant intensity $\nu\in\mathbb{R}_{>0}$.
+Suppose we have a family of Poisson process models parameterised by their constant intensity $\nu\in\mathbb{R}_{>0}$.
 
 The log-likelihood of each model is then given by
 
@@ -737,8 +748,8 @@ $$\left(\hat\nu_\mathrm{MLE}\right)_E = \frac{N_\mathcal{D}^E\left(t_\mathrm{max
 
 \subsection{Composite Processes}
 Suppose that the intensity of each point process $\mathcal{T}_{\theta_1,\theta_2,\ldots}$ in a parametric family has the form
-$$\lambda^{\theta_1,\theta_2,\ldots}(t,\omega) \coloneq \sum_i \lambda_i^{\theta_i}(t,\omega),$$
-where each component $\lambda_i(t,\omega)$ is parameterised by some vector $\theta_i$ and adapted with respect to the natural filtration $\mathcal{F}$ of $\mathcal{T}_{\theta_1,\theta_2,\ldots}$. Then the loglikelihood will be
+$$\lambda^{\theta_1,\theta_2,\ldots}(\omega,t) \coloneq \sum_i \lambda_i^{\theta_i}(\omega,t),$$
+where each component $\lambda_i(\omega,t)$ is parameterised by some vector $\theta_i$ and adapted with respect to the natural filtration $\mathcal{F}$ of $\mathcal{T}_{\theta_1,\theta_2,\ldots}$. Then the loglikelihood will be
 $$\ell(\theta_1,\theta_2,\ldots;\mathcal{D}) = \int_{t_\mathrm{min}}^{t_\mathrm{max}}\log\left(\sum_i \left(\lambda_i^{\theta_i}\right)_{\mathcal{D}}(t)\right)d\Lambda_\mathcal{D}(t)-\sum_i \bar\Lambda_i\left(t_\mathrm{max}\right),$$
 where $$(\lambda_i^{\theta_i})_\mathcal{D} \coloneq \lim_{s\to t^+}\mathbb{E}_{\mathbb{P}\vert\mathcal{F}_t,\mathcal{D}_t}\left[\lambda_i^{\theta_i}(s)\right]$$
 \textcolor{red}{Is this the right definition to use? it should coincide with component intensities in the case of a composite point process, as noted below. It seems to depend on continuity of the first moment, and so maybe more restrictions need to be placed on the component processes}
@@ -841,7 +852,7 @@ $$- \sum_i \log\left( B_{i,t}^{\theta_1,\theta_2,\ldots}\right)B_{i,t}^{\theta_1
 
 \subsection{Continuous-State Hawkes Processes}
 
-Piecewise constant multivariate cadlag state process $X^-(t)$ with right-limit $X^+(t)$
+Piecewise constant multivariate left-continuous state process $X(t)$
 
 \begin{equation*}
 	\begin{align}
@@ -881,25 +892,41 @@ Piecewise constant multivariate cadlag state process $X^-(t)$ with right-limit $
 This nests ordinary state-dependence if you have one positive and one negative kernel
 
 \subsection{Continuous-State Power Hawkes Processes}
+``We introduce and establish the main properties of QHawkes ("Quadratic" Hawkes) models. QHawkes models generalize the Hawkes price models introduced in E. Bacry et al. (2014), by allowing all feedback effects in the jump intensity that are linear and quadratic in past returns. A non-parametric fit on NYSE stock data shows that the off-diagonal component of the quadratic kernel indeed has a structure that standard Hawkes models fail to reproduce. Our model exhibits two main properties, that we believe are crucial in the modelling and the understanding of the volatility process: first, the model is time-reversal asymmetric, similar to financial markets whose time evolution has a preferred direction. Second, it generates a multiplicative, fat-tailed volatility process, that we characterize in detail in the case of exponentially decaying kernels, and which is linked to Pearson diffusions in the continuous limit. Several other interesting properties of QHawkes processes are discussed, in particular the fact that they can generate long memory without necessarily be at the critical point. Finally, we provide numerical simulations of our calibrated QHawkes model, which is indeed seen to reproduce, with only a small amount of quadratic non-linearity, the correct magnitude of fat-tails and time reversal asymmetry seen in empirical time series.''
+% https://arxiv.org/abs/1509.07710
 \begin{equation*}
 	\begin{align}
 		\lambda_\mathcal{D}^{i,j}(t) &= \alpha_{i,j} \exp(X^-(t)\cdot b_{i,j})\int_{t_\mathrm{min}}^t \exp(X^+(s)\cdot a_{i,j}) \exp(-\beta (t-s)) d\Lambda_\mathcal{D}^i(s) \\
 		\lambda_\mathcal{D}^j(t) &= \sum_i \lambda_\mathcal{D}^{i,j}(t)\right \\
-		\ell(\alpha,\beta,a,b; \mathcal{D}) &= \sum_j\left( \int_{t_\mathrm{min}}^{t_\mathrm{max}} k\log\left(\lambda_\mathcal{D}^j(t)\right)d\Lambda_\mathcal{D}^j(t) - \int_{t_\mathrm{min}}^{t_\mathrm{max}}\lambda_\mathcal{D}^j(t)^k dt \right) \\
+		\ell(\alpha,\beta,a,b,k; \mathcal{D}) &= \sum_j\left( \int_{t_\mathrm{min}}^{t_\mathrm{max}} k\log\left(\lambda_\mathcal{D}^j(t)\right)d\Lambda_\mathcal{D}^j(t) - \int_{t_\mathrm{min}}^{t_\mathrm{max}}\lambda_\mathcal{D}^j(t)^k dt \right) \\
 		\frac{\partial\ell}{\partial k} &= \sum_j\left( \int_{t_\mathrm{min}}^{t_\mathrm{max}} \log\left(\lambda_\mathcal{D}^j(t)\right)d\Lambda_\mathcal{D}^j(t) - \int_{t_\mathrm{min}}^{t_\mathrm{max}}\lambda_\mathcal{D}^j(t)^k \log(\lambda_\mathcal{D}^j(t)) dt \right) \\
+		\Lambda(t+\epsilon)-\Lambda(t)=0 &\implies \int_{t}^{t+\epsilon}\lambda_\mathcal{D}^j(s)^k \log(\lambda_\mathcal{D}^j(s)) ds \right) \\ &= \lambda_\mathcal{D}^j(t)^k \log(\lambda_\mathcal{D}^j(t))\int_0^\epsilon \exp(-\beta k s)ds - \lambda_\mathcal{D}^j(t)^k \beta \int_0^\epsilon s\exp(-\beta k s)ds \\
 		\frac{\partial^2\ell}{\partial k\partial k} &= -\sum_j\left( \int_{t_\mathrm{min}}^{t_\mathrm{max}}\lambda_\mathcal{D}^j(t)^k \log(\lambda_\mathcal{D}^j(t))^2 dt \right) \\
+		\Lambda(t+\epsilon)-\Lambda(t)=0 &\implies \int_t^{t+\epsilon}\lambda_\mathcal{D}^j(s)^k \log(\lambda_\mathcal{D}^j(s))^2 ds \\ &= \int_0^\epsilon \lambda_\mathcal{D}^j(t)^k\exp(-\beta k s) \left(\log(\lambda_\mathcal{D}^j(t)) - \beta s\right)^2 ds\\ &= \int_0^\epsilon \lambda_\mathcal{D}^j(t)^k\exp(-\beta k s) \left( \log(\lambda_\mathcal{D}^j(t))^2 - 2 \log(\lambda_\mathcal{D}^j(t))\beta s + \beta^2 s^2 \right) ds\\
+		\frac{\partial\lambda_\mathcal{D}^j(t)}{\partial\beta} &= -\sum_i \alpha_{i,j}\exp(X^-(t)\cdot b_{i,j}) \int_{t_\mathrm{min}}^t (t-s)\exp(X^+(s)\cdot a_{i,j})\exp(-\beta (t-s)) d\Lambda_\mathcal{D}^i(s) \\
+		\Lambda(t+\epsilon)-\Lambda(t)=0 &\implies \frac{\partial\lambda_\mathcal{D}^j}{\partial\beta}(t+\epsilon) = \exp(-\beta \epsilon) \left( \frac{\partial\lambda_\mathcal{D}^j}{\partial\beta}(t)-\epsilon \lambda_\mathcal{D}^j(t) \right) \\
+		\frac{\partial^2\lambda_\mathcal{D}^j(t)}{\partial\beta\partial\beta} &= \sum_i \alpha_{i,j}\exp(X^-(t)\cdot b_{i,j}) \int_{t_\mathrm{min}}^t (t-s)^2\exp(X^+(s)\cdot a_{i,j})\exp(-\beta (t-s)) d\Lambda_\mathcal{D}^i(s) \\
+		\Lambda(t+\epsilon)-\Lambda(t)=0 &\implies \frac{\partial^2\lambda_\mathcal{D}^j}{\partial\beta\partial\beta}(t+\epsilon) = \exp(-2\beta\epsilon)\left(\frac{\partial^2\lambda_\mathcal{D}^j}{\partial\beta\partial\beta}(t)-2\epsilon\frac{\partial\lambda_\mathcal{D}^j}{\partial\beta}(t)+\epsilon^2\lambda_\mathcal{D}^j(t)\right)\\
+		\frac{\partial\ell}{\partial \beta} &= k \sum_j\left( \int_{t_\mathrm{min}}^{t_\mathrm{max}} \frac{\frac{\partial}{\partial\beta}\lambda_\mathcal{D}^j(t)}{\lambda_\mathcal{D}^j(t)}d\Lambda_\mathcal{D}^j(t) - \int_{t_\mathrm{min}}^{t_\mathrm{max}}\lambda_\mathcal{D}^j(t)^{k-1} \frac{\partial \lambda_\mathcal{D}^j(t)}{\partial\beta} dt \right) \\
+		\frac{\partial^2\ell}{\partial \beta \partial \beta} &= k \sum_j \int_{t_\mathrm{min}}^{t_\mathrm{max}} \left( \frac{\frac{\partial^2}{\partial\beta\partial\beta}\lambda_\mathcal{D}^j(t)}{\lambda_\mathcal{D}^j(t)} - \left(\frac{\frac{\partial}{\partial\beta}\lambda_\mathcal{D}^j(t)}{\lambda_\mathcal{D}^j(t)}\right)^2 \right) d\Lambda_\mathcal{D}^j(t) \\ &- k\sum_j \int_{t_\mathrm{min}}^{t_\mathrm{max}} \left( (k-1)\lambda_\mathcal{D}^j(t)^{k-2} \left(\frac{\partial \lambda_\mathcal{D}^j(t)}{\partial\beta}\right)^2 + \lambda_\mathcal{D}^j(t)^{k-1} \frac{\partial^2 \lambda_\mathcal{D}^j(t)}{\partial\beta\partial\beta} \right) dt \right) \\ 
+	\end{align}
+\end{equation*}
+
+\begin{equation*}
+	\begin{align}
 		\frac{\partial\ell}{\partial\theta_{i,j}} &= k\int_{t_\mathrm{min}}^{t_\mathrm{max}} \frac{\frac{\partial}{\partial\theta_{i,j}} \lambda_\mathcal{D}^{i,j}(t)}{\lambda_\mathcal{D}^j(t)}d\Lambda_\mathcal{D}^{j}(t) - k\int_{t_\mathrm{min}}^{t_\mathrm{max}} \lambda_\mathcal{D}^j(t)^{k-1} \frac{\partial \lambda_\mathcal{D}^{i,j}(t)}{\partial \theta_{i,j}} dt \\
 		\frac{\partial^2\ell}{\partial\theta_{i,j}\partial\theta_{i,j}} &= k\int_{t_\mathrm{min}}^{t_\mathrm{max}} \left( \frac{\frac{\partial^2}{\partial\theta_{i,j}\partial\theta_{i,j}} \lambda_\mathcal{D}^{i,j}(t)}{\lambda_\mathcal{D}^j(t)} - \left(\frac{\frac{\partial}{\partial\theta_{i,j}}\lambda_\mathcal{D}^{i,j}(t)}{\lambda_\mathcal{D}^i(t)}\right)^2 \right) d\Lambda_\mathcal{D}^{j}(t) \\
 		&- k\int_{t_\mathrm{min}}^{t_\mathrm{max}} \left( (k-1)\lambda_\mathcal{D}^j(t)^{k-2} \left(\frac{\partial \lambda_\mathcal{D}^{i,j}(t)}{\partial \theta_{i,j}}\right)^2 + \lambda_\mathcal{D}^j(t)^{k-1} \frac{\partial^2 \lambda_\mathcal{D}^{i,j}(t)}{\partial \theta_{i,j}\partial\theta_{i,j}} \right) dt \\
 		\frac{\partial \lambda_\mathcal{D}^{i,j}(t)}{\partial \alpha_{i,j}} &= \frac{\lambda_\mathcal{D}^{i,j}(t)}{\alpha_{i,j}} \\
 		\frac{\partial^2 \lambda_\mathcal{D}^{i,j}(t)}{\partial \alpha_{i,j}\partial\alpha_{i,j}} &= \frac{\lambda_\mathcal{D}^{i,j}(t)}{\alpha_{i,j}^2} \\
-		\frac{\partial \lambda_\mathcal{D}^{i,j}(t)}{\partial b_{i,j}} &= X^-(t)\lambda_\mathcal{D}^{i,j}(t) \\
-		\frac{\partial^2 \lambda_\mathcal{D}^{i,j}(t)}{\partial b_{i,j}\partial b_{i,j}} &= X^-(t) X^-(t)^T \lambda_\mathcal{D}^{i,j}(t) \\
-		\frac{\partial^2 \lambda_\mathcal{D}^{i,j}(t)}{\partial a_{i,j}\partial a_{i,j}} &= \alpha_{i,j}\exp(X^-(t)\cdot b_{i,j}) \int_{t_\mathrm{min}}^t X^+(s) X^+(s)^T \exp(X^+(s)\cdot a_{i,j})\exp(-\beta(t-s))d\Lambda_\mathcal{D}^i(s) \\
+		\frac{\partial \lambda_\mathcal{D}^{i,j}(t)}{\partial b_{i,j}} &= X(t)\lambda_\mathcal{D}^{i,j}(t) \\
+		\frac{\partial^2 \lambda_\mathcal{D}^{i,j}(t)}{\partial b_{i,j}\partial b_{i,j}} &= X(t) X(t)^T \lambda_\mathcal{D}^{i,j}(t) \\
+		\frac{\partial \lambda_\mathcal{D}^{i,j}(t)}{\partial a_{i,j}} &= \alpha_{i,j}\exp(X(t)\cdot b_{i,j}) \int_{t_\mathrm{min}}^t X(s) \exp(X(s)\cdot a_{i,j})\exp(-\beta(t-s))d\Lambda_\mathcal{D}^i(s) \\
+		\frac{\partial^2 \lambda_\mathcal{D}^{i,j}(t)}{\partial a_{i,j}\partial a_{i,j}} &= \alpha_{i,j}\exp(X(t)\cdot b_{i,j}) \int_{t_\mathrm{min}}^t X(s) X(s)^T \exp(X(s)\cdot a_{i,j})\exp(-\beta(t-s))d\Lambda_\mathcal{D}^i(s) \\
 	\end{align}
 \end{equation*}
 
-This nests the previous with $n^2$ kernels and a possible sign flip
+This nests the previous with $n^2$ kernels and a possible sign flip. Explain why $\beta$ needs to be a single number rather than a matrix as before.
 
 \subsection{EM for State-Dependent Hawkes Processes}
 - Equations
@@ -1134,7 +1161,7 @@ how to quantify compute time? number of EM steps, etc
 
 \begin{itemize}
 	\item Replicate findings from \cite{MorariuPatrichiPakkanen}
-	\item Hidden events (\& events on different exchanges) - either poisson distributed or more complex
+	\item Hidden events (\& events on different exchanges) - either Poisson distributed or more complex
 	\item Modeling changes in the entire order book
 	\item Market impact (are there any datasets on this? square-root law, other common findings. power law impact for hawkes processes is explicitly studied here \texttt{https://arxiv.org/pdf/1805.07134})
 	\item Optimal execution - VWAP, TWAP, Almgren-Chriss

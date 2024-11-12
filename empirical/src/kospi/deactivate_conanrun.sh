@@ -1,0 +1,1 @@
+. "/home/soms/Honours/src/kospi/deactivate_conanrunenv-release-x86_64.sh"

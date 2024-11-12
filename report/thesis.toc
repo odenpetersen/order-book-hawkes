@@ -13,62 +13,61 @@
 \contentsline {subsection}{\numberline {2.1.4}Residuals and the Compensator Process}{10}{}%
 \contentsline {subsection}{\numberline {2.1.5}Marked and Multivariate Point Processes}{10}{}%
 \contentsline {subsection}{\numberline {2.1.6}Composite Point Processes}{11}{}%
-\contentsline {section}{\numberline {2.2}Point Process Models of Book Updates}{11}{}%
-\contentsline {subsection}{\numberline {2.2.1}Poisson Processes}{11}{}%
-\contentsline {subsection}{\numberline {2.2.2}Inhomogeneous Poisson Process}{12}{}%
-\contentsline {subsection}{\numberline {2.2.3}Hawkes Processes}{12}{}%
-\contentsline {subsection}{\numberline {2.2.4}State Dependence}{14}{}%
-\contentsline {subsection}{\numberline {2.2.5}Regression on marks}{15}{}%
-\contentsline {subsection}{\numberline {2.2.6}Raising the Intensity to a Power}{16}{}%
-\contentsline {subsection}{\numberline {2.2.7}Hidden States}{16}{}%
-\contentsline {chapter}{\numberline {Chapter 3}Simulation}{17}{}%
-\contentsline {section}{\numberline {3.1}Simulation Methods for Point Process Models}{17}{}%
-\contentsline {section}{\numberline {3.2}Simulation Study of Estimation Methods}{17}{}%
-\contentsline {section}{\numberline {3.3}Impulse Response Function}{17}{}%
-\contentsline {chapter}{\numberline {Chapter 4}Estimation}{18}{}%
-\contentsline {section}{\numberline {4.1}Branching Probabilities}{19}{}%
-\contentsline {section}{\numberline {4.2}Maximum Likelihood Estimation}{19}{}%
-\contentsline {subsection}{\numberline {4.2.1}Maximum Likelihood Estimator}{20}{}%
-\contentsline {subsection}{\numberline {4.2.2}Log-Likelihood Maximisation}{20}{}%
-\contentsline {subsection}{\numberline {4.2.3}Poisson Processes}{21}{}%
-\contentsline {subsection}{\numberline {4.2.4}Composite Processes}{22}{}%
-\contentsline {section}{\numberline {4.3}Expectation Maximisation}{23}{}%
-\contentsline {subsection}{\numberline {4.3.1}Hawkes Processes}{23}{}%
-\contentsline {subsection}{\numberline {4.3.2}Continuous-State Hawkes Processes}{26}{}%
-\contentsline {subsection}{\numberline {4.3.3}Continuous-State Power Hawkes Processes}{28}{}%
-\contentsline {subsection}{\numberline {4.3.4}EM for State-Dependent Hawkes Processes}{30}{}%
-\contentsline {section}{\numberline {4.4}Inference for the Mark Process}{30}{}%
-\contentsline {section}{\numberline {4.5}Hidden Events}{31}{}%
-\contentsline {section}{\numberline {4.6}Monte Carlo EM}{31}{}%
-\contentsline {section}{\numberline {4.7}Hidden Marks}{32}{}%
-\contentsline {subsection}{\numberline {4.7.1}Discrete}{32}{}%
-\contentsline {section}{\numberline {4.8}Quadratic Hawkes Processes}{32}{}%
-\contentsline {section}{\numberline {4.9}Uncertainty Quantification}{33}{}%
-\contentsline {section}{\numberline {4.10}Computational Concerns}{33}{}%
-\contentsline {section}{\numberline {4.11}Model Selection}{33}{}%
-\contentsline {chapter}{\numberline {Chapter 5}Application to KOSPI/SPY Data}{34}{}%
-\contentsline {section}{\numberline {5.1}Dataset}{34}{}%
-\contentsline {section}{\numberline {5.2}Point Process Modelling}{34}{}%
-\contentsline {subsection}{\numberline {5.2.1}Santa Fe Model}{34}{}%
-\contentsline {subsection}{\numberline {5.2.2}Inhomogeneity}{34}{}%
-\contentsline {subsection}{\numberline {5.2.3}Hawkes Kernel}{35}{}%
-\contentsline {subsection}{\numberline {5.2.4}State Dependence}{35}{}%
-\contentsline {subsection}{\numberline {5.2.5}Regression}{35}{}%
-\contentsline {subsection}{\numberline {5.2.6}Power Hawkes}{35}{}%
-\contentsline {subsection}{\numberline {5.2.7}Idiosyncratic Daily Behaviour}{35}{}%
-\contentsline {section}{\numberline {5.3}notes}{35}{}%
-\contentsline {subsection}{\numberline {5.3.1}Clustering Ratio}{37}{}%
-\contentsline {section}{\numberline {5.4}Summary of datasets}{37}{}%
-\contentsline {section}{\numberline {5.5}Inhomogeneity}{37}{}%
-\contentsline {section}{\numberline {5.6}Multidimensionality}{37}{}%
-\contentsline {section}{\numberline {5.7}Self-Excitation and Mutual Excitation}{38}{}%
-\contentsline {section}{\numberline {5.8}Queue Size Dependence}{38}{}%
-\contentsline {section}{\numberline {5.9}Regression on marks}{38}{}%
-\contentsline {chapter}{\numberline {Chapter 6}Conclusion}{39}{}%
-\contentsline {chapter}{\numberline {Chapter 7}Appendix: Foundations of Probabilistic Models}{40}{}%
-\contentsline {section}{\numberline {7.1}Measure Theory Fundamentals}{40}{}%
-\contentsline {section}{\numberline {7.2}Probability Spaces}{41}{}%
-\contentsline {subsection}{\numberline {7.2.1}Conditionalisation}{42}{}%
-\contentsline {section}{\numberline {7.3}Density of a Measure}{43}{}%
-\contentsline {section}{\numberline {7.4}Stochastic Process Fundamentals}{43}{}%
-\contentsline {chapter}{References}{44}{}%
+\contentsline {section}{\numberline {2.2}Point Process Models of Book Updates}{12}{}%
+\contentsline {subsection}{\numberline {2.2.1}Poisson Processes}{12}{}%
+\contentsline {subsection}{\numberline {2.2.2}Inhomogeneous Poisson Process}{13}{}%
+\contentsline {subsection}{\numberline {2.2.3}Hawkes Processes}{13}{}%
+\contentsline {subsection}{\numberline {2.2.4}State Dependence}{15}{}%
+\contentsline {subsection}{\numberline {2.2.5}Raising the Intensity to a Power}{17}{}%
+\contentsline {chapter}{\numberline {Chapter 3}Estimation}{18}{}%
+\contentsline {section}{\numberline {3.1}Empirical Likelihood}{18}{}%
+\contentsline {subsection}{\numberline {3.1.1}Empirical Intensity and Loglikelihood}{19}{}%
+\contentsline {section}{\numberline {3.2}Maximum Likelihood Estimation}{19}{}%
+\contentsline {subsection}{\numberline {3.2.1}Poisson Processes}{20}{}%
+\contentsline {section}{\numberline {3.3}Maximum Likelihood Estimation for Composite Processes}{21}{}%
+\contentsline {subsection}{\numberline {3.3.1}Expectation Maximisation}{22}{}%
+\contentsline {section}{\numberline {3.4}General Point Process Model}{22}{}%
+\contentsline {subsection}{\numberline {3.4.1}Hawkes Processes}{24}{}%
+\contentsline {subsection}{\numberline {3.4.2}Continuous-State Hawkes Processes}{27}{}%
+\contentsline {subsection}{\numberline {3.4.3}Continuous-State Power Hawkes Processes}{29}{}%
+\contentsline {subsection}{\numberline {3.4.4}EM for State-Dependent Hawkes Processes}{31}{}%
+\contentsline {section}{\numberline {3.5}Inference for the Mark Process}{31}{}%
+\contentsline {section}{\numberline {3.6}Hidden Events}{32}{}%
+\contentsline {section}{\numberline {3.7}Monte Carlo EM}{32}{}%
+\contentsline {section}{\numberline {3.8}Hidden Marks}{33}{}%
+\contentsline {subsection}{\numberline {3.8.1}Discrete}{33}{}%
+\contentsline {section}{\numberline {3.9}Quadratic Hawkes Processes}{33}{}%
+\contentsline {section}{\numberline {3.10}Uncertainty Quantification}{34}{}%
+\contentsline {section}{\numberline {3.11}Computational Concerns}{34}{}%
+\contentsline {section}{\numberline {3.12}Model Selection}{34}{}%
+\contentsline {chapter}{\numberline {Chapter 4}Simulation}{35}{}%
+\contentsline {section}{\numberline {4.1}Simulation Methods for Point Process Models}{35}{}%
+\contentsline {section}{\numberline {4.2}Simulation Study of Estimation Methods}{35}{}%
+\contentsline {section}{\numberline {4.3}Impulse Response Function}{35}{}%
+\contentsline {chapter}{\numberline {Chapter 5}Application to KOSPI/SPY Data}{36}{}%
+\contentsline {section}{\numberline {5.1}Dataset}{36}{}%
+\contentsline {section}{\numberline {5.2}Point Process Modelling}{36}{}%
+\contentsline {subsection}{\numberline {5.2.1}Santa Fe Model}{36}{}%
+\contentsline {subsection}{\numberline {5.2.2}Inhomogeneity}{36}{}%
+\contentsline {subsection}{\numberline {5.2.3}Hawkes Kernel}{37}{}%
+\contentsline {subsection}{\numberline {5.2.4}State Dependence}{37}{}%
+\contentsline {subsection}{\numberline {5.2.5}Regression}{37}{}%
+\contentsline {subsection}{\numberline {5.2.6}Power Hawkes}{37}{}%
+\contentsline {subsection}{\numberline {5.2.7}Idiosyncratic Daily Behaviour}{37}{}%
+\contentsline {section}{\numberline {5.3}notes}{37}{}%
+\contentsline {subsection}{\numberline {5.3.1}Clustering Ratio}{39}{}%
+\contentsline {section}{\numberline {5.4}Summary of datasets}{39}{}%
+\contentsline {section}{\numberline {5.5}Inhomogeneity}{39}{}%
+\contentsline {section}{\numberline {5.6}Multidimensionality}{39}{}%
+\contentsline {section}{\numberline {5.7}Self-Excitation and Mutual Excitation}{40}{}%
+\contentsline {section}{\numberline {5.8}Queue Size Dependence}{40}{}%
+\contentsline {chapter}{\numberline {Chapter 6}Conclusion}{41}{}%
+\contentsline {subsection}{\numberline {6.0.1}Hidden States}{41}{}%
+\contentsline {subsection}{\numberline {6.0.2}Daily Variation}{41}{}%
+\contentsline {chapter}{\numberline {Chapter 7}Appendix: Foundations of Probabilistic Models}{42}{}%
+\contentsline {section}{\numberline {7.1}Measure Theory Fundamentals}{42}{}%
+\contentsline {section}{\numberline {7.2}Probability Spaces}{43}{}%
+\contentsline {subsection}{\numberline {7.2.1}Conditionalisation}{44}{}%
+\contentsline {section}{\numberline {7.3}Density of a Measure}{45}{}%
+\contentsline {section}{\numberline {7.4}Stochastic Process Fundamentals}{45}{}%
+\contentsline {chapter}{References}{46}{}%

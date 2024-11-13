@@ -615,7 +615,8 @@ $$\lambda_e(\omega,t) = \nu_e + \left(\sum_{e'\in E}\int_{t_\mathrm{min}}^t A_{e
 More generally, we might have a linear combination of such terms, writing
 \begin{equation}
 	\begin{align}
-		\lambda_e^i(\omega,t) &= \sum_{e'\in E}\int_{t_\mathrm{min}}^t A_{e',e,i}(\mathcal{X}(\omega,s))B_{e',e,i}(\mathcal{X}(\omega,t))k_{e',e,i,i}(t-s)d\Lambda_\omega^{e'}(s), \\
+		\lambda_{e',e}^i(\omega,t) &= \int_{t_\mathrm{min}}^t A_{e',e,i}(\mathcal{X}(\omega,s))B_{e',e,i}(\mathcal{X}(\omega,t))k_{e',e,i,i}(t-s)d\Lambda_\omega^{e'}(s), \\
+		\lambda_e^i(\omega,t) &= \sum_{e'\in E}\lambda_{e',e}^i(\omega,t), \\
 		\lambda_e(\omega,t) &= \nu_e + \sum_i \pm_i \lambda_e^i(\omega,t)^{\kappa_i}.
 	\end{align}\label{eq:general_model}
 \end{equation}
@@ -624,8 +625,10 @@ By taking $\kappa_j$ to be integers, and supposing that the excitation component
 
 \textcolor{red}{Explain why this nests the quadratic hawkes process}
 %https://arxiv.org/abs/1509.07710
+\textcolor{red}{``We introduce and establish the main properties of QHawkes ("Quadratic" Hawkes) models. QHawkes models generalize the Hawkes price models introduced in E. Bacry et al. (2014), by allowing all feedback effects in the jump intensity that are linear and quadratic in past returns. A non-parametric fit on NYSE stock data shows that the off-diagonal component of the quadratic kernel indeed has a structure that standard Hawkes models fail to reproduce. Our model exhibits two main properties, that we believe are crucial in the modelling and the understanding of the volatility process: first, the model is time-reversal asymmetric, similar to financial markets whose time evolution has a preferred direction. Second, it generates a multiplicative, fat-tailed volatility process, that we characterize in detail in the case of exponentially decaying kernels, and which is linked to Pearson diffusions in the continuous limit. Several other interesting properties of QHawkes processes are discussed, in particular the fact that they can generate long memory without necessarily be at the critical point. Finally, we provide numerical simulations of our calibrated QHawkes model, which is indeed seen to reproduce, with only a small amount of quadratic non-linearity, the correct magnitude of fat-tails and time reversal asymmetry seen in empirical time series.''}
 
 \textcolor{red}{computational details covered in estimation section}
+
 
 \chapter{Estimation}%\label{something}
 Selecting a model from some parametric family of point process models based on empirical order book data serves two primary purposes. Firstly, estimating the parameters of a sufficiently parsimonious and interpretable model serves to provide direct insight into the relationship between various order book events and states, such as by identifying the sign of various parameters, comparing the magnitude of parameters to one another, and performing hypothesis tests to see if a parameter is significantly different from some default value. From this we may tentatively draw qualitative conclusions about the true behaviour of the data generating process governing market behaviour. Secondly, by estimating both a point process model and a model for state transitions at each event time, we can identify a model that will allow us to simulate synthetic order book data in a manner reasonably consistent with actual market behaviour. Repeated samples from a simulation of true market behaviour may be used to predict the evolution of the order book from some initial market state, or to answer counterfactual questions such as the effect of placing a trade with some quantity at some point in time \textcolor{red}{in the same way that the Santa Fe model implies a price impact model in the paper that proposed it}.
@@ -718,7 +721,7 @@ This implies that
 \end{equation}
 where $\delta_{e,e'}$ is $1$ if and only if $e=e'$ and $0$ otherwise.
 
-Since the hessian is a diagonal matrix with negative diagonal entries, it is negative definite, and so a unique local maxima exists and is a global maxima. Solving for $\nabla_\nu \ell_\mathcal{D}(\nu)$, we obtain
+Since the hessian is a diagonal matrix with negative diagonal entries, it is negative definite, and so a unique local maxima exists and is a global maxima. Using the fact that $\nabla_\nu \ell_\mathcal{D}(\nu)=0$, we obtain
 \begin{equation}
 	\hat\nu_\mathrm{MLE} = \frac{N_\mathcal{D}(t_\mathrm{max})}{t_\mathrm{max}-t_\mathrm{min}}.
 \end{equation}
@@ -737,9 +740,9 @@ It follows that
 	\begin{align}
 		\nabla_{\theta^i} \ell_\mathcal{D}(\theta) &= \sum_e\left(\int_{t_\mathrm{min}}^{t_\mathrm{max}} \frac{\nabla_{\theta^i} \lambda_\mathcal{D}^{i,\theta^i,e}(t)}{\lambda_\mathcal{D}^{\theta,e}(t)} d\Lambda_\mathcal{D}(t)-\int_{t_\mathrm{min}}^{t_\mathrm{max}}\nabla_{\theta^i} \lambda_\mathcal{D}^{\theta,e}(t) dt\right) \\
 		&= \sum_e\left(\int_{t_\mathrm{min}}^{t_\mathrm{max}} \frac{\nabla_{\theta^i} \lambda_\mathcal{D}^{i,\theta^i,e}(t)}{\lambda_\mathcal{D}^{i,\theta^i,e}(t)}\cdot\frac{\lambda_\mathcal{D}^{i,\theta^i,e}(t)}{\lambda_\mathcal{D}^{\theta,e}(t)} d\Lambda_\mathcal{D}(t)-\int_{t_\mathrm{min}}^{t_\mathrm{max}}\nabla_{\theta^i} \lambda_\mathcal{D}^{\theta,e}(t) dt\right) \\
-		&= \sum_e\left(\int_{t_\mathrm{min}}^{t_\mathrm{max}} \nabla_{\theta^i} \log\left(\lambda_\mathcal{D}^{i,\theta^i,e}(t)\right)\cdot P_{\mathcal{D},i}^e(t) d\Lambda_\mathcal{D}(t)-\int_{t_\mathrm{min}}^{t_\mathrm{max}}\nabla_{\theta^i} \lambda_\mathcal{D}^{\theta,e}(t) dt\right) \\
-		H_{\theta^i} \ell_\mathcal{D}(\theta) &= \sum_e\left(\int_{t_\mathrm{min}}^{t_\mathrm{max}} \left( \frac{H_{\theta^i} \lambda_\mathcal{D}^{i,\theta^i,e}(t)}{\lambda_\mathcal{D}^{i,\theta^i,e}(t)} - \left\|\frac{\nabla_{\theta^i}\lambda_\mathcal{D}^{i,\theta^i,e}(t)}{\lambda_\mathcal{D}^{i,\theta^i,e}(t)}\right\|^2 \cdot P_{\mathcal{D},i}^e(t)\right)\cdot P_{\mathcal{D},i}^e(t) d\Lambda_\mathcal{D}(t)\right) \\ &- \sum_e\int_{t_\mathrm{min}}^{t_\mathrm{max}} H_\theta \lambda_\mathcal{D}^{i,\theta^i,e}(t) dt,\\ 
-	\end{align}
+		&= \sum_e\left(\int_{t_\mathrm{min}}^{t_\mathrm{max}} \nabla_{\theta^i} \log\left(\left\vert \lambda_\mathcal{D}^{i,\theta^i,e}(t) \right\vert\right)\cdot P_{\mathcal{D},i}^e(t) d\Lambda_\mathcal{D}(t)-\int_{t_\mathrm{min}}^{t_\mathrm{max}}\nabla_{\theta^i} \lambda_\mathcal{D}^{\theta,e}(t) dt\right) \\
+		H_{\theta^i} \ell_\mathcal{D}(\theta) &= \sum_e \int_{t_\mathrm{min}}^{t_\mathrm{max}} \left( \frac{H_{\theta^i} \lambda_\mathcal{D}^{i,\theta^i,e}(t)}{\lambda_\mathcal{D}^{i,\theta^i,e}(t)} - \frac{ \left(\nabla_{\theta^i}\lambda_\mathcal{D}^{i,\theta^i,e}(t)\right) \left(\nabla_{\theta^i}\lambda_\mathcal{D}^{i,\theta^i,e}(t)\right)^T  }{\lambda_\mathcal{D}^{i,\theta^i,e}(t)^2} \cdot P_{\mathcal{D},i}^e(t)\right)\cdot P_{\mathcal{D},i}^e(t) d\Lambda_\mathcal{D}(t) \\ &- \sum_e\int_{t_\mathrm{min}}^{t_\mathrm{max}} H_\theta \lambda_\mathcal{D}^{i,\theta^i,e}(t) dt,\\ 
+	\end{align}\label{eq:derivatives}
 \end{equation}
 where $\lambda^{i,\theta^i,e}(\omega,t)$ are the elements of the vector $\lambda^{i,\theta^i}(\omega,t)$. The full gradient $\nabla_\theta \ell_\mathcal{D}(\theta)$ is then the concatenation of the individual gradients $\nabla_{\theta^i} \ell_\mathcal{D}(\theta)$, and similarly the hessian $H_\theta \ell_\mathcal{D}(\theta)$ will be a block-diagonal matrix with $H_{\theta^i}\ell_\mathcal{D}(\theta)$ placed in the block whose rows and columns correspond to $\theta^i$, and zeros in the remaining entries.
 
@@ -754,12 +757,25 @@ $$- \sum_i \log\left( B_{i,t}^{\theta_1,\theta_2,\ldots}\right)B_{i,t}^{\theta_1
 
 \textcolor{red}{Can cite original dempster paper? As well as the one that corrects the errors in that paper}
 
+\textcolor{red}{- Equations
+
+- Visualisation of branching matrix. How does it evolve throughout the fitting procedure?
+
+- Quasi EM approximation
+
+- Closed form constant time M step for multivariate state dependent hawkes processes
+
+- Method of scoring (Newton's method)
+
+- Negative probabilities. Conditions for kernel nonnegativity? (Probably not tractable) }
+
 \section{General Point Process Model}
 Recall that the model with component intensities raised to powers $\kappa_i$ was so far the most general model, nesting all others described. I will therefore focus my attention on this model with the intention that results for the simpler models will follow from this analysis. Recall the intensity as described in \eqref{eq:general_model},
 \begin{equation*}
 	\begin{align}
 		\lambda_e(\omega,t) &= \nu_e + \sum_i \pm_i \lambda_e^i(\omega,t)^{\kappa_i}, \\
-		\lambda_e^i(\omega,t) &= \sum_{e'\in E}\int_{t_\mathrm{min}}^t A_{e',e,i}(\mathcal{X}(\omega,s))B_{e',e,i}(\mathcal{X}(\omega,t))k_{e',e,i,i}(t-s)d\Lambda_\omega^{e'}(s). \\
+		\lambda_e^i(\omega,t) &= \sum_{e'\in E}, \\
+		\lambda_{e',e}^i(\omega,t) &= \int_{t_\mathrm{min}}^t A_{e',e,i}(\mathcal{X}(\omega,s))B_{e',e,i}(\mathcal{X}(\omega,t))k_{e',e,i,i}(t-s)d\Lambda_\omega^{e'}(s).
 	\end{align}
 \end{equation*}
 
@@ -767,7 +783,8 @@ To be more concrete, I will consider an intensity of the form
 \begin{equation}
 	\begin{align}
 		\lambda_e(\omega,t) &= \nu_e + \sum_i \pm_i \lambda_e^i(\omega,t)^{\kappa_i}, \\
-		\lambda_e^j(\omega,t) &= \sum_{e'\in E}\int_{t_\mathrm{min}}^t \alpha_{e',e,i} A_{e',e,i}(\omega,s) B_{e',e,i}(\omega,t)\exp(-\beta_i(t-s))d\Lambda_\omega^{e'}(s), \\
+		\lambda_e^j(\omega,t) &= \sum_{e'\in E} \lambda_{e',e}^j(\omega,t), \\
+		\lambda_{e',e}^j(\omega,t) &= \int_{t_\mathrm{min}}^t \alpha_{e',e,i} A_{e',e,i}(\omega,s) B_{e',e,i}(\omega,t)\exp(-\beta_i(t-s))d\Lambda_\omega^{e'}(s), \\
 		A_{e',e,i}(\omega,s) &= \exp(a_{e',e,i}\cdot\chi(\mathcal{X}(\omega,s))), \\
 		B_{e',e,i}(\omega,t) &= \exp(b_{e',e,i}\cdot\chi(\mathcal{X}(\omega,t))).
 	\end{align}
@@ -779,286 +796,184 @@ On some dataset $\mathcal{D}$, the empirical intensity will then have the form
 \begin{equation}
 	\begin{align}
 		\lambda_\mathcal{D}^e(t) &= \nu_e + \sum_i \pm_i \lambda_\mathcal{D}^{i,e}(t)^{\kappa_i}, \\
-		\lambda_\mathcal{D}^{e,i}(t) &= \sum_{e'\in E}\int_{t_\mathrm{min}}^t \alpha_{e',e,i} A_\mathcal{D}^{e',e,i}(s) B_\mathcal{D}^{e',e,i}(t)\exp(-\beta_i(t-s))d\Lambda_\mathcal{D}^{e'}(s), \\
+		\lambda_\mathcal{D}^{e,i}(t) &= \sum_{e'\in E} \lambda_\mathcal{D}^{e',e,i}(t) \\
+		\lambda_\mathcal{D}^{e',e,i}(t) &= \int_{t_\mathrm{min}}^t \alpha_{e',e,i} A_\mathcal{D}^{e',e,i}(s) B_\mathcal{D}^{e',e,i}(t)\exp(-\beta_i(t-s))d\Lambda_\mathcal{D}^{e'}(s), \\
 		A_\mathcal{D}^{e',e,i}(s) &= \exp(a_{e',e,i}\cdot\chi(\mathcal{X}_\mathcal{D}(s))), \\
 		B_\mathcal{D}^{e',e,i}(t) &= \exp(b_{e',e,i}\cdot\chi(\mathcal{X}_\mathcal{D}(t))),
 	\end{align}
 \end{equation}
 where $\mathcal{X}_\mathcal{D}(t)$ represents the most recent recorded state of the order book at time $t$.
 
-Treating $\nu_e$ as the $0$th component intensity and $\pm_i \lambda_\mathcal{D}^{i,e}^{\kappa_i}$ as the $i$th, we then obtain
+\subsection{Differentiating with respect to the Parameters}
+Treating $\nu_e$ as the $0$th component intensities and $\pm_i \lambda_\mathcal{D}^{i,e}^{\kappa_i}$ as the $i$th, we can write down component probabilities
 \begin{equation}
 	\begin{align}
-		\frac{\partial}{\partial \nu_e}\ell_\mathcal{D} &= \frac{1}{\nu_e} \int_{t_\mathrm{min}}^{t_\mathrm{max}} P_{\mathcal{D},0}(t)d\Lambda_\mathcal{D}^e(t) - \int_{t_\mathrm{min}}^{t_\mathrm{max}} dt \\
-		&= \frac{1}{\nu_e} \int_{t_\mathrm{min}}^{t_\mathrm{max}} P_{\mathcal{D},0}(t)d\Lambda_\mathcal{D}^e(t) - (t_\mathrm{max}-t_\mathrm{min}) \\
-		\frac{\partial^2}{(\partial \nu_e)^2}\ell_\mathcal{D} &= -\frac{N_\mathcal{D}^e(t)}{\nu_e^2}, \\
-		\frac{\partial}{\partial}
+		P_{\mathcal{D},0}^e(t) &= \frac{\nu_e}{\lambda_\mathcal{D}^e(t)}, \\
+		P_{\mathcal{D},i}^e(t) &= \frac{\pm_i \lambda_\mathcal{D}^{e,i}(t)^{\kappa_i}}{\lambda_\mathcal{D}^e(t)}.
 	\end{align}
 \end{equation}
 
+From here, we can compute derivatives of $\ell_\mathcal{D}$ with respect to each parameter, as in equation \eqref{eq:derivatives}, in order to determine \textcolor{red}{the newton step?}.
 
-By writing $\lambda_\mathcal{D}^{e,i}(t)$ as
-$$\exp(-\beta_i t)\sum_{e'\in E}\alpha_{e',e,i} B_\mathcal{D}^{e',e,i}(t)\int_{t_\mathrm{min}}^t A_\mathcal{D}^{e',e,i}(s) \exp(\beta_i s)d\Lambda_\mathcal{D}^{e'}(s),$$
+\begin{equation}
+	\begin{align}
+		\frac{\partial}{\partial \nu_e}\ell_\mathcal{D} &= \frac{1}{\nu_e} \int_{t_\mathrm{min}}^{t_\mathrm{max}} P_{\mathcal{D},0}^e(t)d\Lambda_\mathcal{D}^e(t) - \int_{t_\mathrm{min}}^{t_\mathrm{max}} dt \\
+		&= \frac{1}{\nu_e} \int_{t_\mathrm{min}}^{t_\mathrm{max}} P_{\mathcal{D},0}^e(t)d\Lambda_\mathcal{D}^e(t) - (t_\mathrm{max}-t_\mathrm{min}), \\
+		\frac{\partial^2}{(\partial \nu_e)^2}\ell_\mathcal{D} &= -\frac{1}{\nu_e^2} \int_{t_\mathrm{min}}^{t_\mathrm{max}} P_{\mathcal{D},0}^e(t)d\Lambda_\mathcal{D}^e(t), \\
+	\end{align}
+\end{equation}
+
+By writing $\lambda_\mathcal{D}^{e',e,i}(t)$ as
+$$\exp(-\beta_i t)\alpha_{e',e,i} B_\mathcal{D}^{e',e,i}(t)\int_{t_\mathrm{min}}^t A_\mathcal{D}^{e',e,i}(s) \exp(\beta_i s)d\Lambda_\mathcal{D}^{e'}(s),$$
 it becomes evident that 
-$$\lambda_\mathcal{D}^{e,i}(t+\epsilon) = \exp(-\beta\epsilon) \lambda_\mathcal{D}^{e,i}(t)$$
-for any $\epsilon>0$ so long as $\Lambda_\mathcal{D}^e([t,t+\epsilon))=0$ for every $e$.
-On the other hand, at some event time $t$ with event type $e$, the right-limit of $\lambda_\mathcal{D}^{e,i}$ will be equal to
-$\frac{\lambda_\mathcal{D}^{e,i}(t)}{\exp(b_{e',e,i}\cdot \chi(\mathcal{X}_\mathcal{D}(t^-)))}$
-where $\mathcal{X}_\mathcal{D}(t^-)$ is the left-limit of $\mathcal{X}_\mathcal{D}$.
-
-For convenience, I will define two collections of measures $\Lambda_\ell^e$ and $\bar\Lambda_\ell^e$ indexed by $e\in E$ as
 \begin{equation*}
 	\begin{align}
-		\Lambda_\ell^e(A) &\coloneq \int_A \log(\lambda_\mathcal{D}^e(t)) d\Lambda_\mathcal{D}^e(t), \\
-		\bar\Lambda_\ell^e(A) &\coloneq \int_A \lambda_\mathcal{D}^e(t) dt.
+		\lambda_\mathcal{D}^{e',e,i}(t+\epsilon) &= \exp(-\beta\epsilon) \lambda_\mathcal{D}^{e',e,i}(t), \\
+		\lambda_\mathcal{D}^{e,i}(t+\epsilon) &= \exp(-\beta\epsilon) \lambda_\mathcal{D}^{e,i}(t), \\
+		\pm_i\lambda_\mathcal{D}^{e,i}(t+\epsilon)^{\kappa_i} &= \pm_i \exp(-\beta\kappa_i\epsilon) \lambda_\mathcal{D}^{e,i}(t)^{\kappa_i}, \\
 	\end{align}
 \end{equation*}
-Notice that we have
-$$\ell_\mathcal{D}(\nu,\alpha,\beta,a,b,\kappa) = \sum_e \left(\Lambda_\ell^e([t_\mathrm{min},t_\mathrm{max}]) - \bar\Lambda_\ell^e([t_\mathrm{min},t_\mathrm{max}])\right).$$
-
-Next, observe that each $\Lambda_\ell^e$ is absolutely continuous with respect to $\Lambda_\mathcal{D}^e$, and that $\log(\lambda_\mathcal{D}^e(t))$ is a Radon-Nikodym derivative $\frac{\Lambda_\ell^e}{\Lambda_\mathcal{D}^e}$. Similarly, $\bar\Lambda_\ell^e$ is absolutely continuous with respect to the Lebesgue measure, and $\lambda_\mathcal{D}^e(t)$ is a Radon-Nikodym derivative $\frac{\bar\Lambda_\ell^e}{dt}$.
-
-\subsection{Hawkes Processes}
-
-\begin{equation*}
+for any $\epsilon>0$ so long as $\sum_{e'}\Lambda_\mathcal{D}^{e'}((t,t+\epsilon))=0$.
+On the other hand, at some event time $t$ with event type $e$, the right-limit of $\lambda_\mathcal{D}^{e',e,i}$ will be equal to
+\begin{equation}
 	\begin{align}
-		\ell(\alpha,\beta; \mathcal{D}) & = \sum_j\left( \int_{t_\mathrm{min}}^{t_\mathrm{max}} \log\left(\sum_i \int_{t_\mathrm{min}}^t \alpha_{i,j}\exp(-\beta_{i,j}(t-s)) d\Lambda_\mathcal{D}^i(s)\right)d\Lambda_\mathcal{D}^j(t)\right) \\ & - \sum_j\sum_i\left( \int_{t_\mathrm{min}}^{t_\mathrm{max}} \int_{t_\mathrm{min}}^t \alpha_{i,j}\exp(-\beta_{i,j}(t-s))d\Lambda_\mathcal{D}^i(s) dt \right)
-		\\
-		\frac{\partial\ell}{\partial\alpha_{i,j}} &= \int_{t_\mathrm{min}}^{t_\mathrm{max}} \frac{\lambda_\mathcal{D}^{i,j}(t)}{\alpha_{i,j}\lambda_\mathcal{D}^j(t)}d\Lambda_\mathcal{D}^j(t) - \int_{t_\mathrm{min}}^{t_\mathrm{max}} \frac{\lambda_\mathcal{D}^{i,j}(t)}{\alpha_{i,j}}dt \\
-		\frac{\partial^2\ell}{\partial\alpha_{i,j}\partial\alpha_{i,j}} &= \int_{t_\mathrm{min}}^{t_\mathrm{max}} \left( \frac{\lambda_\mathcal{D}^{i,j}(t)}{\alpha_{i,j}^2\lambda_\mathcal{D}^j(t)} - \frac{\lambda_\mathcal{D}^{i,j}(t)}{\alpha_{i,j}^2\lambda_\mathcal{D}^j(t)} - \left(\frac{\lambda_\mathcal{D}^{i,j}(t)}{\alpha_{i,j}\lambda_\mathcal{D}^j(t)}\right)^2 \right) d\Lambda_\mathcal{D}^j(t) \\&- \int_{t_\mathrm{min}}^{t_\mathrm{max}} \left( \frac{\lambda_\mathcal{D}^j(t)}{\alpha_{i,j}^2} - \frac{\lambda_\mathcal{D}^j(t)}{\alpha_{i,j}^2} \right) dt\\
-		&= - \int_{t_\mathrm{min}}^{t_\mathrm{max}} \left(\frac{\lambda_\mathcal{D}^{i,j}(t)}{\alpha_{i,j}\lambda_\mathcal{D}^j(t)}\right)^2 d\Lambda_\mathcal{D}^j(t)\\
-		\frac{\partial^2\ell}{\partial\alpha_{i,j}\partial\alpha_{k,j}} &= \int_{t_\mathrm{min}}^{t_\mathrm{max}} \frac{\lambda_\mathcal{D}^{i,j}(t)\lambda_\mathcal{D}^{k,j}(t)}{\alpha_{i,j}\alpha_{k,j}\lambda_\mathcal{D}^j(t)} d\Lambda_\mathcal{D}^j(t)\\
-		\frac{\partial^2\ell}{\partial\alpha_{i,j}\partial\alpha_{k,l}}  &= 0\\
+		\lambda_\mathcal{D}^{e',e,i}(t^+) &= \frac{B_\mathcal{D}^{e',e,i}(t)}{B_\mathcal{D}^{e',e,i}(t^-)}\lambda_\mathcal{D}^{e',e,i}(t) + \alpha_{e',e,i} A_\mathcal{D}^{e',e,i}(t)B_\mathcal{D}^{e',e,i}(t),
 	\end{align}
-\end{equation*}
+\end{equation}
+where $B_\mathcal{D}^{e',e,i}(t^-)$ is the left-limit of $B_\mathcal{D}^{e',e,i}$.
 
-\begin{equation*}
+Partition the observation interval $(t_\mathrm{min},t_\mathrm{max})$ into $\vert\mathcal{D}\vert+1$ different intervals $T_j$ with endpoints in $\mathcal{D}\cup\{t_\mathrm{min},t_\mathrm{max}\}$. Furthermore, define
+\begin{equation}
 	\begin{align}
-		\gamma_\mathcal{D}^{i,j}(t) &= -\frac{\partial}{\partial\beta_{i,j}}\lambda_\mathcal{D}^{i,j}(t) = \int_{t_\mathrm{min}}^t (t-s)\alpha_{i,j}\exp(-\beta_{i,j}(t-s))d\Lambda_\mathcal{D}^j(s) \\
-		\gamma_\mathcal{D}^{i,j}(t+\delta) &= \int_{t_\mathrm{min}}^{t+\delta} (t+\delta-s)\alpha_{i,j}\exp(-\beta_{i,j}(t+\delta-s))d\Lambda_\mathcal{D}^j(s) \\
-		&= \delta\exp(-\beta_{i,j}\delta) \left( \lambda_\mathcal{D}^{i,j}(t) + \int_{t}^{t+\delta} \alpha_{i,j}\exp(-\beta_{i,j}(t-s))d\Lambda_\mathcal{D}^j(s) \right) \\ &+ \exp(-\beta_{i,j}\delta) \left( \gamma_\mathcal{D}^{i,j}(t) + \int_{t}^{t+\delta} (t-s)\alpha_{i,j}\exp(-\beta_{i,j}(t-s))d\Lambda_\mathcal{D}^j(s) \right) \\
-		\Gamma_\mathcal{D}^{i,j}(t) &= \int_{t_\mathrm{min}}^t\gamma_\mathcal{D}^{i,j}(s)ds \\
-		\Gamma_\mathcal{D}^{i,j}(t+\delta) &= \Gamma_\mathcal{D}^{i,j}(t) + \int_0^\delta\gamma_\mathcal{D}^{i,j}(t+\delta')d\delta' \\
-		&= \Gamma_\mathcal{D}^{i,j}(t) + \lambda_\mathcal{D}^{i,j}(t)\int_0^\delta \delta'\exp(-\beta_{i,j}\delta')d\delta' + \gamma_\mathcal{D}^{i,j}(t)\int_0^\delta \exp(-\beta_{i,j}\delta')d\delta' \\
-		&+ \int_{t_\mathrm{min}}^t\int_t^{t+\delta}\ldots d\Lambda_\mathcal{D}^j(s)du \\
-		&= \Gamma_\mathcal{D}^{i,j}(t) + \frac{\lambda_\mathcal{D}^{i,j}(t)}{\beta_{i,j}^2}(1-(\beta_{i,j}\delta+1)\exp(-\beta_{i,j}\delta)) + \frac{\gamma_\mathcal{D}^{i,j}(t)}{\beta_{i,j}}(1-\exp(-\beta_{i,j}\delta)) \\
-		&+ \int_{t_\mathrm{min}}^t\int_t^{t+\delta}\ldots d\Lambda_\mathcal{D}^j(s)du \\
+		\Gamma_0^\gamma(T_j) &= \int_{\inf T_j}^{\sup T_j}\exp(-\gamma (t-\inf T_j))dt \\
+		&= \frac{1}{\gamma} (1 - \exp(-\gamma \mu_\mathrm{Lebesgue}(T_j))), \\
+		\Gamma_1^\gamma(T_j) &= \int_{\inf T_j}^{\sup T_j}(t-\inf T_j)\exp(-\gamma (t-\inf T_j))dt \\
+		&= \frac{1}{\gamma^2} (1 - \exp(-\gamma \mu_\mathrm{Lebesgue}(T_j))(\gamma \mu_\mathrm{Lebesgue}(T_j) + 1)), \\
+		\Gamma_2^\gamma(T_j) &= \int_{\inf T_j}^{\sup T_j}(t-\inf T_j)^2\exp(-\gamma (t-\inf T_j))dt \\
+		&= \frac{1}{\gamma^3} (2 - \exp(-\gamma \mu_\mathrm{Lebesgue}(T_j))(\gamma^2\mu_\mathrm{Lebesgue}(T_j)^2+2\gamma \mu_\mathrm{Lebesgue}(T_j)+2)), \\
 	\end{align}
-\end{equation*}
+\end{equation}
+with $\mu_\mathrm{Lebesgue}(T_j) = \sup T_j - \inf T_j$.
 
+Then differentiating with respect to $\alpha_{e',e,i}$ yields
 \begin{equation*}
 	\begin{align}
-		\phi_\mathcal{D}^{i,j}(t) &= -\frac{\partial}{\partial\beta_{i,j}}\gamma_\mathcal{D}^{i,j}(t) = \int_{t_\mathrm{min}}^t (t-s)^2\alpha_{i,j}\exp(-\beta_{i,j}(t-s))d\Lambda_\mathcal{D}^j(s) \\
-		\phi_\mathcal{D}^{i,j}(t+\delta) &= \int_{t_\mathrm{min}}^{t+\delta} (t+\delta-s)^2\alpha_{i,j}\exp(-\beta_{i,j}(t+\delta-s))d\Lambda_\mathcal{D}^j(s) \\
-		&= \exp(-\beta_{i,j}\delta)\int_{t_\mathrm{min}}^{t+\delta} (\delta^2+2\delta(t-s)+(t-s)^2)\alpha_{i,j}\exp(-\beta_{i,j}(t-s))d\Lambda_\mathcal{D}^j(s) \\
-		&= \delta^2\exp(-\beta_{i,j}\delta) \left( \lambda_\mathcal{D}^{i,j}(t) + \int_{t}^{t+\delta} \alpha_{i,j}\exp(-\beta_{i,j}(t-s))d\Lambda_\mathcal{D}^j(s) \right) \\
-		&+ 2\delta\exp(-\beta_{i,j}\delta) \left( \gamma_\mathcal{D}^{i,j}(t) + \int_{t}^{t+\delta} (t-s)\alpha_{i,j}\exp(-\beta_{i,j}(t-s))d\Lambda_\mathcal{D}^j(s) \right) \\
-		&+ \exp(-\beta_{i,j}\delta) \left( \phi_\mathcal{D}^{i,j}(t) + \int_{t}^{t+\delta} (t-s)^2\alpha_{i,j}\exp(-\beta_{i,j}(t-s))d\Lambda_\mathcal{D}^j(s) \right) \\
-		\Phi_\mathcal{D}^{i,j}(t) &= \int_{t_\mathrm{min}}^t \phi_\mathcal{D}^{i,j}(s) ds \\
-		\Phi_\mathcal{D}^{i,j}(t+\delta) &= \Phi_\mathcal{D}^{i,j}(t) + \int_0^\delta\phi_\mathcal{D}^{i,j}(t+\delta')d\delta' \\
-		&= \Phi_\mathcal{D}^{i,j}(t) + \lambda_\mathcal{D}^{i,j}(t)\int_0^\delta\delta'^2\exp(-\beta_{i,j}\delta')d\delta'\\
-		&+ 2\gamma_\mathcal{D}^{i,j}(t)\int_0^\delta\delta'\exp(-\beta_{i,j}\delta')d\delta' + \phi_\mathcal{D}^{i,j}(t)\int_0^\delta\exp(-\beta_{i,j}\delta')d\delta'\\
-		&+ \int_t^{t+\delta}\int_t^{t+\delta'}\ldots d\Lambda_\mathcal{D}^{j}(s) \\
-		&= \Phi_\mathcal{D}^{i,j}\left(t\right) + \frac{\lambda_\mathcal{D}^{i,j}\left(t\right)}{\beta_{i,j}^3}\left(2-\exp\left(-\beta_{i,j}\delta\right)\left(\left(\beta_{i,j}\delta\right)^2-2\beta_{i,j}\delta+2\right)\right)\\
-		&+ \frac{2\gamma_\mathcal{D}^{i,j}(t)}{\beta_{i,j}^2}(1-\exp(-\beta_{i,j}\delta)(\beta_{i,j}\delta+1))\\
-		&+ \frac{\phi_\mathcal{D}^{i,j}(t)}{\beta_{i,j}}(1-\exp(-\beta_{i,j}\delta))\\
-		&+ \int_t^{t+\delta}\int_t^{t+\delta'}\ldots d\Lambda_\mathcal{D}^{j}(s)
+		\frac{\partial}{\partial\alpha_{e',e,i}} \lambda_\mathcal{D}^{e,i}(t)^{\kappa_i} &= \frac{\kappa_i}{\alpha_{e',e,i}} \lambda_\mathcal{D}^{e',e,i}(t) \lambda_\mathcal{D}^{e,i}(t)^{\kappa_i-1} \\
+		\frac{\partial}{\partial\alpha_{e',e,i}}\ell_\mathcal{D} &= \int_{t_\mathrm{min}}^{t_\mathrm{max}} \frac{\kappa_i \lambda_\mathcal{D}^{e',e,i}(t)}{\alpha_{e',e,i}\lambda_\mathcal{D}^{e,i}(t)} \cdot P_{\mathcal{D},i}^e(t) d\Lambda_\mathcal{D}^e(t) - \pm_i \frac{\kappa_i}{\alpha_{e',e,i}} \int_{t_\mathrm{min}}^{t_\mathrm{max}} \lambda_\mathcal{D}^{e',e,i}(t)\lambda_\mathcal{D}^{e,i}(t)^{\kappa_i-1}dt \\
+		&= \int_{t_\mathrm{min}}^{t_\mathrm{max}} \frac{\kappa_i \lambda_\mathcal{D}^{e',e,i}(t)}{\alpha_{e',e,i}\lambda_\mathcal{D}^{e,i}(t)} \cdot P_{\mathcal{D},i}^e(t) d\Lambda_\mathcal{D}^e(t) \\
+		&- \pm_i \frac{\kappa_i}{\alpha_{e',e,i}} \sum_j \lambda_\mathcal{D}^{e',e,i}((\inf T_j)^+)\lambda_\mathcal{D}^{e,i}((\inf T_j)^+)^{\kappa_i-1} \Gamma_0^{\beta_i\kappa_i}(T_j), \\
+		\frac{\partial^2}{(\partial\alpha_{e',e,i})^2} \lambda_\mathcal{D}^{e,i}(t)^{\kappa_i} &= \frac{\kappa_i(\kappa_i-1)}{\alpha_{e',e,i}^2} \lambda_\mathcal{D}^{e',e,i}(t)^2 \lambda_\mathcal{D}^{e,i}(t)^{\kappa_i-2}  \\
+		\frac{\partial^2}{(\partial\alpha_{e',e,i})^2}\ell_\mathcal{D} &= \int_{t_\mathrm{min}}^{t_\mathrm{max}} \left( \frac{\kappa_i(\kappa_i-1)\lambda_\mathcal{D}^{e',e,i}(t)^2}{\alpha_{e',e,i}^2\lambda_\mathcal{D}^{e,i}(t)^2} - \left(\frac{\kappa_i \lambda_\mathcal{D}^{e',e,i}(t)}{\alpha_{e',e,i}\lambda_\mathcal{D}^{e,i}(t)}\right)^2 \cdot P_{\mathcal{D},i}^e(t) \right) \cdot P_{\mathcal{D},i}^e(t) d\Lambda_\mathcal{D}^e(t) \\
+		&- \pm_i \int_{t_\mathrm{min}}^{t_\mathrm{max}} \frac{\kappa_i(\kappa_i-1)}{\alpha_{e',e,i}^2} \lambda_\mathcal{D}^{e',e,i}(t)^2 \lambda_\mathcal{D}^{e,i}(t)^{\kappa_i-2} dt \\
+		&= \int_{t_\mathrm{min}}^{t_\mathrm{max}} \left( \frac{\kappa_i(\kappa_i-1)\lambda_\mathcal{D}^{e',e,i}(t)^2}{\alpha_{e',e,i}^2\lambda_\mathcal{D}^{e,i}(t)^2} - \left(\frac{\kappa_i \lambda_\mathcal{D}^{e',e,i}(t)}{\alpha_{e',e,i}\lambda_\mathcal{D}^{e,i}(t)}\right)^2 \cdot P_{\mathcal{D},i}^e(t) \right) \cdot P_{\mathcal{D},i}^e(t) d\Lambda_\mathcal{D}^e(t) \\
+		&- \pm_i \sum_j \frac{\kappa_i(\kappa_i-1)}{\alpha_{e',e,i}^2} \lambda_\mathcal{D}^{e',e,i}((\inf T_j)^+)^2 \lambda_\mathcal{D}^{e,i}(\inf T_j)^+)^{\kappa_i-2} \Gamma_0^{\beta_i\kappa_i}(T_j). \\
 	\end{align}
 \end{equation*}
 
+Next, we will have
 \begin{equation*}
 	\begin{align}
-		\frac{\partial\ell}{\partial\beta_{i,j}} &= -\int_{t_\mathrm{min}}^{t_\mathrm{max}}\frac{\gamma_\mathcal{D}^{i,j}(t)}{\lambda_\mathcal{D}^{j}(t)}d\Lambda_\mathcal{D}^j(t) + \Gamma_\mathcal{D}^{i,j}(t_\mathrm{max}) \\
-		&= -\int_{t_\mathrm{min}}^{t_\mathrm{max}}\frac{\gamma_\mathcal{D}^{i,j}(t)}{\lambda_\mathcal{D}^{j}(t)}d\Lambda_\mathcal{D}^j(t) + \Gamma_\mathcal{D}^{i,j}(t_\mathrm{max}) \\
-		\frac{\partial^2\ell}{\partial\beta_{i,j}\partial\beta_{i,j}} &= \int_{t_\mathrm{min}}^{t_\mathrm{max}} \left( \frac{\phi_\mathcal{D}^{i,j}(t)}{\lambda_\mathcal{D}^{j}(t)} - \left(\frac{\gamma_\mathcal{D}^{i,j}(t)}{\lambda_\mathcal{D}^{j}(t)}\right)^2 \right) d\Lambda_\mathcal{D}^j(t) - \Phi(t_\mathrm{max}) \\
-		&= \int_{t_\mathrm{min}}^{t_\mathrm{max}} \left( \frac{\phi_\mathcal{D}^{i,j}(t)}{\lambda_\mathcal{D}^{j}(t)} - \left(\frac{\gamma_\mathcal{D}^{i,j}(t)}{\lambda_\mathcal{D}^{j}(t)}\right)^2 \right) d\Lambda_\mathcal{D}^j(t) - \Phi(t_\mathrm{max}) \\
-		\frac{\partial^2\ell}{\partial\beta_{i,j}\partial\beta_{k,j}} &= -\int_{t_\mathrm{min}}^{t_\mathrm{max}}\frac{\gamma_\mathcal{D}^{i,j}(t)\gamma_\mathcal{D}^{k,j}(t)}{\lambda_\mathcal{D}^{j}(t)^2}d\Lambda_\mathcal{D}^j(t) \\
-		\frac{\partial^2\ell}{\partial\beta_{i,j}\partial\beta_{k,l}} &= 0\\
-		\frac{\partial^2\ell}{\partial\beta_{i,j}\partial\alpha_{i,j}} &= -\int_{t_\mathrm{min}}^{t_\mathrm{max}} \frac{\gamma_\mathcal{D}^{i,j}(t)}{\alpha_{i,j}\lambda_\mathcal{D}^{j}(t)} \left( 1 - \frac{\lambda_\mathcal{D}^{i,j}(t)}{\lambda_\mathcal{D}^{j}(t)} \right) d\Lambda_\mathcal{D}^j(t) + \frac{\Gamma_\mathcal{D}^{i,j}(t_\mathrm{max})}{\alpha_{i,j}} \\
-		&= -\int_{t_\mathrm{min}}^{t_\mathrm{max}} \frac{\gamma_\mathcal{D}^{i,j}(t)}{\alpha_{i,j}\lambda_\mathcal{D}^{j}(t)} \left( 1 - \frac{\lambda_\mathcal{D}^{i,j}(t)}{\lambda_\mathcal{D}^{j}(t)} \right) d\Lambda_\mathcal{D}^j(t) + \frac{\Gamma_\mathcal{D}^{i,j}(t_\mathrm{max})}{\alpha_{i,j}} \\
-		\frac{\partial^2\ell}{\partial\beta_{i,j}\partial\alpha_{k,j}} &= \int_{t_\mathrm{min}}^{t_\mathrm{max}}\frac{\gamma_\mathcal{D}^{i,j}(t)\lambda_\mathcal{D}^{k,j}(t)}{\alpha_{k,j}\lambda_\mathcal{D}^{j}(t)^2}d\Lambda_\mathcal{D}^j(t) \\
-		\frac{\partial^2\ell}{\partial\beta_{i,j}\partial\alpha_{k,l}} &= 0
+		\frac{\partial}{\partial\beta_i}\lambda_\mathcal{D}^{e',e,i}(t) &= -\int_{t_\mathrm{min}}^t (t-s) \alpha_{e',e,i}A_\mathcal{D}^{e',e,i}(s)B_\mathcal{D}^{e',e,i}(t)\exp(-\beta_i(t-s)) d\Lambda_\mathcal{D}^{e'}(s), \\
+		\frac{\partial^2}{(\partial\beta_i)^2}\lambda_\mathcal{D}^{e',e,i}(t) &= \int_{t_\mathrm{min}}^t (t-s)^2 \alpha_{e',e,i}A_\mathcal{D}^{e',e,i}(t)B_\mathcal{D}^{e',e,i}(t)\exp(-\beta_i(t-s)) d\Lambda_\mathcal{D}^{e'}(s), \\
+	\end{align}
+\end{equation*}
+and in the case where $\sum_{e'}\Lambda_\mathcal{D}^{e'}((t,t+\epsilon))=0$ we can express these recursively as
+\begin{equation*}
+	\begin{align}
+		\frac{\partial}{\partial\beta_i}\lambda_\mathcal{D}^{e',e,i}(t+\epsilon) &= \exp(-\beta_i \epsilon)\left( -\epsilon\lambda_\mathcal{D}^{e',e,i}(t) + \frac{\partial}{\partial\beta_i}\lambda_\mathcal{D}^{e',e,i}(t) \right), \\
+		\frac{\partial^2}{(\partial\beta_i)^2}\lambda_\mathcal{D}^{e',e,i}(t+\epsilon) &= \exp(-\beta_i \epsilon)\left( \epsilon^2\lambda_\mathcal{D}^{e',e,i}(t) - 2\epsilon\frac{\partial}{\partial\beta_i}\lambda_\mathcal{D}^{e',e,i}(t) + \frac{\partial^2}{(\partial\beta_i)^2}\lambda_\mathcal{D}^{e',e,i}(t) \right).
 	\end{align}
 \end{equation*}
 
-\subsection{Continuous-State Hawkes Processes}
-
-Piecewise constant multivariate left-continuous state process $X(t)$
-
+Using these results, we can then express the derivatives of $\lambda_\mathcal{D}^{e,i}$ and $\ell_\mathcal{D}$ with respect to $\beta_i$ as
 \begin{equation*}
 	\begin{align}
-		\lambda_{i,j}(t) &= \alpha_{i,j} \exp(X^-(t)\cdot b_{i,j})\int_{t_\mathrm{min}}^t \exp(X^+(s)\cdot a_{i,j}) \exp(-\beta_{i,j}(t-s)) d\Lambda_\mathcal{D}^i(s) \\
-		\lambda_j(t) &= \sum_i \lambda_{i,j}(t) \\
-		\gamma_{i,j}(t) &= -\frac{\partial\lambda_{i,j}(t)}{\partial\beta_{i,j}} = \alpha_{i,j} \exp(X^-(t)\cdot b_{i,j})\int_{t_\mathrm{min}}^t \exp(X^+(s)\cdot a_{i,j}) (t-s)\exp(-\beta_{i,j}(t-s)) d\Lambda_\mathcal{D}^i(s) \\
+		\frac{\partial}{\partial\beta_i} \lambda_\mathcal{D}^{e,i}(t)^{\kappa_i} &= \kappa_i \lambda_\mathcal{D}^{e,i}(t)^{\kappa_i-1} \sum_{e'} \frac{\partial}{\partial\beta_i}\lambda_\mathcal{D}^{e',e,i}(t), \\
+		\frac{\partial}{\partial\beta_i}\ell_\mathcal{D} &= \int_{t_\mathrm{min}}^{t_\mathrm{max}} \frac{\kappa_i \sum_{e'} \frac{\partial}{\partial\beta_i}\lambda_\mathcal{D}^{e',e,i}(t)}{\lambda_\mathcal{D}^{e,i}(t)} P_{\mathcal{D},i}^e(t)d\Lambda_\mathcal{D}^e(t) \\
+		&- \pm_i \kappa_i \int_{t_\mathrm{min}}^{t_\mathrm{max}} \lambda_\mathcal{D}^{e,i}(t)^{\kappa_i-1}\sum_{e'}\frac{\partial}{\partial\beta_i}\lambda_\mathcal{D}^{e',e,i}(t) dt \\
+		&= \int_{t_\mathrm{min}}^{t_\mathrm{max}} \frac{\kappa_i \sum_{e'} \frac{\partial}{\partial\beta_i}\lambda_\mathcal{D}^{e',e,i}(t)}{\lambda_\mathcal{D}^{e,i}(t)} P_{\mathcal{D},i}^e(t)d\Lambda_\mathcal{D}^e(t) \\
+		&+ \pm_i \kappa_i \sum_j \lambda_\mathcal{D}^{e,i}((\inf T_j)^+)^{\kappa_i-1}\sum_{e'} \lambda_\mathcal{D}^{e',e,i}((\inf T_j)^+)\Gamma_1^{\beta_i\kappa_i}(T_j) \\
+		&- \pm_i \kappa_i \sum_j \lambda_\mathcal{D}^{e,i}((\inf T_j)^+)^{\kappa_i-1}\sum_{e'} \frac{\partial}{\partial\beta_i}\lambda_\mathcal{D}^{e',e,i}(\inf T_j)^+) \Gamma_0^{\beta_i\kappa_i}(T_j), \\
+		\frac{\partial^2}{(\partial\beta_i)^2} \lambda_\mathcal{D}^{e,i}(t)^{\kappa_i} &= \kappa_i(\kappa_i-1) \lambda_\mathcal{D}^{e,i}(t)^{\kappa_i-2} \left(\sum_{e'} \frac{\partial}{\partial\beta_i}\lambda_\mathcal{D}^{e',e,i}(t)\right)^2 + \kappa_i \lambda_\mathcal{D}^{e,i}(t)^{\kappa_i-1} \sum_{e'} \frac{\partial^2}{(\partial\beta_i)^2}\lambda_\mathcal{D}^{e',e,i}(t), \\\
+		\frac{\partial^2}{(\partial\beta_i)^2}\ell_\mathcal{D} &= \int_{t_\mathrm{min}}^{t_\mathrm{max}} \left( \kappa_i(\kappa_i-1)\left(\frac{\sum_{e'}\frac{\partial}{\partial\beta_i}\lambda_\mathcal{D}^{e',e,i}(t)}{\lambda_\mathcal{D}^{e,i}(t)}\right)^2 + \kappa_i \frac{\sum_{e'}\frac{\partial^2}{(\partial\beta_i)^2}}{\lambda_\mathcal{D}^{e,i}(t)} \right) P_{\mathcal{D},i}^e(t) d\Lambda_\mathcal{D}^e(t) \\
+		&- \int_{t_\mathrm{min}}^{t_\mathrm{max}} \kappa_i^2\left(\frac{\sum_{e'}\frac{\partial}{\partial\beta_i}\lambda_\mathcal{D}^{e',e,i}(t)}{\lambda_\mathcal{D}^{e,i}(t)}\right)^2 P_{\mathcal{D},i}^e(t)^2 d\Lambda_\mathcal{D}^e(t) \\
+		&- \pm_i\kappa_i(\kappa_i-1) \int_{t_\mathrm{min}}^{t_\mathrm{max}} \lambda_\mathcal{D}^{e,i}(t)^{\kappa_i-2} \left(\sum_{e'} \frac{\partial}{\partial\beta_i}\lambda_\mathcal{D}^{e',e,i}(t)\right)^2 dt \\
+		&+ \pm_i\kappa_i \int_{t_\mathrm{min}}^{t_\mathrm{max}} \lambda_\mathcal{D}^{e,i}(t)^{\kappa_i-1} \sum_{e'} \frac{\partial^2}{(\partial\beta_i)^2}\lambda_\mathcal{D}^{e',e,i}(t) dt \\
 	\end{align}
 \end{equation*}
 
 \begin{equation*}
 	\begin{align}
-		\ell(\alpha,\beta,a,b; \mathcal{D}) &= \sum_j\left( \int_{t_\mathrm{min}}^{t_\mathrm{max}} \log\left(\lambda_j(t)\right)d\Lambda_\mathcal{D}^j(t) - \int_{t_\mathrm{min}}^{t_\mathrm{max}}\lambda_j(t)dt \right) \\
-		\frac{\partial\ell}{\partial\alpha_{i,j}} &= \int_{t_\mathrm{min}}^{t_\mathrm{max}} \frac{\lambda_\mathcal{D}^{i,j}(t)}{\alpha_{i,j}\lambda_\mathcal{D}^j(t)}d\Lambda_\mathcal{D}^j(t) - \int_{t_\mathrm{min}}^{t_\mathrm{max}} \frac{\lambda_\mathcal{D}^{i,j}(t)}{\alpha_{i,j}}dt \\
-		\frac{\partial^2\ell}{\partial\alpha_{i,j}\partial\alpha_{i,j}} &= \int_{t_\mathrm{min}}^{t_\mathrm{max}} \left( \frac{\lambda_\mathcal{D}^{i,j}(t)}{\alpha_{i,j}^2\lambda_\mathcal{D}^j(t)} - \frac{\lambda_\mathcal{D}^{i,j}(t)}{\alpha_{i,j}^2\lambda_\mathcal{D}^j(t)} - \left(\frac{\lambda_\mathcal{D}^{i,j}(t)}{\alpha_{i,j}\lambda_\mathcal{D}^j(t)}\right)^2 \right) d\Lambda_\mathcal{D}^j(t) \\&- \int_{t_\mathrm{min}}^{t_\mathrm{max}} \left( \frac{\lambda_\mathcal{D}^j(t)}{\alpha_{i,j}^2} - \frac{\lambda_\mathcal{D}^j(t)}{\alpha_{i,j}^2} \right) dt\\
-		&= - \int_{t_\mathrm{min}}^{t_\mathrm{max}} \left(\frac{\lambda_\mathcal{D}^{i,j}(t)}{\alpha_{i,j}\lambda_\mathcal{D}^j(t)}\right)^2 d\Lambda_\mathcal{D}^j(t)\\
-		\frac{\partial^2\ell}{\partial\alpha_{i,j}\partial\alpha_{k,j}} &= \int_{t_\mathrm{min}}^{t_\mathrm{max}} \frac{\lambda_\mathcal{D}^{i,j}(t)\lambda_\mathcal{D}^{k,j}(t)}{\alpha_{i,j}\alpha_{k,j}\lambda_\mathcal{D}^j(t)} d\Lambda_\mathcal{D}^j(t)\\
-		\frac{\partial^2\ell}{\partial\alpha_{i,j}\partial\alpha_{k,l}}  &= 0\\
-		\frac{\partial\ell}{\partial\beta_{i,j}} &= -\int_{t_\mathrm{min}}^{t_\mathrm{max}}\frac{\gamma_\mathcal{D}^{i,j}(t)}{\lambda_\mathcal{D}^{j}(t)}d\Lambda_\mathcal{D}^j(t) + \Gamma_\mathcal{D}^{i,j}(t_\mathrm{max}) \\
-		&= -\int_{t_\mathrm{min}}^{t_\mathrm{max}}\frac{\gamma_\mathcal{D}^{i,j}(t)}{\lambda_\mathcal{D}^{j}(t)}d\Lambda_\mathcal{D}^j(t) + \Gamma_\mathcal{D}^{i,j}(t_\mathrm{max}) \\
-		\frac{\partial^2\ell}{\partial\beta_{i,j}\partial\beta_{i,j}} &= \int_{t_\mathrm{min}}^{t_\mathrm{max}} \left( \frac{\phi_\mathcal{D}^{i,j}(t)}{\lambda_\mathcal{D}^{j}(t)} - \left(\frac{\gamma_\mathcal{D}^{i,j}(t)}{\lambda_\mathcal{D}^{j}(t)}\right)^2 \right) d\Lambda_\mathcal{D}^j(t) - \Phi(t_\mathrm{max}) \\
-		&= \int_{t_\mathrm{min}}^{t_\mathrm{max}} \left( \frac{\phi_\mathcal{D}^{i,j}(t)}{\lambda_\mathcal{D}^{j}(t)} - \left(\frac{\gamma_\mathcal{D}^{i,j}(t)}{\lambda_\mathcal{D}^{j}(t)}\right)^2 \right) d\Lambda_\mathcal{D}^j(t) - \Phi(t_\mathrm{max}) \\
-		\frac{\partial^2\ell}{\partial\beta_{i,j}\partial\beta_{k,j}} &= -\int_{t_\mathrm{min}}^{t_\mathrm{max}}\frac{\gamma_\mathcal{D}^{i,j}(t)\gamma_\mathcal{D}^{k,j}(t)}{\lambda_\mathcal{D}^{j}(t)^2}d\Lambda_\mathcal{D}^j(t) \\
-		\frac{\partial^2\ell}{\partial\beta_{i,j}\partial\beta_{k,l}} &= 0\\
-		\frac{\partial^2\ell}{\partial\beta_{i,j}\partial\alpha_{i,j}} &= -\int_{t_\mathrm{min}}^{t_\mathrm{max}} \frac{\gamma_\mathcal{D}^{i,j}(t)}{\alpha_{i,j}\lambda_\mathcal{D}^{j}(t)} \left( 1 - \frac{\lambda_\mathcal{D}^{i,j}(t)}{\lambda_\mathcal{D}^{j}(t)} \right) d\Lambda_\mathcal{D}^j(t) + \frac{\Gamma_\mathcal{D}^{i,j}(t_\mathrm{max})}{\alpha_{i,j}} \\
-		&= -\int_{t_\mathrm{min}}^{t_\mathrm{max}} \frac{\gamma_\mathcal{D}^{i,j}(t)}{\alpha_{i,j}\lambda_\mathcal{D}^{j}(t)} \left( 1 - \frac{\lambda_\mathcal{D}^{i,j}(t)}{\lambda_\mathcal{D}^{j}(t)} \right) d\Lambda_\mathcal{D}^j(t) + \frac{\Gamma_\mathcal{D}^{i,j}(t_\mathrm{max})}{\alpha_{i,j}} \\
-		\frac{\partial^2\ell}{\partial\beta_{i,j}\partial\alpha_{k,j}} &= \int_{t_\mathrm{min}}^{t_\mathrm{max}}\frac{\gamma_\mathcal{D}^{i,j}(t)\lambda_\mathcal{D}^{k,j}(t)}{\alpha_{k,j}\lambda_\mathcal{D}^{j}(t)^2}d\Lambda_\mathcal{D}^j(t) \\
-		\frac{\partial^2\ell}{\partial\beta_{i,j}\partial\alpha_{k,l}} &= 0
-		\frac{\partial\ell}{\partial b_{i,j,k}} &= \int_{t_\mathrm{min}}^{t_\mathrm{max}} \frac{X^-(t)_k \lambda_{i,j}(t)}{\lambda_j(t)}d\Lambda_\mathcal{D}^j(t) - \int_{t_\mathrm{min}}^{t_\mathrm{max}}X^-(t)_k \lambda_{i,j}(t)dt\\
-		\frac{\partial^2\ell}{\partial b_{i,j,k}\partial b_{i,j,l}} &= \int_{t_\mathrm{min}}^{t_\mathrm{max}} \frac{X^-(t)_k X^-(t)_l \lambda_{i,j}(t)}{\lambda_j(t)}\left( 1 - \frac{\lambda_{i,j}(t)}{\lambda_j(t)} \right) d\Lambda_\mathcal{D}^j(t) \\ &- \int_{t_\mathrm{min}}^{t_\mathrm{max}} X^-(t)_k X^-(t)_l \lambda_{i,j}(t) dt\\
-		\lambda_{i,j}^k(t) &= \alpha_{i,j} \exp(X^-(t)\cdot b_{i,j})\int_{t_\mathrm{min}}^t X^+(s)_k\exp(X^+(s)\cdot a_{i,j}) \exp(-\beta_{i,j}(t-s)) d\Lambda_\mathcal{D}^i(s) \\
-		\lambda_{i,j}^{k,l}(t) &= \alpha_{i,j} \exp(X^-(t)\cdot b_{i,j})\int_{t_\mathrm{min}}^t X^+(s)_k X^+(s)_l \exp(X^+(s)\cdot a_{i,j}) \exp(-\beta_{i,j}(t-s)) d\Lambda_\mathcal{D}^i(s) \\
-		\frac{\partial\ell}{\partial a_{i,j,k}} &= \int_{t_\mathrm{min}}^{t_\mathrm{max}} \frac{\lambda_{i,j}^k(t)}{\lambda_j(t)}d\Lambda_\mathcal{D}^j(t) - \int_{t_\mathrm{min}}^{t_\mathrm{max}} \lambda_{i,j}^k(t)dt\\
-		\frac{\partial^2\ell}{\partial a_{i,j,k}\partial a_{i,j,l}} &= \int_{t_\mathrm{min}}^{t_\mathrm{max}} \left( \frac{\lambda_{i,j}^{k,l}(t)}{\lambda_j(t)} - \frac{\lambda_{i,j}^k(t)\lambda_{i,j}^l(t)}{\lambda_j(t)^2} \right) d\Lambda_\mathcal{D}^j(t) - \int_{t_\mathrm{min}}^{t_\mathrm{max}} \lambda_{i,j}^{k,l}(t)dt\\
+		&= \int_{t_\mathrm{min}}^{t_\mathrm{max}} \left( \kappa_i(\kappa_i-1)\left(\frac{\sum_{e'}\frac{\partial}{\partial\beta_i}\lambda_\mathcal{D}^{e',e,i}(t)}{\lambda_\mathcal{D}^{e,i}(t)}\right)^2 + \kappa_i \frac{\sum_{e'}\frac{\partial^2}{(\partial\beta_i)^2}}{\lambda_\mathcal{D}^{e,i}(t)} \right) P_{\mathcal{D},i}^e(t) d\Lambda_\mathcal{D}^e(t) \\
+		&- \int_{t_\mathrm{min}}^{t_\mathrm{max}} \kappa_i^2\left(\frac{\sum_{e'}\frac{\partial}{\partial\beta_i}\lambda_\mathcal{D}^{e',e,i}(t)}{\lambda_\mathcal{D}^{e,i}(t)}\right)^2 P_{\mathcal{D},i}^e(t)^2 d\Lambda_\mathcal{D}^e(t) \\
+		&- \pm_i\kappa_i(\kappa_i-1) \sum_j \lambda_\mathcal{D}^{e,i}((\inf T_j)^+)^{\kappa_i-2} \Gamma_0^{\beta_i\kappa_i}(T_j) \left(\frac{\partial}{\partial\beta_i}\lambda_\mathcal{D}^{e,i}(\inf T_j)^+)\right)^2 \\
+		&+ \pm_i2\kappa_i(\kappa_i-1) \sum_j \lambda_\mathcal{D}^{e,i}((\inf T_j)^+)^{\kappa_i-1} \Gamma_1^{\beta_i\kappa_i}(T_j) \frac{\partial}{\partial\beta_i}\lambda_\mathcal{D}^{e,i}(\inf T_j)^+) \\
+		&- \pm_i\kappa_i(\kappa_i-1) \sum_j \lambda_\mathcal{D}^{e,i}((\inf T_j)^+)^{\kappa_i} \Gamma_2^{\beta_i\kappa_i}(T_j) \\
+		&+ \kappa_i \sum_j \lambda_\mathcal{D}^{e,i}((\inf T_j)^+)^{\kappa_i-1} \Gamma_0^{\beta_i\kappa_i}(T_j) \frac{\partial^2}{(\partial\beta_i)^2}\lambda_\mathcal{D}^{e,i}((\inf T_j)^+) \\
+		&-\pm_i2\kappa_i \sum_j \lambda_\mathcal{D}^{e,i}((\inf T_j)^+)^{\kappa_i-1} \Gamma_1^{\beta_i\kappa_i}(T_j)\frac{\partial}{\partial\beta_i}\lambda_\mathcal{D}^{e,i}((\inf T_j)^+) \\
+		&+ \pm_i\kappa_i \sum_j \lambda_\mathcal{D}^{e,i}((\inf T_j)^+)^{\kappa_i} \Gamma_2^{\beta_i\kappa_i}(T_j)\\
+		&= \int_{t_\mathrm{min}}^{t_\mathrm{max}} \left( \kappa_i(\kappa_i-1)\left(\frac{\sum_{e'}\frac{\partial}{\partial\beta_i}\lambda_\mathcal{D}^{e',e,i}(t)}{\lambda_\mathcal{D}^{e,i}(t)}\right)^2 + \kappa_i \frac{\sum_{e'}\frac{\partial^2}{(\partial\beta_i)^2}}{\lambda_\mathcal{D}^{e,i}(t)} \right) P_{\mathcal{D},i}^e(t) d\Lambda_\mathcal{D}^e(t) \\
+		&- \int_{t_\mathrm{min}}^{t_\mathrm{max}} \kappa_i^2\left(\frac{\sum_{e'}\frac{\partial}{\partial\beta_i}\lambda_\mathcal{D}^{e',e,i}(t)}{\lambda_\mathcal{D}^{e,i}(t)}\right)^2 P_{\mathcal{D},i}^e(t)^2 d\Lambda_\mathcal{D}^e(t) \\
+		&- \pm_i\kappa_i(\kappa_i-1) \sum_j \lambda_\mathcal{D}^{e,i}((\inf T_j)^+)^{\kappa_i-2} \Gamma_0^{\beta_i\kappa_i}(T_j) \left(\frac{\partial}{\partial\beta_i}\lambda_\mathcal{D}^{e,i}(\inf T_j)^+)\right)^2 \\
+		&+ \pm_i2\kappa_i(\kappa_i-2) \sum_j \lambda_\mathcal{D}^{e,i}((\inf T_j)^+)^{\kappa_i-1} \Gamma_1^{\beta_i\kappa_i}(T_j) \frac{\partial}{\partial\beta_i}\lambda_\mathcal{D}^{e,i}(\inf T_j)^+) \\
+		&- \pm_i\kappa_i(\kappa_i-2) \sum_j \lambda_\mathcal{D}^{e,i}((\inf T_j)^+)^{\kappa_i} \Gamma_2^{\beta_i\kappa_i}(T_j) \\
+		&+ \pm_i\kappa_i \sum_j \lambda_\mathcal{D}^{e,i}((\inf T_j)^+)^{\kappa_i-1} \Gamma_0^{\beta_i\kappa_i}(T_j) \frac{\partial^2}{(\partial\beta_i)^2}\lambda_\mathcal{D}^{e,i}((\inf T_j)^+). \\
 	\end{align}
 \end{equation*}
 
-This nests ordinary state-dependence if you have one positive and one negative kernel
-
-\subsection{Continuous-State Power Hawkes Processes}
-``We introduce and establish the main properties of QHawkes ("Quadratic" Hawkes) models. QHawkes models generalize the Hawkes price models introduced in E. Bacry et al. (2014), by allowing all feedback effects in the jump intensity that are linear and quadratic in past returns. A non-parametric fit on NYSE stock data shows that the off-diagonal component of the quadratic kernel indeed has a structure that standard Hawkes models fail to reproduce. Our model exhibits two main properties, that we believe are crucial in the modelling and the understanding of the volatility process: first, the model is time-reversal asymmetric, similar to financial markets whose time evolution has a preferred direction. Second, it generates a multiplicative, fat-tailed volatility process, that we characterize in detail in the case of exponentially decaying kernels, and which is linked to Pearson diffusions in the continuous limit. Several other interesting properties of QHawkes processes are discussed, in particular the fact that they can generate long memory without necessarily be at the critical point. Finally, we provide numerical simulations of our calibrated QHawkes model, which is indeed seen to reproduce, with only a small amount of quadratic non-linearity, the correct magnitude of fat-tails and time reversal asymmetry seen in empirical time series.''
-% https://arxiv.org/abs/1509.07710
+Differentiating with respect to $a_{e',e,i}$, we obtain
 \begin{equation*}
 	\begin{align}
-		\lambda_\mathcal{D}^{i,j}(t) &= \alpha_{i,j} \exp(X^-(t)\cdot b_{i,j})\int_{t_\mathrm{min}}^t \exp(X^+(s)\cdot a_{i,j}) \exp(-\beta (t-s)) d\Lambda_\mathcal{D}^i(s) \\
-		\lambda_\mathcal{D}^j(t) &= \sum_i \lambda_\mathcal{D}^{i,j}(t)\right \\
-		\ell(\alpha,\beta,a,b,k; \mathcal{D}) &= \sum_j\left( \int_{t_\mathrm{min}}^{t_\mathrm{max}} k\log\left(\lambda_\mathcal{D}^j(t)\right)d\Lambda_\mathcal{D}^j(t) - \int_{t_\mathrm{min}}^{t_\mathrm{max}}\lambda_\mathcal{D}^j(t)^k dt \right) \\
-		\frac{\partial\ell}{\partial k} &= \sum_j\left( \int_{t_\mathrm{min}}^{t_\mathrm{max}} \log\left(\lambda_\mathcal{D}^j(t)\right)d\Lambda_\mathcal{D}^j(t) - \int_{t_\mathrm{min}}^{t_\mathrm{max}}\lambda_\mathcal{D}^j(t)^k \log(\lambda_\mathcal{D}^j(t)) dt \right) \\
-		\Lambda(t+\epsilon)-\Lambda(t)=0 &\implies \int_{t}^{t+\epsilon}\lambda_\mathcal{D}^j(s)^k \log(\lambda_\mathcal{D}^j(s)) ds \right) \\ &= \lambda_\mathcal{D}^j(t)^k \log(\lambda_\mathcal{D}^j(t))\int_0^\epsilon \exp(-\beta k s)ds - \lambda_\mathcal{D}^j(t)^k \beta \int_0^\epsilon s\exp(-\beta k s)ds \\
-		\frac{\partial^2\ell}{\partial k\partial k} &= -\sum_j\left( \int_{t_\mathrm{min}}^{t_\mathrm{max}}\lambda_\mathcal{D}^j(t)^k \log(\lambda_\mathcal{D}^j(t))^2 dt \right) \\
-		\Lambda(t+\epsilon)-\Lambda(t)=0 &\implies \int_t^{t+\epsilon}\lambda_\mathcal{D}^j(s)^k \log(\lambda_\mathcal{D}^j(s))^2 ds \\ &= \int_0^\epsilon \lambda_\mathcal{D}^j(t)^k\exp(-\beta k s) \left(\log(\lambda_\mathcal{D}^j(t)) - \beta s\right)^2 ds\\ &= \int_0^\epsilon \lambda_\mathcal{D}^j(t)^k\exp(-\beta k s) \left( \log(\lambda_\mathcal{D}^j(t))^2 - 2 \log(\lambda_\mathcal{D}^j(t))\beta s + \beta^2 s^2 \right) ds\\
-		\frac{\partial\lambda_\mathcal{D}^j(t)}{\partial\beta} &= -\sum_i \alpha_{i,j}\exp(X^-(t)\cdot b_{i,j}) \int_{t_\mathrm{min}}^t (t-s)\exp(X^+(s)\cdot a_{i,j})\exp(-\beta (t-s)) d\Lambda_\mathcal{D}^i(s) \\
-		\Lambda(t+\epsilon)-\Lambda(t)=0 &\implies \frac{\partial\lambda_\mathcal{D}^j}{\partial\beta}(t+\epsilon) = \exp(-\beta \epsilon) \left( \frac{\partial\lambda_\mathcal{D}^j}{\partial\beta}(t)-\epsilon \lambda_\mathcal{D}^j(t) \right) \\
-		\frac{\partial^2\lambda_\mathcal{D}^j(t)}{\partial\beta\partial\beta} &= \sum_i \alpha_{i,j}\exp(X^-(t)\cdot b_{i,j}) \int_{t_\mathrm{min}}^t (t-s)^2\exp(X^+(s)\cdot a_{i,j})\exp(-\beta (t-s)) d\Lambda_\mathcal{D}^i(s) \\
-		\Lambda(t+\epsilon)-\Lambda(t)=0 &\implies \frac{\partial^2\lambda_\mathcal{D}^j}{\partial\beta\partial\beta}(t+\epsilon) = \exp(-2\beta\epsilon)\left(\frac{\partial^2\lambda_\mathcal{D}^j}{\partial\beta\partial\beta}(t)-2\epsilon\frac{\partial\lambda_\mathcal{D}^j}{\partial\beta}(t)+\epsilon^2\lambda_\mathcal{D}^j(t)\right)\\
-		\frac{\partial\ell}{\partial \beta} &= k \sum_j\left( \int_{t_\mathrm{min}}^{t_\mathrm{max}} \frac{\frac{\partial}{\partial\beta}\lambda_\mathcal{D}^j(t)}{\lambda_\mathcal{D}^j(t)}d\Lambda_\mathcal{D}^j(t) - \int_{t_\mathrm{min}}^{t_\mathrm{max}}\lambda_\mathcal{D}^j(t)^{k-1} \frac{\partial \lambda_\mathcal{D}^j(t)}{\partial\beta} dt \right) \\
-		\frac{\partial^2\ell}{\partial \beta \partial \beta} &= k \sum_j \int_{t_\mathrm{min}}^{t_\mathrm{max}} \left( \frac{\frac{\partial^2}{\partial\beta\partial\beta}\lambda_\mathcal{D}^j(t)}{\lambda_\mathcal{D}^j(t)} - \left(\frac{\frac{\partial}{\partial\beta}\lambda_\mathcal{D}^j(t)}{\lambda_\mathcal{D}^j(t)}\right)^2 \right) d\Lambda_\mathcal{D}^j(t) \\ &- k\sum_j \int_{t_\mathrm{min}}^{t_\mathrm{max}} \left( (k-1)\lambda_\mathcal{D}^j(t)^{k-2} \left(\frac{\partial \lambda_\mathcal{D}^j(t)}{\partial\beta}\right)^2 + \lambda_\mathcal{D}^j(t)^{k-1} \frac{\partial^2 \lambda_\mathcal{D}^j(t)}{\partial\beta\partial\beta} \right) dt \right) \\ 
+		\nabla_{a_{e',e,i}} \lambda_\mathcal{D}^{e',e,i}(t) &= \int_{t_\mathrm{min}}^t \chi(\mathcal{X}_\mathcal{D}(s)) \alpha_{e',e,i}A_\mathcal{D}^{e',e,i}(s)B_\mathcal{D}^{e',e,i}(t) \exp(-\beta_i(t-s)) d\Lambda_\mathcal{D}^{e'}(s),\\
+		\nabla_{a_{e',e,i}} \lambda_\mathcal{D}^{e,i}(t)^{\kappa_i} &= \kappa_i \lambda_\mathcal{D}^{e,i}(t)^{\kappa_i-1} \nabla_{a_{e',e,i}} \lambda_\mathcal{D}^{e',e,i}(t), \\
+		\nabla_{a_{e',e,i}} \ell_\mathcal{D} &= \int_{t_\mathrm{min}}^{t_\mathrm{max}} \frac{\kappa_i \nabla_{a_{e',e,i}}\lambda_\mathcal{D}^{e',e,i}(t) }{\lambda_\mathcal{D}^{e,i}(t)} P_{\mathcal{D},i}^e(t) d\Lambda_\mathcal{D}^e(t) - \pm_i\int_{t_\mathrm{min}}^{t_\mathrm{max}} \kappa_i \lambda_\mathcal{D}^{e,i}(t)^{\kappa_i-1} \nabla_{a_{e',e,i}} \lambda_\mathcal{D}^{e',e,i}(t) dt \\
+		&= \int_{t_\mathrm{min}}^{t_\mathrm{max}} \frac{\kappa_i \nabla_{a_{e',e,i}}\lambda_\mathcal{D}^{e',e,i}(t) }{\lambda_\mathcal{D}^{e,i}(t)} P_{\mathcal{D},i}^e(t) d\Lambda_\mathcal{D}^e(t) \\
+		&- \pm_i\kappa_i \sum_j \Gamma_0^{\beta_i\kappa_i}(T_j)\lambda_\mathcal{D}^{e,i}((\inf T_j)^+)^{\kappa_i-1} \nabla_{a_{e',e,i}} \lambda_\mathcal{D}^{e',e,i}((\inf T_j)^+), \\
+		H_{a_{e',e,i}} \lambda_\mathcal{D}^{e',e,i}(t) &= \int_{t_\mathrm{min}}^t \chi(\mathcal{X}_\mathcal{D}(s)) \chi(\mathcal{X}_\mathcal{D}(s))^T \alpha_{e',e,i}A_\mathcal{D}^{e',e,i}(s)B_\mathcal{D}^{e',e,i}(t) \exp(-\beta_i(t-s)) d\Lambda_\mathcal{D}^{e'}(s), \\
+		H_{a_{e',e,i}} \lambda_\mathcal{D}^{e,i}(t)^{\kappa_i} &= \kappa_i(\kappa_i-1) \lambda_\mathcal{D}^{e,i}(t)^{\kappa_i-2} \left(\nabla_{a_{e',e,i}}\lambda_\mathcal{D}^{e',e,i}(t)\right) \left(\nabla_{a_{e',e,i}}\lambda_\mathcal{D}^{e',e,i}(t)\right)^T, \\
+		H_{a_{e',e,i}} \ell_\mathcal{D} &= \int_{t_\mathrm{min}}^{t_\mathrm{max}} \frac{\kappa_i(\kappa_i-1) (\nabla_{a_{e',e,i}}\lambda_\mathcal{D}^{e',e,i}(t)) (\nabla_{a_{e',e,i}}\lambda_\mathcal{D}^{e',e,i}(t))^T }{\lambda_\mathcal{D}^{e,i}(t)^2} P_{\mathcal{D},i}^e(t) d\Lambda_\mathcal{D}^e(t) \\
+		&+ \int_{t_\mathrm{min}}^{t_\mathrm{max}} \frac{\kappa_i H_{a_{a',e,i}}\lambda_\mathcal{D}^{e',e,i}(t)}{\lambda_\mathcal{D}^{e,i}(t)} P_{\mathcal{D},i}^e(t) d\Lambda_\mathcal{D}^e(t) \\
+		&- \int_{t_\mathrm{min}}^{t_\mathrm{max}} \frac{\kappa_i^2 (\nabla_{a_{e',e,i}}\lambda_\mathcal{D}^{e',e,i}(t)) (\nabla_{a_{e',e,i}}\lambda_\mathcal{D}^{e',e,i}(t))^T }{\lambda_\mathcal{D}^{e,i}(t)^2} P_{\mathcal{D},i}^e(t)^2 d\Lambda_\mathcal{D}^e(t) \\
+		&- \pm_i\int_{t_\mathrm{min}}^{t_\mathrm{max}} \kappa_i(\kappa_i-1) \lambda_\mathcal{D}^{e,i}(t)^{\kappa_i-2} \left(\nabla_{a_{e',e,i}}\lambda_\mathcal{D}^{e',e,i}(t)\right) \left(\nabla_{a_{e',e,i}}\lambda_\mathcal{D}^{e',e,i}(t)\right)^T dt \\
+		&= \int_{t_\mathrm{min}}^{t_\mathrm{max}} \frac{\kappa_i(\kappa_i-1) (\nabla_{a_{e',e,i}}\lambda_\mathcal{D}^{e',e,i}(t)) (\nabla_{a_{e',e,i}}\lambda_\mathcal{D}^{e',e,i}(t))^T }{\lambda_\mathcal{D}^{e,i}(t)^2} P_{\mathcal{D},i}^e(t) d\Lambda_\mathcal{D}^e(t) \\
+		&+ \int_{t_\mathrm{min}}^{t_\mathrm{max}} \frac{\kappa_i H_{a_{a',e,i}}\lambda_\mathcal{D}^{e',e,i}(t)}{\lambda_\mathcal{D}^{e,i}(t)} P_{\mathcal{D},i}^e(t) d\Lambda_\mathcal{D}^e(t) \\
+		&- \int_{t_\mathrm{min}}^{t_\mathrm{max}} \frac{\kappa_i^2 (\nabla_{a_{e',e,i}}\lambda_\mathcal{D}^{e',e,i}(t)) (\nabla_{a_{e',e,i}}\lambda_\mathcal{D}^{e',e,i}(t))^T }{\lambda_\mathcal{D}^{e,i}(t)^2} P_{\mathcal{D},i}^e(t)^2 d\Lambda_\mathcal{D}^e(t) \\
+		&- \pm_i\kappa_i(\kappa_i-1) \sum_j \Gamma_0^{\beta_i\kappa_i}(T_j)\lambda_\mathcal{D}^{e,i} ((\inf T_j)^+)^{\kappa_i-2} \\
+		&\cdot \left(\nabla_{a_{e',e,i}}\lambda_\mathcal{D}^{e',e,i}((\inf T_j)^+)\right) \left(\nabla_{a_{e',e,i}}\lambda_\mathcal{D}^{e',e,i}((\inf T_j)^+)\right)^T. \\
 	\end{align}
 \end{equation*}
 
+Similarly, differentiating with respect to $b_{e',e,i}$ yields
 \begin{equation*}
 	\begin{align}
-		\frac{\partial\ell}{\partial\theta_{i,j}} &= k\int_{t_\mathrm{min}}^{t_\mathrm{max}} \frac{\frac{\partial}{\partial\theta_{i,j}} \lambda_\mathcal{D}^{i,j}(t)}{\lambda_\mathcal{D}^j(t)}d\Lambda_\mathcal{D}^{j}(t) - k\int_{t_\mathrm{min}}^{t_\mathrm{max}} \lambda_\mathcal{D}^j(t)^{k-1} \frac{\partial \lambda_\mathcal{D}^{i,j}(t)}{\partial \theta_{i,j}} dt \\
-		\frac{\partial^2\ell}{\partial\theta_{i,j}\partial\theta_{i,j}} &= k\int_{t_\mathrm{min}}^{t_\mathrm{max}} \left( \frac{\frac{\partial^2}{\partial\theta_{i,j}\partial\theta_{i,j}} \lambda_\mathcal{D}^{i,j}(t)}{\lambda_\mathcal{D}^j(t)} - \left(\frac{\frac{\partial}{\partial\theta_{i,j}}\lambda_\mathcal{D}^{i,j}(t)}{\lambda_\mathcal{D}^i(t)}\right)^2 \right) d\Lambda_\mathcal{D}^{j}(t) \\
-		&- k\int_{t_\mathrm{min}}^{t_\mathrm{max}} \left( (k-1)\lambda_\mathcal{D}^j(t)^{k-2} \left(\frac{\partial \lambda_\mathcal{D}^{i,j}(t)}{\partial \theta_{i,j}}\right)^2 + \lambda_\mathcal{D}^j(t)^{k-1} \frac{\partial^2 \lambda_\mathcal{D}^{i,j}(t)}{\partial \theta_{i,j}\partial\theta_{i,j}} \right) dt \\
-		\frac{\partial \lambda_\mathcal{D}^{i,j}(t)}{\partial \alpha_{i,j}} &= \frac{\lambda_\mathcal{D}^{i,j}(t)}{\alpha_{i,j}} \\
-		\frac{\partial^2 \lambda_\mathcal{D}^{i,j}(t)}{\partial \alpha_{i,j}\partial\alpha_{i,j}} &= \frac{\lambda_\mathcal{D}^{i,j}(t)}{\alpha_{i,j}^2} \\
-		\frac{\partial \lambda_\mathcal{D}^{i,j}(t)}{\partial b_{i,j}} &= X(t)\lambda_\mathcal{D}^{i,j}(t) \\
-		\frac{\partial^2 \lambda_\mathcal{D}^{i,j}(t)}{\partial b_{i,j}\partial b_{i,j}} &= X(t) X(t)^T \lambda_\mathcal{D}^{i,j}(t) \\
-		\frac{\partial \lambda_\mathcal{D}^{i,j}(t)}{\partial a_{i,j}} &= \alpha_{i,j}\exp(X(t)\cdot b_{i,j}) \int_{t_\mathrm{min}}^t X(s) \exp(X(s)\cdot a_{i,j})\exp(-\beta(t-s))d\Lambda_\mathcal{D}^i(s) \\
-		\frac{\partial^2 \lambda_\mathcal{D}^{i,j}(t)}{\partial a_{i,j}\partial a_{i,j}} &= \alpha_{i,j}\exp(X(t)\cdot b_{i,j}) \int_{t_\mathrm{min}}^t X(s) X(s)^T \exp(X(s)\cdot a_{i,j})\exp(-\beta(t-s))d\Lambda_\mathcal{D}^i(s) \\
+		\nabla_{b_{e',e,i}} \lambda_\mathcal{D}^{e',e,i}(t) &= \chi(\mathcal{X}_\mathcal{D}(t^-)) \lambda_\mathcal{D}^{e',e,i}(t), \\
+		\nabla_{b_{e',e,i}} \lambda_\mathcal{D}^{e,i}(t)^{\kappa_i} &= \kappa_i \lambda_\mathcal{D}^{e,i}(t)^{\kappa_i-1} \chi(\mathcal{X}_\mathcal{D}(t^-)) \lambda_\mathcal{D}^{e',e,i}(t), \\
+		\nabla_{b_{e',e,i}} \ell_\mathcal{D} &= \int_{t_\mathrm{min}}^{t_\mathrm{max}} \frac{\kappa_i \chi(\mathcal{X}_\mathcal{D}(t^-))\lambda_\mathcal{D}^{e',e,i}(t) }{\lambda_\mathcal{D}^{e,i}(t)} P_{\mathcal{D},i}^e(t) d\Lambda_\mathcal{D}^e(t) \\
+		&- \pm_i \int_{t_\mathrm{min}}^{t_\mathrm{max}} \kappa_i \lambda_\mathcal{D}^{e,i}(t)^{\kappa_i-1} \chi(\mathcal{X}_\mathcal{D}(t^-)) \lambda_\mathcal{D}^{e',e,i}(t) dt \\
+		&= \int_{t_\mathrm{min}}^{t_\mathrm{max}} \frac{\kappa_i \chi(\mathcal{X}_\mathcal{D}(t^-)) \lambda_\mathcal{D}^{e',e,i}(t) }{\lambda_\mathcal{D}^{e,i}(t)} P_{\mathcal{D},i}^e(t) d\Lambda_\mathcal{D}^e(t) \\
+		&- \pm_i \kappa_i \sum_j \Gamma_0^{\beta_i\kappa_i}(T_j)\lambda_\mathcal{D}^{e,i}((\inf T_j)^+)^{\kappa_i-1} \chi(\mathcal{X}_\mathcal{D}((\inf T_j))) \lambda_\mathcal{D}^{e',e,i}((\inf T_j)^+), \\
+		H_{b_{e',e,i}} \lambda_\mathcal{D}^{e',e,i}(t) &= \chi(\mathcal{X}_\mathcal{D}(t^-)) \chi(\mathcal{X}_\mathcal{D}(t^-))^T \lambda_\mathcal{D}^{e',e,i}(t), \\
+		H_{b_{e',e,i}} \lambda_\mathcal{D}^{e,i}(t)^{\kappa_i} &= \kappa_i(\kappa_i-1) \chi(\mathcal{X}_\mathcal{D}(t^-)) \chi(\mathcal{X}_\mathcal{D}(t^-))^T \lambda_\mathcal{D}^{e,i}(t)^{\kappa_i-2} \lambda_\mathcal{D}^{e',e,i}(t)^2, \\
+		H_{b_{e',e,i}} \ell_\mathcal{D} &= \int_{t_\mathrm{min}}^{t_\mathrm{max}} \kappa_i(\kappa_i-1) \chi(\mathcal{X}_\mathcal{D}(t^-)) \chi(\mathcal{X}_\mathcal{D}(t^-))^T \frac{\lambda_\mathcal{D}^{e',e,i}(t)^2 }{\lambda_\mathcal{D}^{e,i}(t)^2} P_{\mathcal{D},i}^e(t) d\Lambda_\mathcal{D}^e(t) \\
+		&+ \int_{t_\mathrm{min}}^{t_\mathrm{max}} \kappa_i \chi(\mathcal{X}_\mathcal{D}(t^-)) \chi(\mathcal{X}_\mathcal{D}(t^-))^T \frac{\lambda_\mathcal{D}^{e',e,i}(t)}{\lambda_\mathcal{D}^{e,i}(t)} P_{\mathcal{D},i}^e(t) d\Lambda_\mathcal{D}^e(t) \\
+		&- \int_{t_\mathrm{min}}^{t_\mathrm{max}} \kappa_i^2\chi(\mathcal{X}_\mathcal{D}(t^-)) \chi(\mathcal{X}_\mathcal{D}(t^-))^T \frac{\lambda_\mathcal{D}^{e',e,i}(t)^2}{\lambda_\mathcal{D}^{e,i}(t)^2} P_{\mathcal{D},i}^e(t)^2 d\Lambda_\mathcal{D}^e(t) \\
+		&- \pm_i \int_{t_\mathrm{min}}^{t_\mathrm{max}} \kappa_i(\kappa_i-1)\chi(\mathcal{X}_\mathcal{D}(t^-)) \chi(\mathcal{X}_\mathcal{D}(t^-))^T  \lambda_\mathcal{D}^{e,i}(t)^{\kappa_i-2} \lambda_\mathcal{D}^{e',e,i}(t)^2 dt \\
+		&= -\int_{t_\mathrm{min}}^{t_\mathrm{max}} \kappa_i\chi(\mathcal{X}_\mathcal{D}(t^-)) \chi(\mathcal{X}_\mathcal{D}(t^-))^T \frac{\lambda_\mathcal{D}^{e',e,i}(t)^2}{\lambda_\mathcal{D}^{e,i}(t)^2} P_{\mathcal{D},i}^e(t) d\Lambda_\mathcal{D}^e(t) \\
+		&+ \int_{t_\mathrm{min}}^{t_\mathrm{max}} \kappa_i \chi(\mathcal{X}_\mathcal{D}(t^-)) \chi(\mathcal{X}_\mathcal{D}(t^-))^T \frac{\lambda_\mathcal{D}^{e',e,i}(t)}{\lambda_\mathcal{D}^{e,i}(t)} P_{\mathcal{D},i}^e(t) d\Lambda_\mathcal{D}^e(t) \\
+		&- \pm_i \kappa_i(\kappa_i-1) \sum_j \Gamma_0^{\beta_i\kappa_i}(T_j)\lambda_\mathcal{D}^{e,i} ((\inf T_j)^+)^{\kappa_i-2} \\
+		&\cdot \chi(\mathcal{X}_\mathcal{D}((\inf T_j))) \chi(\mathcal{X}_\mathcal{D}((\inf T_j)))^T \lambda_\mathcal{D}^{e',e,i}((\inf T_j)^+)^2. \\
 	\end{align}
 \end{equation*}
 
-This nests the previous with $n^2$ kernels and a possible sign flip. Explain why $\beta$ needs to be a single number rather than a matrix as before.
-
-\subsection{EM for State-Dependent Hawkes Processes}
-- Equations
-
-- Visualisation of branching matrix. How does it evolve throughout the fitting procedure?
-
-- Quasi EM approximation
-
-- Closed form constant time M step for multivariate state dependent hawkes processes
-
-- Method of scoring (Newton's method)
-
-- Negative probabilities. Conditions for kernel nonnegativity? (Probably not tractable)
-
-\section{Inference for the Mark Process}
-Kalman filter? Ways to couple this with the point process? (Monte carlo EM?)
-
-\section{Hidden Events}
+Finally, differentiating with respect to $\kappa_i$ yields
 \begin{equation*}
 	\begin{align}
-		& \mathbb{P}^\theta(t\in\mathcal{T} \vert \mathcal{D}, \mathcal{H}_t) \\
-		= & \mathbb{P}^\theta(t\in\mathcal{T}\vert \mathcal{D}_t, \mathcal{H}_t) \frac{\mathbb{P}^\theta(\mathcal{D}_{t\to T} \vert t\in\mathcal{T}, \mathcal{D}_t, \mathcal{H}_t)}{\mathbb{P}^\theta(\mathcal{D}_{t\to T} \vert t\in\mathcal{T}, \mathcal{D}_t, \mathcal{H}_t)\lambda_{\mathcal{D},\mathcal{H}}dt + \mathbb{P}^\theta(\mathcal{D}_{t\to T} \vert t\not\in\mathcal{T}, \mathcal{D}_t, \mathcal{H}_t)(1-\lambda_{\mathcal{D},\mathcal{H}}dt)} \\
-		= & \mathbb{P}^\theta(t\in\mathcal{T}\vert \mathcal{D}_t, \mathcal{H}_t) \frac{\mathbb{P}^\theta(\mathcal{D}_{t\to T}\vert t\in\mathcal{T}, \mathcal{D}_t, \mathcal{H}_t)}{\mathbb{P}^\theta(\mathcal{D}_{t\to T}\vert t\not\in\mathcal{T}, \mathcal{D}_t, \mathcal{H}_t)}
+		\frac{\partial}{\partial\kappa_i} \lambda_\mathcal{D}^{e,i}(t)^{\kappa_i} &= \lambda_\mathcal{D}^{e,i}(t)^{\kappa_i} \log\lambda_\mathcal{D}^{e,i}(t) \\
+		\frac{\partial}{\partial\kappa_i} \ell_\mathcal{D} &= \int_{t_\mathrm{min}}^{t_\mathrm{max}} \log\lambda_\mathcal{D}^{e,i}(t) P_{\mathcal{D},i}^e(t) d\Lambda_\mathcal{D}^e(t) - \pm_i \int_{t_\mathrm{min}}^{t_\mathrm{max}} \lambda_\mathcal{D}^{e,i}(t)^{\kappa_i} \log\lambda_\mathcal{D}^{e,i}(t) dt \\
+		&= \int_{t_\mathrm{min}}^{t_\mathrm{max}} \log\lambda_\mathcal{D}^{e,i}(t) P_{\mathcal{D},i}^e(t) d\Lambda_\mathcal{D}^e(t) \\
+		&- \pm_i\sum_j \lambda_\mathcal{D}^{e,i}((\inf T_j)^+)^{\kappa_i} \left( \log\lambda_\mathcal{D}^{e,i}((\inf T_j)^+)\Gamma_0^{\beta_i\kappa_i}(T_j) - \beta_i \Gamma_1^{\beta_i\kappa_i}(T_j)\right). \\
 	\end{align}
 \end{equation*}
-
-$$\lambda_{\mathbb{P} \vert \mathcal{D}, \mathcal{H}_t}^\theta = \lambda_{\mathcal{D},\mathcal{H}}^\theta \frac{\mathbb{P}^\theta(\mathcal{D}_{t\to T}\vert t\in\mathcal{T}, \mathcal{D}_t, \mathcal{H}_t)}{\mathbb{P}^\theta(\mathcal{D}_{t\to T}\vert t\not\in\mathcal{T}, \mathcal{D}_t, \mathcal{H}_t)}$$
-
-\begin{equation*}
-	\begin{align}
-		& \lambda_{\mathbb{P} \vert \mathcal{D}}^\theta \\
-		= & \lambda_{\mathcal{D}}^\theta \frac{\mathbb{P}^\theta(\mathcal{D}_{t\to T}\vert t\in\mathcal{T}, \mathcal{D}_t)}{\mathbb{P}^\theta(\mathcal{D}_{t\to T}\vert t\not\in\mathcal{T}, \mathcal{D}_t)} \\
-		= & \lambda_\mathcal{D}^\theta \exp\left( \int_t^T \log\left(1 + \frac{\lambda_\text{from t and hidden descendants}}{\lambda_\text{exogenous to t plus observed and descendents}}\right) d\Lambda - \int_t^T \lambda_\text{from t and hidden descendants}dt \right)
-	\end{align}
-\end{equation*}
-Can bound this above by bounding denominator below and numerator above using monotonicity of exponential kernel :)
-
-
-For metaorders with fixed duration and no descendants this can be evaluated quickly. Unfortunately this makes things nondifferentiable:( But can approximated with a `bump' function with bounded support
-More generally, can use bump times exp(polynomial), possibly with a dynamic `duration' component that varies as a function of history, and possibly with descendants
-
-\section{Monte Carlo EM}
-I think this makes it possible to do hidden marks
-
-\begin{equation*}
-	\begin{align}
-		\mathbb{E}\left[\int \log\lambda d\Lambda - \int \lambda dt \vert \mathcal{D}\right] \\
-		= \int \left[\int \log\lambda d\Lambda - \int \lambda dt\right] p(\lambda \vert\mathcal{D})d\mu(\lambda) \\
-		= \int \left[\int \log\lambda d\Lambda - \int \lambda dt\right] \frac{p(\mathcal{D}_{after} \vert \lambda,\mathcal{D}_{before})p(\lambda \vert \mathcal{D}_{before})}{p(\mathcal{D}_{after}\vert \mathcal{D}_{before})}d\mu(\lambda) \\
-		= \frac{\mathbb{E} \left[\left(\int \log\lambda d\Lambda - \int \lambda dt\right)p(\mathcal{D}\vert\lambda)\right]}{p(\mathcal{D})} \\
-		= \frac{\mathbb{E} \left[\left(\int \log\lambda d\Lambda - \int \lambda dt\right)p(\mathcal{D}\vert\lambda)\right]}{\mathbb{E}\left[p(\mathcal{D}\vert\lambda)\right]} \\
-	\end{align}
-\end{equation*}
-This is basically particle filtering, I think?
-
-$$H(s) = U H(s) + \epsilon_u(s)$$
-$$X(s) = O H(s) + \epsilon_i(s)$$
-
-\begin{equation*}
-	\begin{align}
-		\sum_s \mathbb{E}\left[\int \left(\log(\alpha) + X(s)c + H(s)c_H - \beta (t-s)\right) B_{s,t} d\Lambda(t) \\
-		- \int \alpha \exp\left(X(s)c + H(s)c_H -\beta (t-s)\right) dt \big\vert \mathcal{D}\right]
-	\end{align}
-\end{equation*}
-
-\begin{equation*}
-	\begin{align}
-		\mathbb{E}\left(\sum_s \int H(s) B_{s,t} d\Lambda(t) - \int \alpha H(s)\exp\left(X(s)c + H(s)c_H -\beta (t-s)\right) dt \big\vert \mathcal{D}\right)
-	\end{align}
-\end{equation*}
-
-\section{Hidden Marks}
-\subsection{Discrete}
-Markov
-
-\section{Quadratic Hawkes Processes}
-\begin{equation*}
-	\begin{align}
-		& \int k\log(\alpha \sum \exp(-\beta(t-s))) d\Lambda - \alpha^k \int \left(\sum\exp(-\beta(t-s))\right)^k dt \\
-		= & \int k \log(\alpha) d\Lambda + \int k\log(\sum \exp(-\beta(t-s))) d\Lambda - \alpha^k \int \left(\sum\exp(-\beta(t-s))\right)^k dt \\
-		\\
-		& \frac{\partial}{\partial \alpha} \\
-		= & \int \frac{k}{\alpha}d\Lambda - k\alpha^{k-1} \int \left(\sum \exp(-\beta (t-s))\right)^k dt \\
-		\\
-		& \frac{\partial}{\partial \beta} \\
-		= & \int k \frac{\sum \exp(-\beta(t-s))(s-t)}{\sum \exp(-\beta(t-s))} d\Lambda \\ & - \alpha^k \int k \left(\sum \exp(-\beta (t-s))\right)^{k-1} \left(\sum \exp(-\beta(t-s))(s-t)\right) dt
-		\\
-		& \frac{\partial}{\partial k} \\
-		= & \int \log(\alpha \sum \exp(-\beta(t-s))) d\Lambda - \int \log\left(\alpha\sum\exp(-\beta(t-s))\right) \left(\alpha\sum\exp(-\beta(t-s))\right)^k dt
-	\end{align}
-\end{equation*}
-
-\begin{equation*}
-	\begin{align}
-		& \int_a^b \log(c e^{sx}) c e^x dx \\
-		= & \log(c) \int_a^b e^x dx + cs\int_a^b x e^x dx \\
-		= & \log(c)(e^b-e^a) + cs \left(\left[x e^x\right]_a^b - \int_a^b e^x dx\right) \\
-		= & \log(c)(e^b-e^a) + cs \left(be^b - a e^a - e^b + e^a\right)
-	\end{align}
-\end{equation*}
-
 
 \section{Uncertainty Quantification}
 Fisher information calculations (different to observed information)
@@ -1079,19 +994,26 @@ Exploiting sparsity \cite{NickelLe}
 \textcolor{red}{Performance of information criteria for selection of Hawkes process models of financial data https://www.tandfonline.com/doi/full/10.1080/14697688.2017.1403140}
 
 \chapter{Simulation}
-Simulation of the limit order book allows for 
+Simulation of the limit order book in accordance with some model of its behaviour serves at least three different purposes. Firstly, in order to perform uncertainty quantification without appealing to asymptotic behaviour of the MLE, we can perform a parametric bootstrap: simulate multiple realisations of the point process using the MLE parameters, and find the MLE on each of these new synthetic datasets to compare the distribution of these new estimates with the ``true'' value used for simulation. Secondly, access to a generative model for order book data lets us predict the distribution of future prices and other characteristics of the order book conditional on the information observed so far. Finally, such a model allows us to answer counterfactual questions, such as quantifying the effect that making a trade of some size will have on market prices, in a way that a purely predictive model might not be able to.
 
-Will play a key role in (1) use of the model for `experimental' studies (2) parametric bootstrap (3) metaorder monte carlo em (if i end up doing this)
+\section{Point Process Simulation}
 
-\section{Simulation Methods for Point Process Models}
+Ogata (1981) \cite{Ogata} describes an algorithm to iteratively sample from an arbitrary point process model for which we can obtain an upper bound on the intensity between the present time $t$ and the next (unknown) event time. Suppose that a multivariate point process $\mathcal{T}$ has empirical intensities $\lamdba_\mathcal{D}^e(t)$ for any dataset $\mathcal{D}$. To simulate $\mathcal{T}$ on an interval $(t_\mathrm{min},t_\mathrm{max})$, begin with an empty dataset $\mathcal{D}_0$ and $t_0=t_\mathrm{min}$, and then for each $i=0,1,\ldots$ do the following:
+\begin{enumerate}
+	\item Compute the upper bound $\bar\lambda_{\mathcal{D}_i}(t_i)$ such that we are guaranteed $\bar\lambda_{\mathcal{D}_i}(t_i)\geq \sum_e \lambda_{\mathcal{D}_i}^e(s)$ for $s>t_i$.
+	\item Sample $U$ from an exponential distribution with rate parameter $\bar\lambda_{\mathcal{D}_i}(t_i)$. Then with probability $\frac{\lambda_{\mathcal{D}_i}(t_i+U)}{\bar\lambda_{\mathcal{D}_i}(t_i)}$, let $\mathcal{D}_{i+1} = \mathcal{D}_i\cup\{t_i+U\}$ and go to the next step; otherwise, add another exponential random variable with rate parameter $\bar\lambda_{\mathcal{D}_i}(t_i+U)$ to $U$ and repeat.
+	\item Let $t_{i+1}=\max \mathcal{D}_{i+1}$.
+	\item If $t_{i+1}\geq t_\mathrm{max}$, stop the simulation. The final dataset is $\mathcal{D}_i$.
+\end{enumerate}
+With different initial conditions for the iteration, we can also simulate the point process conditional on some fixed initial data. This allows us to predict the distribution of future outcomes (e.g. prices) following some observed history.
 
-\textcolor{red}{Pseudocode}
+\textcolor{red}{Prove correctness}
 
-Ogata thinning \bibitem{Ogata}
-
-\textcolor{red}{Pseudocode}
-
-\textcolor{red}{Do these have different time complexity? Memory complexity?}
+\section{Simulating Order Book Events}
+\subsection{Order Insertions}
+\subsection{Order Cancellations}
+\subsection{Modifying an Order}
+\subsection{Trades}
 
 \section{Simulation Study of Estimation Methods}
 Convergence analysis for simple models (eg univariate)

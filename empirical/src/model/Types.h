@@ -4,7 +4,7 @@
 #include <Eigen/Dense>
 #include <iostream>
 
-#define REAL long double
+#define REAL double
 #define VECTOR Eigen::VectorXd
 #define MATRIX Eigen::MatrixXd
 #define GENERATOR Realisation

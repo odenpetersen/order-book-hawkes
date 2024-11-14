@@ -10,12 +10,13 @@
 #include <cassert>
 
 #include "Types.h"
+#include "constants.h"
 
 const int seconds_in_day = 60*60*24;
 
 class EventIterator {
 	public:
-		EventIterator(const std::string& filename) : file(filename), done(false) {
+		EventIterator(const std::string& filename) : file(filename,std::ios::in), done(false) {
 			if (!file.is_open()) {
 				done = true;
 			} else {
@@ -60,7 +61,7 @@ class EventIterator {
 
 		void readNextLine() {
 			std::string line;
-			if (std::getline(file, line)) {
+			while (std::getline(file, line)) {
 				std::stringstream lineStream(line);
 				std::string cell;
 				currentRow.clear();
@@ -74,15 +75,18 @@ class EventIterator {
 				// 0.027280861|MES|7114|1720396800027280505|A|3|A|6853508913474|531179|5612750000000|[]|||5612.75|34|5612.5|7|5612.75
 				if (currentRow.size() != 18) {
 					std::cout << "WARNING: READ " << currentRow.size() << " ITEMS: " << line << std::endl;
-					readNextLine();
+					continue;
 				}
 
-				long double time = std::stod(currentRow[0]);
+				REAL time = std::stod(currentRow[0]);
 				std::string ticker = currentRow[1];
 				std::string action = currentRow[4];
+				if (TRADES_ONLY & action!="T") {
+					continue;
+				}
 				int size = std::stoi(currentRow[5]);
 				std::string side = currentRow[6];
-				long double price;
+				REAL price;
 				if (currentRow[13]=="") {
 					price = 0;
 
@@ -90,9 +94,9 @@ class EventIterator {
 					price = std::stod(currentRow[13]);
 				}
 				int bq = std::stoi(currentRow[14]);
-				long double bp = std::stod(currentRow[15]);
+				REAL bp = std::stod(currentRow[15]);
 				int aq = std::stoi(currentRow[16]);
-				long double ap = std::stod(currentRow[17]);
+				REAL ap = std::stod(currentRow[17]);
 
 				/*
 				std::string ticker = currentRow[0];
@@ -113,14 +117,22 @@ class EventIterator {
 
 				//'AB', 'AA', 'CB', 'CA', 'MA', 'MB', 'TA', 'FB', 'TB', 'FA'
 				int event_type = -1;
-				if (action=="A") {
-					event_type = 0;
-				} else if (action=="C") {
-					event_type = 1;
-				} else if (action=="M") {
-					event_type = 2;
-				} else if (action=="T") {
-					event_type = 3;
+				if (TRADES_ONLY) {
+					if (action=="T") {
+						event_type = 0;
+					} else {
+						continue;
+					}
+				} else {
+					if (action=="A") {
+						event_type = 0;
+					} else if (action=="C") {
+						event_type = 1;
+					} else if (action=="M") {
+						event_type = 2;
+					} else if (action=="T") {
+						event_type = 3;
+					}
 				}
 
 
@@ -159,7 +171,7 @@ class EventIterator {
 
 
 				if (event_type==-1) {
-					readNextLine();
+					continue;
 				} else {
 					if (currentEvent) {
 						delete currentEvent;
@@ -176,13 +188,15 @@ class EventIterator {
 						marks_eigen.array()[i]               = (double) marks[i];
 						marks_eigen.array()[num_mark_vars+i] = (double)(marks[i]*marks[i]);
 					}
+					assert (marks_eigen.size() == NUM_MARK_VARIABLES);
 					currentEvent = new Event(time, event_type, marks_eigen, 1.0);
 				}
 
+				return;
 
-			} else {
-				done = true; // No more lines to read
 			}
+			done = true; // No more lines to read
+			file.close();
 		}
 };
 

@@ -73,41 +73,47 @@ def get_events(df):
     trade_event = df[df.order_id.apply(filled_orders.__contains__) | (df.order_id==trade_order_id)]
     other_events = df[(df.action!='T') & (~df.order_id.apply(filled_orders.__contains__)) & (df.order_id!=trade_order_id)]
     yield trade_event
-    for i in range(other_events.shape[0]):
-        yield other_events.iloc[i:i+1]
+    if (other_events.action=='C').all() and len(other_events.side.unique())==1:
+        yield other_events
+    else:
+        for i in range(other_events.shape[0]):
+            yield other_events.iloc[i:i+1]
 
-def split_events(df):
-    indices = list(df[df.action=='T'].index)
+def split_events(df,condition):
+    #(~((df.action==df.action.shift(1)) & (df.side==df.side.shift(1))))
+    indices = list(df[condition].index)
     for prev_trade_index,trade_index in zip([-1]+indices,indices+[np.inf]):
         new_df = df[(prev_trade_index <= df.index) & (df.index < trade_index)]
         if new_df.shape[0] > 0:
             assert (new_df.action=='T').sum() <= 1, new_df
             yield new_df
 
-def process_day(data):
+#def process_day(data,interval = None):
+def process_day(data,interval = pd.Interval(36000,37200)):
     events = None
     prev_ts_event = None
     for mbo,market,instrument,seconds in data:
-        event = dict(instrument_id=mbo.instrument_id, ts_event=mbo.ts_event, action=mbo.action, size=mbo.size, side=mbo.side, order_id=mbo.order_id, sequence=mbo.sequence, price=mbo.price)
-        if mbo.action=='T' or mbo.ts_event != prev_ts_event:
-            if events is not None:
-                assert len(events)>0, events
-            if events is None:
-                events = []
-            if len(events)>0:
-                df = pd.DataFrame(events)
-                for cascade in get_events(df):
-                    for subevent in split_events(cascade):
-                        yield (subevent,market,instrument,seconds)
-                events.clear()
-        events.append(event)
-        prev_ts_event = mbo.ts_event
+        if interval is None or seconds in interval:
+            event = dict(instrument_id=mbo.instrument_id, ts_event=mbo.ts_event, action=mbo.action, size=mbo.size, side=mbo.side, order_id=mbo.order_id, sequence=mbo.sequence, price=mbo.price)
+            if mbo.action=='T' or mbo.ts_event != prev_ts_event:
+                if events is not None:
+                    assert len(events)>0, events
+                if events is None:
+                    events = []
+                if len(events)>0:
+                    df = pd.DataFrame(events)
+                    for cascade in get_events(df):
+                        for subevent in split_events(cascade, condition = cascade.action=='T'):
+                            yield (subevent,market,instrument,seconds)
+                    events.clear()
+            events.append(event)
+            prev_ts_event = mbo.ts_event
 
 def process_mbos(filename):
     for event,market,instrument,seconds in process_day(parse_file(filename)):
         assert event.ts_event.unique().shape[0]==1, event
-        assert event.shape[0]==1 or event.action.iloc[0]=='T', event
-        assert event[event.action=='M'].shape[0] <= 1, event
+        assert event.shape[0]==1 or (len(event.action.unique())==1 and len(event.side.unique())==1) or event.action.iloc[0]=='T', event
+        #assert event[event.action=='M'].shape[0] <= 1, event
         yield (event,market,instrument,seconds)
 
 def interleave(generators):
@@ -136,11 +142,16 @@ def write_csv(generator, output_file):
             bid,ask = market.aggregated_bbo(event.instrument_id.iloc[0])
             #data = [instrument, mbo.ts_event, mbo.ts_recv, seconds, mbo.order_id, mbo.action, mbo.side, mbo.size, mbo.price, bid.size if bid else np.nan, bid.price/dbn.FIXED_PRICE_SCALE if bid else np.nan, ask.size if ask else np.nan, ask.price/dbn.FIXED_PRICE_SCALE if ask else np.nan]
             modified_order = event[event.action=='M']
-            assert modified_order.shape[0] <= 1
-            modified_order,modified_order_newsize = '','' if modified_order.shape[0] == 0 else (int(modified_order.order_id.iloc[0]), int(modified_order['size'].iloc[0]))
+            modified_order_ids = list(map(int,modified_order.order_id.values))
+            modified_order_newsize = list(map(int,modified_order['size'].values))
             market_details = [event.price.iloc[0]/dbn.FIXED_PRICE_SCALE, bid.size if bid else np.nan, bid.price/dbn.FIXED_PRICE_SCALE if bid else np.nan, ask.size if ask else np.nan, ask.price/dbn.FIXED_PRICE_SCALE if ask else np.nan]
             assert event.shape[1]==8, event
-            print(seconds,instrument,*event.iloc[0].values, list(map(int,event[event.action=='C'].order_id.unique())),modified_order,modified_order_newsize,*market_details,sep='|',file=f)
+            event_details = event.iloc[0].copy()
+            if (event['action']=='C').all() and len(event['side'].unique())==1:
+                event_details.at['size'] = event['size'].sum()
+            elif event.iloc[0]['action']!='T':
+                assert event.shape[0] == 1, event
+            print(seconds,instrument,*event.iloc[0].values, list(map(int,event[event.action=='C'].order_id.unique())),modified_order_ids,modified_order_newsize,*market_details,sep='|',file=f)
         except Exception as e:
             raise e#print('Exception: ', repr(e), event, bid, ask)
 
@@ -151,6 +162,7 @@ if __name__ == "__main__":
     for filename in tqdm.tqdm(filenames):
         print('Start',filename)
         mbos = interleave([process_mbos(folder+filename) for folder in folders])
+        #output_file = '../output/databento_collated_fullday/'+filename.split('.')[0]+'.csv'
         output_file = '../output/databento_collated/'+filename.split('.')[0]+'.csv'
         datastores = {db.DBNStore.from_file(folder+filename) for folder in folders}
         bounds = {(data.metadata.start,data.metadata.end) for data in datastores}

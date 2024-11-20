@@ -163,7 +163,7 @@ if __name__ == "__main__":
         print('Start',filename)
         mbos = interleave([process_mbos(folder+filename) for folder in folders])
         #output_file = '../output/databento_collated_fullday/'+filename.split('.')[0]+'.csv'
-        output_file = '../output/databento_collated/'+filename.split('.')[0]+'.csv'
+        output_file = '../output/databento_collated_depth_profile/'+filename.split('.')[0]+'.csv'
         datastores = {db.DBNStore.from_file(folder+filename) for folder in folders}
         bounds = {(data.metadata.start,data.metadata.end) for data in datastores}
         assert len(bounds) == 1, (filename,bounds)

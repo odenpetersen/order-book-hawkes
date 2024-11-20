@@ -31,7 +31,7 @@ int main(int argc, char *argv) {
 	*/
 	for (int i = 0; i < 10; i++) {
 		//kernel.add_kernel(new ContinuousStateHawkesKernel(NUM_EVENT_TYPES,START_TIME,END_TIME,NUM_MARK_VARIABLES,true,true,true,false));
-		kernel.add_kernel(new ContinuousStateHawkesKernel(NUM_EVENT_TYPES,START_TIME,END_TIME,NUM_MARK_VARIABLES,false,false,false,i<5));
+		kernel.add_kernel(new ContinuousStateHawkesKernel(NUM_EVENT_TYPES,START_TIME,END_TIME,NUM_MARK_VARIABLES,true,true,true,i<5));
 	}
 	//std::string prefix = "../../output/databento_collated_fullday/glbx-mdp3-2024";
 	std::string prefix = "../../output/databento_collated/glbx-mdp3-2024";
@@ -147,18 +147,22 @@ int main(int argc, char *argv) {
 		std::cout << "precision, threshold = " << step.cwiseAbs().maxCoeff() << "," << ATOL + RTOL*kernel.get_params().cwiseAbs().minCoeff() << std::endl;
 	} while (step.cwiseAbs().maxCoeff() > ATOL + RTOL*kernel.get_params().cwiseAbs().minCoeff());
 
-	std::ofstream file(output_folder + "/params.csv",std::ios::out);
-	file << kernel.get_params() << std::endl;
-	file.close();
+	{
+		std::ofstream file(output_folder + "/params.csv",std::ios::out);
+		file << kernel.get_params() << std::endl;
+		file.close();
+	}
 
-	std::ofstream file(output_folder + "/describe.csv",std::ios::out);
-	file << kernel.as_string() << std::endl;
-	file.close();
+	{
+		std::ofstream file(output_folder + "/describe.csv",std::ios::out);
+		file << kernel.as_string() << std::endl;
+		file.close();
+	}
 
 	for (std::vector<std::string> files : {train_files, test_files}) {
 		for (std::string filename : files) {
 			std::cout << "residuals for " << filename << std::endl;
-			std::string output_file = output_folder + "/residuals/" + filename;
+			std::string output_file = output_folder + "/residuals_poweredstatedependenthawkesprocess_5pos5neg/" + filename;
 			std::cout << "Writing to " << output_file << std::endl;
 			std::ofstream file(output_file,std::ios::out);
 			file << std::setprecision(20);

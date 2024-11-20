@@ -81,7 +81,7 @@ def mean_graph(file,function,where=None,label=None,resolution=60):
         
     plt.scatter(times,means,label=label)
 
-def arrivals_vs_intensity(file,label=None,alpha=0.05,linewidth=7,cumulative=False):
+def arrivals_vs_intensity(file,label=None,alpha=0.05,linewidth=3,cumulative=False):
     times = []
     residuals = []
     intensities = []
@@ -125,7 +125,7 @@ def intensity_plots(cumulative=False,folder='residuals_train2wkstest2wks_poisson
     plt.suptitle('Model Trained on 8th-12th July 2024')
     plt.title(f'Arrivals vs Intensity (In Sample)')
     plt.legend()
-    plt.savefig(f'intensities_train{"_cumulative" if cumulative else ""}.png')
+    plt.savefig(f'intensities_train{"_cumulative" if cumulative else ""}_{folder}.png')
     plt.clf()
 
     for file,day in zip(test_files,test_days):
@@ -133,7 +133,7 @@ def intensity_plots(cumulative=False,folder='residuals_train2wkstest2wks_poisson
     plt.suptitle('Model Trained on 8th-12th July 2024')
     plt.title(f'Arrivals vs Intensity (Out of Sample)')
     plt.legend()
-    plt.savefig(f'intensities_test{"_cumulative" if cumulative else ""}.png')
+    plt.savefig(f'intensities_test{"_cumulative" if cumulative else ""}_{folder}.png')
     plt.clf()
 
 def residuals_plots(folder='residuals_train2wkstest2wks_poisson'):
@@ -156,8 +156,53 @@ def residuals_plots(folder='residuals_train2wkstest2wks_poisson'):
     plt.savefig(f'consecutive_test_{folder}.png')
     plt.clf()
 
+def insertion_distribution(filename,price=True):
+    es,mes = itertools.islice(open(filename,'r'),0,2)
+    es,mes = map(pd.Series,map(eval,(es,mes)))
+
+    df = pd.read_csv(filename,sep='|',skiprows=2,usecols=['instrument','action','side','change'])
+    df.change = df.change.apply(eval)
+
+    df['bidprice_before'] = np.nan
+    df['askprice_before'] = np.nan
+    for i,(instrument,change) in enumerate(zip(df.instrument,df.change)):
+        if instrument=='ES':
+            bid = es[es>0].index.max()
+            ask = es[es<0].index.min()
+            es = es.add(pd.Series(change),fill_value=0)
+        if instrument=='MES':
+            bid = mes[mes>0].index.max()
+            ask = mes[mes<0].index.min()
+            mes = mes.add(pd.Series(change),fill_value=0)
+        df.loc[i,'bidprice_before'] = bid
+        df.loc[i,'askprice_before'] = ask
+
+    if price:
+        for instrument in ('ES','MES'):
+            insertions = df[(df.action=='A') & (df.change.apply(len)==1) & (df.instrument==instrument)]
+            insertion_price_minus_opposite_side_of_book = abs(insertions.change.apply(lambda x : list(x)[0]) - insertions.bidprice_before.where(insertions.side=='A',insertions.askprice_before))
+            log_pricediff = np.log(insertion_price_minus_opposite_side_of_book)
+            plt.hist(pd.Series(log_pricediff).where(np.isfinite).dropna(),label=instrument,alpha=0.8)
+    else:
+        for instrument in ('ES','MES'):
+            insertions = df[(df.action=='A') & (df.change.apply(len)==1) & (df.instrument==instrument)]
+            plt.hist(np.log(abs(insertions.change.apply(lambda x : list(x.values())[0]))), label=instrument, alpha=0.8)
+
 if __name__ == '__main__':
-    for folder in ('residuals_more_imprecise','residuals_train2wkstest2wks_poisson'): #'residuals_train2wkstest2wks_hawkes', 'residuals_train2wkstest2wks_hawkes_imprecise'
+    insertion_distribution('../../output/databento_collated_depth/glbx-mdp3-20240708.csv',price=True)
+    plt.title('Log of Difference between Insertion Price and Other Side of Book (8th July)')
+    plt.legend()
+    plt.savefig('insertion_distribution_price.png')
+    plt.clf()
+
+    insertion_distribution('../../output/databento_collated_depth/glbx-mdp3-20240708.csv',price=False)
+    plt.title('Log of Insertion Size (8th July)')
+    plt.legend()
+    plt.savefig('insertion_distribution_size.png')
+    plt.clf()
+
+    print('residuals')
+    for folder in ('residuals','residuals_more_imprecise','residuals_train2wkstest2wks_poisson'): #'residuals_train2wkstest2wks_hawkes', 'residuals_train2wkstest2wks_hawkes_imprecise'
         intensity_plots(cumulative=False,folder=folder)
         intensity_plots(cumulative=True,folder=folder)
 

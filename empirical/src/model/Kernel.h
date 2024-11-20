@@ -119,7 +119,7 @@ class Kernel {
 class PoissonKernel : public Kernel {
 	public:
 		PoissonKernel(int num_event_types, REAL start_time, REAL end_time,bool allow_negative=false) : Kernel(num_event_types, start_time, end_time), allow_negative(allow_negative) {
-			nu = Eigen::VectorXd::Random(num_event_types).array() + 1.0;
+			nu = 6*(Eigen::VectorXd::Random(num_event_types).array() + 1.0);
 			weighted_event_counts = Eigen::VectorXd::Constant(num_event_types,0.0);
 		}
 
